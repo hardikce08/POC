@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AMD MetalTrail</title>
+    <!-- Web Fonts  -->
+    <link href="~/Theme/Css/Googlefonts.css" rel="stylesheet" />
+
+    <!-- Vendor CSS -->
+    <link href="~/Theme/Css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Theme/Css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Theme/Css/magnific-popup.css" rel="stylesheet" />
+
+    <!-- Theme CSS -->
+    <link href="~/Theme/Css/theme.css" rel="stylesheet" />
+
+    <!-- Skin CSS -->
+    <link href="~/Theme/Css/default.css" rel="stylesheet" />
+
+    <!-- Theme Custom CSS -->
+    <link href="~/Theme/Css/theme-custom.css" rel="stylesheet" />
+</head>
+<body>
+    <section class="body-sign">
+        <div class="center-sign">
+            <a href="/" class="logo pull-left">
+                <img src="~/Theme/Images/logo.png" height="54" alt="IQ Lance" />
+            </a>
+
+            <div class="panel panel-sign">
+                <div class="panel-title-sign mt-xl text-right">
+                    <h2 class="title text-uppercase text-bold m-none"><i class="fa fa-user mr-xs"></i>Sign In</h2>
+                </div>
+                <div class="panel-body">
+                    @if (!Request.IsAuthenticated)
+                    {
+                        <!-- If the user is not authenticated, display the sign-in button -->
+                        <a href="@Url.Action("SignIn", "Home")" style="text-decoration: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="300px" height="50px" viewBox="0 0 3278 522" class="SignInButton">
+                            <style type="text/css">
+                                .fil0:hover {
+                                    fill: #4B4B4B;
+                                }
+
+                                .fnt0 {
+                                    font-size: 260px;
+                                    font-family: 'Segoe UI Semibold', 'Segoe UI';
+                                    text-decoration: none;
+                                }
+</style>
+                            <rect class="fil0" x="2" y="2" width="3174" height="517" fill="black" />
+                            <rect x="150" y="129" width="122" height="122" fill="#F35325" />
+                            <rect x="284" y="129" width="122" height="122" fill="#81BC06" />
+                            <rect x="150" y="263" width="122" height="122" fill="#05A6F0" />
+                            <rect x="284" y="263" width="122" height="122" fill="#FFBA08" />
+                            <text x="470" y="357" fill="white" class="fnt0">Sign in with Microsoft</text>
+        </svg>
+                        </a>
+                    }
+                    else
+                    {
+                        <span><br />Hello @System.Security.Claims.ClaimsPrincipal.Current.FindFirst("name").Value;</span>
+                        <br /><br />
+                        @Html.ActionLink("See Your Claims", "Index", "Claims")
+                        <br /><br />
+                        @Html.ActionLink("Sign out", "SignOut", "Home")
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Request.QueryString["errormessage"]))
+                    {
+                        <div style="background-color:red;color:white;font-weight: bold;">Error: @Request.QueryString["errormessage"]</div>
+                    }
+                </div>
+            </div>
+            <p class="text-center text-muted mt-md mb-md">&copy; Copyright @DateTime.Now.Year.ToString(). All rights reserved.</p>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,574 @@
+﻿@model POC.DataAccess.Model.ProductDetailView
+@{
+    ViewBag.Title = "Product Detail";
+    ViewBag.Page = "products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .datatables-footer {
+        display: none !important;
+    }
+
+    .tab-content label {
+        font-weight: bold !important;
+        margin: 0px !important;
+        width: auto;
+    }
+
+    .background-fill {
+        background-color: whitesmoke;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    .background-fillOrigin {
+        background-color: whitesmoke;
+        border-radius: 30px;
+        width: 30% !important;
+        margin-bottom: 0px !important;
+        margin: 10px;
+    }
+
+    .Customwidth {
+        width: 30% !important;
+        margin-bottom: 0px !important;
+    }
+
+    /*  #media .col-md-4 {
+        width: 27.333333% !important;
+    }
+    #media .col-md-12 {
+        padding-right: 0px !important;
+    }*/
+    .CustomwidthOverView {
+        width: 30% !important;
+    }
+
+    .dataTables_filter label {
+        width: 100% !important;
+    }
+
+    #tblEvents.dataTable th {
+        visibility: hidden;
+    }
+
+    #tblEvents.dataTable {
+        width: 100% !important;
+    }
+
+    #tblEvents_filter.dataTables_filter {
+        width: 100%;
+        padding: 0px;
+    }
+
+    table.dataTable.no-footer {
+        border: 0px;
+    }
+
+    #map-canvas {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+    }
+
+    .graphdiv {
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .grpahselected {
+        background: #ff6f47 !important;
+    }
+
+    .content-body {
+        margin-top: -35px;
+    }
+
+    #tblEvents tbody td {
+        border-top: 0px;
+        border-radius: 20px;
+        background: #ddd;
+    }
+    /* #tblEvents thead tr {
+        display:none;
+    }*/
+    #tblEvents.dataTable {
+        border-collapse: separate;
+        border-spacing: 0 1em;
+    }
+</style>
+<link href="~/Theme/Css/flags.css" rel="stylesheet" />
+@if (Model.result != null)
+{
+    var product = @Model.result?.productVC?.credentialSubject?.product;
+    var credentialsubject = @Model.result?.productVC?.credentialSubject;
+    var lstSpecification = @Model.result?.productSpecs;
+    var eventlst = Model.result.events;
+    var res = @Model.result;
+    <h3 style="text-align: center;"></h3>
+    <div class="tabbable boxed parentTabs p-4">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#set1" class="nav-link">Overview</a>
+            </li>
+            <li>
+                <a href="#set2" class="nav-link">Events</a>
+            </li>
+            <li>
+                <a href="#origin" class="nav-link">Origin</a>
+            </li>
+            <li>
+                <a href="#carbon" class="nav-link">Carbon</a>
+            </li>
+            @*<li>
+                    <a href="#origin" class="nav-link">Origin</a>
+                </li>
+                <li>
+                    <a href="#carbon" class="nav-link">Carbon</a>
+                </li>*@
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active in" style="height:740px !important;" id="set1">
+                <div class="col-md-12 form-group">
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Product Type</label><br />
+                        @product.name
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Technology Type</label><br />
+                        @credentialsubject.technologyType
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Heat No</label><br />
+                        @if (string.IsNullOrEmpty(credentialsubject.heatNumber))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @credentialsubject.heatNumber
+                        }
+
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Weight</label><br />
+                        @product.weight.value.ToString()  @product.weight.unitCode
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">HS Code</label><br />
+                        @credentialsubject.HSCode
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Sku</label><br />
+                        @if (string.IsNullOrEmpty(credentialsubject.sku))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @credentialsubject.sku
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12  form-group">
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Origin-Location</label><br />
+                        @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Grade</label><br />
+                        @if (string.IsNullOrEmpty(credentialsubject.grade))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @credentialsubject.grade
+                        }
+
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Current Location</label><br />
+                        @if (credentialsubject.facility.address != null)
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @credentialsubject.facility.address.addressCountry
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12  form-group">
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Transfer Location</label><br />
+                        N/A
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Anamoly Detected</label><br />
+                        Carbon Outlier
+
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Status</label><br />
+                        @if (string.IsNullOrEmpty(res.status))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @res.status
+                        }
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    @if (lstSpecification != null)
+                    {
+                        <table class="table table-condensed table-bordered">
+                            <div style="color:black;font-weight:bold;text-align:center;margin-bottom:10px;">Product Specification</div>
+                            <thead>
+                                <tr>
+                                    <th>Charachteristics</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in lstSpecification)
+                                {
+                                    <tr>
+                                        <td>@item.property.description</td>
+                                        <td>@item.measurement.value @item.measurement.unitCode</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+
+                </div>
+
+                @*<div class="tabbable">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#sub11" class="nav-link">PopularAll</a>
+                            </li>
+                            <li>
+                                <a href="#sub12" class="nav-link">UniqueAll</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="sub11">
+                                <p>pop all content</p>
+                            </div>
+                            <div class="tab-pane fade" id="sub12">
+                                <p>unique all content</p>
+                            </div>
+                        </div>
+                    </div>*@
+            </div>
+            <div class="tab-pane fade" style="min-height:400px;" id="set2">
+                <div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                    <div class="col-md-6">
+                        @*<input type="button" id="testm" value="graph" data-latLng="53.488188,-2.373019"></input>*@
+                        @if (eventlst != null)
+                        {
+                            <table class="table " id="tblEvents">
+                                <thead>
+                                    <tr>
+                                        <th>Test</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in eventlst)
+                                    {
+                                        <tr>
+                                            <td class="graphdiv" value="graph" data-latLng="@item.eventVC.credentialSubject.place.geo.latitude,@item.eventVC.credentialSubject.place.geo.longitude">
+                                                <b>@item.eventType Product</b><br />
+                                                Submitted by: @item.eventVC.credentialSubject.initiator?.name<br />
+                                                @item.eventVC.credentialSubject.place.address.addressLocality ,  @item.eventVC.credentialSubject.place.address.addressRegion ,  @item.eventVC.credentialSubject.place.address.addressCountry <br />
+                                                <p class="rounddiv">@item.eventVC.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.eventVC.issuanceDate.ToString("hh:mm tt")</p>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td class="graphdiv" data-latLng="-25.344,131.036">
+                                                <b>@item.eventType Product</b><br />
+                                                Submitted by: @item.eventVC.credentialSubject.initiator?.name<br />
+                                                @item.eventVC.credentialSubject.place.address.addressLocality ,  @item.eventVC.credentialSubject.place.address.addressRegion ,  @item.eventVC.credentialSubject.place.address.addressCountry <br />
+                                                <p class="rounddiv">@item.eventVC.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.eventVC.issuanceDate.ToString("hh:mm tt")</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <div id="map-canvas"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" style="min-height:550px;" id="origin">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#sub11" class="nav-link">Certificate of Origin</a>
+                        </li>
+                        <li>
+                            <a href="#sub12" class="nav-link">Mill Test certification</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" style="min-height:550px;">
+                        <div class="tab-pane fade active in" id="sub11">
+                            <div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                                <div class="col-md-4" style="text-align:center;">
+                                    <span><b>Certificate of Origin</b></span><br />
+                                    <img src="~/Theme/Images/origin.png" style="margin-top:15px;" /><br />
+                                    <p style="margin-top:20px;"><b>Product ID:</b></p>
+                                    <p>@product.id</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <div class="col-md-8">
+                                            <p style="font-weight:bold;font-size:20px;">@product.name</p><p>
+                                                @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 background-fill">
+                                            <label class="control-label">Product Id</label><br />
+                                            @product.id
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Product Type</label><br />
+                                            @product.name
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Technology Type</label><br />
+                                            @credentialsubject.technologyType
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 background-fill">
+                                            <label class="control-label">Owner</label><br />
+                                            @res.owner.name
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Origin</label><br />
+                                            @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Current Location</label><br />
+                                            @if (credentialsubject.facility.address != null)
+                                            {
+                                                @:N/A
+                                            }
+                                            else
+                                            {
+                                                @credentialsubject.facility.address.addressCountry
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 background-fill">
+                                            <label class="control-label">Weight</label><br />
+                                            @product.weight.value.ToString()  @product.weight.unitCode
+                                        </div>
+
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Price per KG</label><br />
+                                            N/A
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">HS Code</label><br />
+                                            @credentialsubject.HSCode
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Sku</label><br />
+                                            @if (string.IsNullOrEmpty(credentialsubject.sku))
+                                            {
+                                                @:N/A
+                                            }
+                                            else
+                                            {
+                                                @credentialsubject.sku
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                                <div class="col-md-12">
+                                    <p style="font-weight:bold;">Composition traceability tree</p>
+                                </div>
+                                <div class="col-md-12" style="border-radius: 10px; border: 1px solid #ccc; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; margin-left: 10px;">
+                                    <p style="font-weight:bold;font-size:12px;margin:0px;">@product.name</p>
+                                    @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i><br />
+                                    @product.id
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="sub12">
+                            <p>unique all content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" style="min-height:550px;" id="carbon">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#carboncerti" class="nav-link">Certificate</a>
+                        </li>
+                        <li>
+                            <a href="#carbonactivity" class="nav-link">Record Activity Data</a>
+                        </li>
+                        <li>
+                            <a href="#carbonemission" class="nav-link">Record Emissions</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" style="min-height:550px;">
+                        <div class="tab-pane fade active in" id="carboncerti">
+                            <div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                                <div class="col-md-4" style="text-align:center;">
+                                    <img src="~/Theme/Images/environmental.png" style="margin-top:15px;" /><br />
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <div class="col-md-8">
+                                            <p style="font-weight:bold;font-size:20px;">Environmental Impact</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 background-fill">
+                                            <label class="control-label">CO2 Emissions</label><br />
+                                            @product.id
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">NO2 Emissions</label><br />
+                                            @product.name
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">CH4 Emissions</label><br />
+                                            @credentialsubject.technologyType
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 background-fill">
+                                            <label class="control-label">Total CO2e Emissions</label><br />
+                                            @res.owner.name
+                                        </div>
+                                        <div class="col-md-3 background-fill">
+                                            <label class="control-label">Total Estimated CO2e Emissions</label><br />
+                                            @res.owner.name
+                                        </div>
+                                        @*<div class="col-md-3 background-fill">
+                            <label class="control-label">Current Location</label><br />
+                            @if (credentialsubject.facility.address != null)
+                            {
+                                @:N/A
+                            }
+                            else
+                            {
+                                @credentialsubject.facility.address.addressCountry
+                            }
+                        </div>*@
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                </div>
+                            </div>
+                            @*<div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                <div class="col-md-12">
+                    <p style="font-weight:bold;">Composition traceability tree</p>
+                </div>
+                <div class="col-md-12" style="border-radius: 10px; border: 1px solid #ccc; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; margin-left: 10px;">
+                    <p style="font-weight:bold;font-size:12px;margin:0px;">@product.name</p>
+                    @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i><br />
+                    @product.id
+
+                </div>
+            </div>*@
+                        </div>
+                        <div class="tab-pane fade" id="carbonactivity">
+                            <p>unique all content</p>
+                        </div>
+                        <div class="tab-pane fade" id="carbonemission">
+                            <p>unique all content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='divLoader' class="loaderdiv" style="display:none;">
+    </div>
+}
+@section scripts{
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDakum_wOxLE9c3_Www1wTo-Lsnd58yoRo&libraries=&v=weekly"></script>
+    <script type="text/javascript">
+        $("ul.nav-tabs a").click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        $(".graphdiv").click(function () {
+            $(".graphdiv").each(function () {
+                $(this).removeClass('grpahselected');
+            });
+
+            //alert($(this).attr("data-latLng"));
+            var latLng = $(this).attr("data-latLng");
+            $(this).addClass('grpahselected');
+            initialize(latLng);
+        });
+        function initialize(latLng) {
+            latLng = latLng.split(",") //split
+            var data = "Test Data for now!";
+            var infowindow = new google.maps.InfoWindow({
+                content: data
+            });
+            const map = new google.maps.Map(document.getElementById("map-canvas"), {
+                zoom: 8,
+                center: new google.maps.LatLng(latLng[0], latLng[1]),
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latLng[0], latLng[1]),
+                map: map,
+                title: "Hello World!"
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+        }
+        $(document).ready(function () {
+            var input = $('#tblEvents_filter label input');
+            //$("#tblEvents_filter label").html('');
+            //$("#tblEvents_filter label").append(input);
+            //$("#tblEvents_wrapper div > div.col-sm-12 col-md-6").remove();
+            $("div > div", "#tblEvents_wrapper")[0].remove();
+            //$("div > div", "#tblEvents_wrapper").removeClass('col-sm-12');
+            $("div > div", "#tblEvents_wrapper").removeClass('col-md-6');
+            //$("div > div", "#tblEvents_wrapper").addClass('col-md-12');
+
+
+
+
+
+        });
+    </script>
+
+}
+

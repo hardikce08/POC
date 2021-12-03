@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="POCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MetalTrail.dbo.Hscode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Hscode">
+          <Key>
+            <PropertyRef Name="MES_PCE_IDENT_NO" />
+          </Key>
+          <Property Name="MES_PCE_IDENT_NO" Type="int" Nullable="false" />
+          <Property Name="HSCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="ALLOY" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PieceInfo">
+          <Key>
+            <PropertyRef Name="MES_PCE_IDENT_NO" />
+          </Key>
+          <Property Name="MES_PCE_IDENT_NO" Type="int" Nullable="false" />
+          <Property Name="PCE_DISPLAY_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LIFT_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="EXTRL_PCE_DISPLAY_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="PCE_WT" Type="float" Nullable="false" />
+          <Property Name="PCE_IMP_WT" Type="float" Nullable="false" />
+          <Property Name="PCE_WDT" Type="float" Nullable="false" />
+          <Property Name="PCE_IMP_WDT" Type="float" Nullable="false" />
+          <Property Name="PCE_THK" Type="float" Nullable="false" />
+          <Property Name="PCE_IMP_THK" Type="float" Nullable="false" />
+          <Property Name="LOC_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIELD_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIELD_SHORT_DESC" Type="nvarchar" MaxLength="50" />
+          <Property Name="PREV_LOC_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="PREV_PREV_LOC_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="LEGACY_LINEUP_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="LINEUP_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="NEXT_OP_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="NEXT_OP_OUTSIDE_PROCESS_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="NEXT_OP_PROCESS_TYPE" Type="nvarchar" MaxLength="50" />
+          <Property Name="PREV_OP_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="BLK_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PCE_OUT_DIAM" Type="float" />
+          <Property Name="PCE_IMP_OUT_DIAM" Type="float" />
+          <Property Name="PKG_INSTR_CD" Type="nvarchar" MaxLength="1" />
+          <Property Name="ABBREV_CUST_NAME" Type="nvarchar" MaxLength="50" />
+          <Property Name="SALES_ORD_NO" Type="int" />
+          <Property Name="SALES_ORD_REL_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="CAT_NO" Type="int" />
+          <Property Name="LUB_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LUB_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HI_LEV_PROD" Type="nvarchar" MaxLength="50" />
+          <Property Name="PCE_SOURCE_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PURCH_PCE_FORM_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PCE_COMNT" Type="nvarchar" MaxLength="50" />
+          <Property Name="PCE_LGT" Type="float" Nullable="false" />
+          <Property Name="PCE_IMP_LGT" Type="float" Nullable="false" />
+          <Property Name="HT_NO" Type="int" Nullable="false" />
+          <Property Name="GRD_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="COAT_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="SURF_FIN_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="ANN_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="TRANS_SLAB_FLAG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PCE_IN_DIAM" Type="float" Nullable="false" />
+          <Property Name="PCE_IMP_IN_DIAM" Type="float" Nullable="false" />
+          <Property Name="PAINT_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PAINT_DESC" Type="nvarchar" MaxLength="1" />
+          <Property Name="PCE_CNT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BILL_OF_LADING_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="MATL_STATE_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROD_ORD_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="MILL_ORD_NO" Type="int" />
+          <Property Name="PROCESS_COIL_SEQ_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="MATL_PHYS_FORM_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROCESS_STEP_IDENT_NO" Type="int" />
+          <Property Name="PCE_DOUBLE_UP_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OVRRIDE_MET_HOLD_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ANN_LOT_NO" Type="nvarchar" MaxLength="50" />
+          <Property Name="LOC_CD_UPD_EST" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PREV_OP_CD_EST" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NEXT_NEXT_OP_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="ORIGNL_PCE_DISPLAY_NO" Type="nvarchar" MaxLength="1" />
+          <Property Name="ORIGN_COUNTRY_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="STOR_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HMILL_ROLL_EST" Type="datetime2" Precision="7" />
+          <Property Name="CUSTOM_COUNTRY_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ORIGN_COUNTRY_CD_TEXT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CUSTOM_COUNTRY_CD_TEXT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LABEL_COUNTRY_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LABEL_COUNTRY_CD_TEXT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CORE_LINR_WT" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CORE_LINR_WT_IMP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TUBE_ROUND_OUT_DIM" Type="nvarchar" MaxLength="50" />
+          <Property Name="TUBE_ROUND_OUT_DIM_IMP" Type="nvarchar" MaxLength="50" />
+          <Property Name="BASIC_PROD_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="LEGACY_CUST_NO" Type="int" />
+          <Property Name="CUST_NO" Type="int" />
+          <Property Name="DEVAL_SCRAP_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="STL_FAM_CD" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TYP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LUB_COAT_WT_CD" Type="nvarchar" MaxLength="50" />
+          <Property Name="SLIT_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="HSLA_GRD_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DEVAL_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CHEM_TREAT_FLG" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CAMPGNID" Type="int" Nullable="false" />
+          <Property Name="CAMPID" Type="int" Nullable="false" />
+          <Property Name="LAST_PROD_ORD_NO" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DEVAL_SCRAP_EST" Type="nvarchar" MaxLength="50" />
+          <Property Name="GEWBRUTTO" Type="float" Nullable="false" />
+          <Property Name="GEWBRUTTO_IMP" Type="float" Nullable="false" />
+          <Property Name="WEIGHTDEFAULT" Type="nvarchar" MaxLength="50" />
+          <Property Name="WEIGHTDEFAULT_IMP" Type="nvarchar" MaxLength="50" />
+          <Property Name="VCId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsSuperAdmin" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="POCModelStoreContainer">
+          <EntitySet Name="PieceInfo" EntityType="Self.PieceInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hscode" EntityType="Self.Hscode" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[Hscode].[MES_PCE_IDENT_NO] AS [MES_PCE_IDENT_NO], 
+[Hscode].[HSCODE] AS [HSCODE], 
+[Hscode].[ALLOY] AS [ALLOY]
+FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="POCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Hscode">
+          <Key>
+            <PropertyRef Name="MES_PCE_IDENT_NO" />
+          </Key>
+          <Property Name="MES_PCE_IDENT_NO" Type="Int32" Nullable="false" />
+          <Property Name="HSCODE1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ALLOY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="POCEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Hscode" EntityType="Self.Hscode" />
+          <EntitySet Name="Users" EntityType="POCModel.Users" />
+          <EntitySet Name="PieceInfo" EntityType="POCModel.PieceInfo" />
+        </EntityContainer>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsSuperAdmin" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PieceInfo">
+          <Key>
+            <PropertyRef Name="MES_PCE_IDENT_NO" />
+          </Key>
+          <Property Name="MES_PCE_IDENT_NO" Type="Int32" Nullable="false" />
+          <Property Name="PCE_DISPLAY_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LIFT_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EXTRL_PCE_DISPLAY_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_WT" Type="Double" Nullable="false" />
+          <Property Name="PCE_IMP_WT" Type="Double" Nullable="false" />
+          <Property Name="PCE_WDT" Type="Double" Nullable="false" />
+          <Property Name="PCE_IMP_WDT" Type="Double" Nullable="false" />
+          <Property Name="PCE_THK" Type="Double" Nullable="false" />
+          <Property Name="PCE_IMP_THK" Type="Double" Nullable="false" />
+          <Property Name="LOC_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FIELD_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FIELD_SHORT_DESC" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PREV_LOC_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PREV_PREV_LOC_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LEGACY_LINEUP_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LINEUP_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NEXT_OP_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NEXT_OP_OUTSIDE_PROCESS_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NEXT_OP_PROCESS_TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PREV_OP_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BLK_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_OUT_DIAM" Type="Double" />
+          <Property Name="PCE_IMP_OUT_DIAM" Type="Double" />
+          <Property Name="PKG_INSTR_CD" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="ABBREV_CUST_NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SALES_ORD_NO" Type="Int32" />
+          <Property Name="SALES_ORD_REL_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CAT_NO" Type="Int32" />
+          <Property Name="LUB_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LUB_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HI_LEV_PROD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_SOURCE_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PURCH_PCE_FORM_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_COMNT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_LGT" Type="Double" Nullable="false" />
+          <Property Name="PCE_IMP_LGT" Type="Double" Nullable="false" />
+          <Property Name="HT_NO" Type="Int32" Nullable="false" />
+          <Property Name="GRD_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="COAT_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SURF_FIN_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ANN_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TRANS_SLAB_FLAG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_IN_DIAM" Type="Double" Nullable="false" />
+          <Property Name="PCE_IMP_IN_DIAM" Type="Double" Nullable="false" />
+          <Property Name="PAINT_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PAINT_DESC" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="PCE_CNT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BILL_OF_LADING_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MATL_STATE_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PROD_ORD_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MILL_ORD_NO" Type="Int32" />
+          <Property Name="PROCESS_COIL_SEQ_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MATL_PHYS_FORM_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PROCESS_STEP_IDENT_NO" Type="Int32" />
+          <Property Name="PCE_DOUBLE_UP_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OVRRIDE_MET_HOLD_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ANN_LOT_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LOC_CD_UPD_EST" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PREV_OP_CD_EST" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NEXT_NEXT_OP_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ORIGNL_PCE_DISPLAY_NO" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="ORIGN_COUNTRY_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STOR_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HMILL_ROLL_EST" Type="DateTime" Precision="7" />
+          <Property Name="CUSTOM_COUNTRY_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ORIGN_COUNTRY_CD_TEXT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CUSTOM_COUNTRY_CD_TEXT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LABEL_COUNTRY_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LABEL_COUNTRY_CD_TEXT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CORE_LINR_WT" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CORE_LINR_WT_IMP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TUBE_ROUND_OUT_DIM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TUBE_ROUND_OUT_DIM_IMP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BASIC_PROD_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LEGACY_CUST_NO" Type="Int32" />
+          <Property Name="CUST_NO" Type="Int32" />
+          <Property Name="DEVAL_SCRAP_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STL_FAM_CD" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TYP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LUB_COAT_WT_CD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SLIT_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HSLA_GRD_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DEVAL_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CHEM_TREAT_FLG" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CAMPGNID" Type="Int32" Nullable="false" />
+          <Property Name="CAMPID" Type="Int32" Nullable="false" />
+          <Property Name="LAST_PROD_ORD_NO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DEVAL_SCRAP_EST" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GEWBRUTTO" Type="Double" Nullable="false" />
+          <Property Name="GEWBRUTTO_IMP" Type="Double" Nullable="false" />
+          <Property Name="WEIGHTDEFAULT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WEIGHTDEFAULT_IMP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VCId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="POCModelStoreContainer" CdmEntityContainer="POCEntities">
+          <EntitySetMapping Name="Hscode">
+            <EntityTypeMapping TypeName="POCModel.Hscode">
+              <MappingFragment StoreEntitySet="Hscode">
+                <ScalarProperty Name="MES_PCE_IDENT_NO" ColumnName="MES_PCE_IDENT_NO" />
+                <ScalarProperty Name="HSCODE1" ColumnName="HSCODE" />
+                <ScalarProperty Name="ALLOY" ColumnName="ALLOY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="POCModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="IsSuperAdmin" ColumnName="IsSuperAdmin" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PieceInfo">
+            <EntityTypeMapping TypeName="POCModel.PieceInfo">
+              <MappingFragment StoreEntitySet="PieceInfo">
+                <ScalarProperty Name="VCId" ColumnName="VCId" />
+                <ScalarProperty Name="WEIGHTDEFAULT_IMP" ColumnName="WEIGHTDEFAULT_IMP" />
+                <ScalarProperty Name="WEIGHTDEFAULT" ColumnName="WEIGHTDEFAULT" />
+                <ScalarProperty Name="GEWBRUTTO_IMP" ColumnName="GEWBRUTTO_IMP" />
+                <ScalarProperty Name="GEWBRUTTO" ColumnName="GEWBRUTTO" />
+                <ScalarProperty Name="DEVAL_SCRAP_EST" ColumnName="DEVAL_SCRAP_EST" />
+                <ScalarProperty Name="LAST_PROD_ORD_NO" ColumnName="LAST_PROD_ORD_NO" />
+                <ScalarProperty Name="CAMPID" ColumnName="CAMPID" />
+                <ScalarProperty Name="CAMPGNID" ColumnName="CAMPGNID" />
+                <ScalarProperty Name="CHEM_TREAT_FLG" ColumnName="CHEM_TREAT_FLG" />
+                <ScalarProperty Name="DEVAL_FLG" ColumnName="DEVAL_FLG" />
+                <ScalarProperty Name="HSLA_GRD_FLG" ColumnName="HSLA_GRD_FLG" />
+                <ScalarProperty Name="SLIT_FLG" ColumnName="SLIT_FLG" />
+                <ScalarProperty Name="LUB_COAT_WT_CD" ColumnName="LUB_COAT_WT_CD" />
+                <ScalarProperty Name="TYP" ColumnName="TYP" />
+                <ScalarProperty Name="STL_FAM_CD" ColumnName="STL_FAM_CD" />
+                <ScalarProperty Name="DEVAL_SCRAP_FLG" ColumnName="DEVAL_SCRAP_FLG" />
+                <ScalarProperty Name="CUST_NO" ColumnName="CUST_NO" />
+                <ScalarProperty Name="LEGACY_CUST_NO" ColumnName="LEGACY_CUST_NO" />
+                <ScalarProperty Name="BASIC_PROD_CD" ColumnName="BASIC_PROD_CD" />
+                <ScalarProperty Name="TUBE_ROUND_OUT_DIM_IMP" ColumnName="TUBE_ROUND_OUT_DIM_IMP" />
+                <ScalarProperty Name="TUBE_ROUND_OUT_DIM" ColumnName="TUBE_ROUND_OUT_DIM" />
+                <ScalarProperty Name="CORE_LINR_WT_IMP" ColumnName="CORE_LINR_WT_IMP" />
+                <ScalarProperty Name="CORE_LINR_WT" ColumnName="CORE_LINR_WT" />
+                <ScalarProperty Name="LABEL_COUNTRY_CD_TEXT" ColumnName="LABEL_COUNTRY_CD_TEXT" />
+                <ScalarProperty Name="LABEL_COUNTRY_CD" ColumnName="LABEL_COUNTRY_CD" />
+                <ScalarProperty Name="CUSTOM_COUNTRY_CD_TEXT" ColumnName="CUSTOM_COUNTRY_CD_TEXT" />
+                <ScalarProperty Name="ORIGN_COUNTRY_CD_TEXT" ColumnName="ORIGN_COUNTRY_CD_TEXT" />
+                <ScalarProperty Name="CUSTOM_COUNTRY_CD" ColumnName="CUSTOM_COUNTRY_CD" />
+                <ScalarProperty Name="HMILL_ROLL_EST" ColumnName="HMILL_ROLL_EST" />
+                <ScalarProperty Name="STOR_FLG" ColumnName="STOR_FLG" />
+                <ScalarProperty Name="ORIGN_COUNTRY_CD" ColumnName="ORIGN_COUNTRY_CD" />
+                <ScalarProperty Name="ORIGNL_PCE_DISPLAY_NO" ColumnName="ORIGNL_PCE_DISPLAY_NO" />
+                <ScalarProperty Name="NEXT_NEXT_OP_CD" ColumnName="NEXT_NEXT_OP_CD" />
+                <ScalarProperty Name="PREV_OP_CD_EST" ColumnName="PREV_OP_CD_EST" />
+                <ScalarProperty Name="LOC_CD_UPD_EST" ColumnName="LOC_CD_UPD_EST" />
+                <ScalarProperty Name="ANN_LOT_NO" ColumnName="ANN_LOT_NO" />
+                <ScalarProperty Name="OVRRIDE_MET_HOLD_FLG" ColumnName="OVRRIDE_MET_HOLD_FLG" />
+                <ScalarProperty Name="PCE_DOUBLE_UP_FLG" ColumnName="PCE_DOUBLE_UP_FLG" />
+                <ScalarProperty Name="PROCESS_STEP_IDENT_NO" ColumnName="PROCESS_STEP_IDENT_NO" />
+                <ScalarProperty Name="MATL_PHYS_FORM_CD" ColumnName="MATL_PHYS_FORM_CD" />
+                <ScalarProperty Name="PROCESS_COIL_SEQ_NO" ColumnName="PROCESS_COIL_SEQ_NO" />
+                <ScalarProperty Name="MILL_ORD_NO" ColumnName="MILL_ORD_NO" />
+                <ScalarProperty Name="PROD_ORD_NO" ColumnName="PROD_ORD_NO" />
+                <ScalarProperty Name="MATL_STATE_CD" ColumnName="MATL_STATE_CD" />
+                <ScalarProperty Name="BILL_OF_LADING_NO" ColumnName="BILL_OF_LADING_NO" />
+                <ScalarProperty Name="PCE_CNT" ColumnName="PCE_CNT" />
+                <ScalarProperty Name="PAINT_DESC" ColumnName="PAINT_DESC" />
+                <ScalarProperty Name="PAINT_FLG" ColumnName="PAINT_FLG" />
+                <ScalarProperty Name="PCE_IMP_IN_DIAM" ColumnName="PCE_IMP_IN_DIAM" />
+                <ScalarProperty Name="PCE_IN_DIAM" ColumnName="PCE_IN_DIAM" />
+                <ScalarProperty Name="TRANS_SLAB_FLAG" ColumnName="TRANS_SLAB_FLAG" />
+                <ScalarProperty Name="ANN_CD" ColumnName="ANN_CD" />
+                <ScalarProperty Name="SURF_FIN_CD" ColumnName="SURF_FIN_CD" />
+                <ScalarProperty Name="COAT_CD" ColumnName="COAT_CD" />
+                <ScalarProperty Name="GRD_CD" ColumnName="GRD_CD" />
+                <ScalarProperty Name="HT_NO" ColumnName="HT_NO" />
+                <ScalarProperty Name="PCE_IMP_LGT" ColumnName="PCE_IMP_LGT" />
+                <ScalarProperty Name="PCE_LGT" ColumnName="PCE_LGT" />
+                <ScalarProperty Name="PCE_COMNT" ColumnName="PCE_COMNT" />
+                <ScalarProperty Name="PURCH_PCE_FORM_CD" ColumnName="PURCH_PCE_FORM_CD" />
+                <ScalarProperty Name="PCE_SOURCE_CD" ColumnName="PCE_SOURCE_CD" />
+                <ScalarProperty Name="HI_LEV_PROD" ColumnName="HI_LEV_PROD" />
+                <ScalarProperty Name="LUB_CD" ColumnName="LUB_CD" />
+                <ScalarProperty Name="LUB_FLG" ColumnName="LUB_FLG" />
+                <ScalarProperty Name="CAT_NO" ColumnName="CAT_NO" />
+                <ScalarProperty Name="SALES_ORD_REL_NO" ColumnName="SALES_ORD_REL_NO" />
+                <ScalarProperty Name="SALES_ORD_NO" ColumnName="SALES_ORD_NO" />
+                <ScalarProperty Name="ABBREV_CUST_NAME" ColumnName="ABBREV_CUST_NAME" />
+                <ScalarProperty Name="PKG_INSTR_CD" ColumnName="PKG_INSTR_CD" />
+                <ScalarProperty Name="PCE_IMP_OUT_DIAM" ColumnName="PCE_IMP_OUT_DIAM" />
+                <ScalarProperty Name="PCE_OUT_DIAM" ColumnName="PCE_OUT_DIAM" />
+                <ScalarProperty Name="BLK_FLG" ColumnName="BLK_FLG" />
+                <ScalarProperty Name="PREV_OP_CD" ColumnName="PREV_OP_CD" />
+                <ScalarProperty Name="NEXT_OP_PROCESS_TYPE" ColumnName="NEXT_OP_PROCESS_TYPE" />
+                <ScalarProperty Name="NEXT_OP_OUTSIDE_PROCESS_CD" ColumnName="NEXT_OP_OUTSIDE_PROCESS_CD" />
+                <ScalarProperty Name="NEXT_OP_CD" ColumnName="NEXT_OP_CD" />
+                <ScalarProperty Name="LINEUP_NO" ColumnName="LINEUP_NO" />
+                <ScalarProperty Name="LEGACY_LINEUP_NO" ColumnName="LEGACY_LINEUP_NO" />
+                <ScalarProperty Name="PREV_PREV_LOC_CD" ColumnName="PREV_PREV_LOC_CD" />
+                <ScalarProperty Name="PREV_LOC_CD" ColumnName="PREV_LOC_CD" />
+                <ScalarProperty Name="FIELD_SHORT_DESC" ColumnName="FIELD_SHORT_DESC" />
+                <ScalarProperty Name="FIELD_CD" ColumnName="FIELD_CD" />
+                <ScalarProperty Name="LOC_CD" ColumnName="LOC_CD" />
+                <ScalarProperty Name="PCE_IMP_THK" ColumnName="PCE_IMP_THK" />
+                <ScalarProperty Name="PCE_THK" ColumnName="PCE_THK" />
+                <ScalarProperty Name="PCE_IMP_WDT" ColumnName="PCE_IMP_WDT" />
+                <ScalarProperty Name="PCE_WDT" ColumnName="PCE_WDT" />
+                <ScalarProperty Name="PCE_IMP_WT" ColumnName="PCE_IMP_WT" />
+                <ScalarProperty Name="PCE_WT" ColumnName="PCE_WT" />
+                <ScalarProperty Name="EXTRL_PCE_DISPLAY_NO" ColumnName="EXTRL_PCE_DISPLAY_NO" />
+                <ScalarProperty Name="LIFT_NO" ColumnName="LIFT_NO" />
+                <ScalarProperty Name="PCE_DISPLAY_NO" ColumnName="PCE_DISPLAY_NO" />
+                <ScalarProperty Name="MES_PCE_IDENT_NO" ColumnName="MES_PCE_IDENT_NO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Default" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="421cf1ed6d1946bca5264f2fe04a595b" Name="Diagram1">
+        <EntityTypeShape EntityType="POCModel.Hscode" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="POCModel.Users" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="POCModel.PieceInfo" Width="1.5" PointX="0.75" PointY="4.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

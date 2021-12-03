@@ -1,0 +1,359 @@
+﻿@{
+    var profile = ProfileHelper.Profile;
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="google" content="notranslate">
+    <title>AMD MetalTrail</title>
+    <!-- Web Fonts  -->
+    <link href="~/Theme/Css/Googlefonts.css" rel="stylesheet" />
+    @Styles.Render("~/Content/DashboardCSS")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Theme/Css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Theme/Css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Theme/Css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Theme/Css/ReportPageCustom.css" rel="stylesheet" />
+    <link href="~/Theme/Css/Sweetalert.css" rel="stylesheet" />
+    <script src="~/Theme/Scripts/jquery.js"></script>
+    <script src="~/Theme/Scripts/kendo.all.min.js"></script>
+    <script src="~/Theme/Scripts/kendo.aspnetmvc.min.js"></script>
+    <link href="~/Theme/Css/kendo.default-main.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            font-family: 'VAG_Rounded_Light';
+        }
+         
+        
+        .sidebar-left {
+            background: #ff6f47;
+            box-shadow: -5px 0 0 #ff6f47 inset;
+        }
+
+        ul.nav-main > li.nav-active > a {
+            /* box-shadow: 2px 0 0 #202020 inset;
+            background-color: #353535 !important;*/
+            box-shadow: 2px 0 0 #ff3700 inset;
+            background-color: #FF3700 !important;
+
+        }
+
+
+        .header {
+            background-color: #ffffff;
+            background-image: -webkit-linear-gradient(#ffffff 0%, #ffffff 45%);
+            background-image: linear-gradient(#ffffff 0%, #ffffff 45%);
+            border-bottom: 0px solid #353535;
+            border-top: 0px solid #353535;
+            z-index: 1000;
+        }
+
+        .header-right {
+            margin-top: -58px;
+        }
+
+        .userbox .role {
+            color: #353535;
+            font-size: 11px;
+            font-size: 1.1rem;
+            line-height: 1.2em;
+        }
+
+        .userbox .name {
+            color: #353535;
+            font-size: 13px;
+            font-size: 1.3rem;
+            line-height: 1.2em;
+        }
+
+        .userbox .custom-caret {
+            color: #353535;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        
+
+        .btn-orange {
+            background: #ff6f47;
+            color: white;
+        }
+
+        .btn-black {
+            background: #ffff;
+            color: #ff6f47 !important;
+            border-color: #ff6f47 !important;
+        }
+
+        #load {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background: #0020ff36;
+            z-index: 9999;
+            background: url('../../Theme/Images/Loader.gif') 50% 50% no-repeat #0020ff36;
+        }
+
+        .logo-container {
+            background-color: #ff6f47 !important;
+            height: 60px;
+            width: 300px;
+        }
+            .logo-container a:hover {
+                text-decoration:none;
+            }
+       /* .form-bordered h3 {
+            margin-top:10px !important;            
+        }*/
+    </style>
+</head>
+<body>
+    <section class="body">
+        <div id='load' style="display:none;">
+        </div>
+        <!-- start: header -->
+        <header class="header">
+
+            <div class="logo-container">
+                <a href="../" class="logo">
+                    <img src="~/Theme/Images/logo.png" height="35" width="110px !important;" alt="AMD MetalTrail" />
+                    @*<span style=" margin-left: 15px; font-weight: bold; color: white; text-decoration: none !important;">AMD  MetalTrail</span>*@
+                </a>
+                <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+                    <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                </div>
+                
+            </div>
+            <!-- start: search & user box -->
+           
+            <div class="header-right">
+                <div class="pageheader"> @ViewBag.Title</div>
+                <span class="separator"></span>
+
+                <div id="userbox" class="userbox">
+                    <a href="#" data-toggle="dropdown">
+                        <figure class="profile-picture">
+                            <img src="~/Theme/Images/person.jpg" class="img-circle" data-lock-picture="~/Theme/Images/person.jpg">
+                        </figure>
+                        <div class="profile-info">
+                            <span class="name">@ViewBag.Name</span>
+                            <span class="role">User</span>
+                        </div>
+
+                        <i class="fa custom-caret"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <ul class="list-unstyled">
+                            <li class="divider"></li>
+                            <li>
+                                <a role="menuitem" tabindex="-1" href="/Home/SignOut"><i class="fa fa-power-off"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end: search & user box -->
+        </header>
+        <!-- end: header -->
+
+        <div class="inner-wrapper">
+            <!-- start: sidebar -->
+            <aside id="sidebar-left" class="sidebar-left">
+
+                <div class="sidebar-header">
+                    <div class="sidebar-title" style="color:white;">
+                        AMD MetalTrail
+                    </div>
+                    <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+                        <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <nav id="menu" class="nav-main" role="navigation">
+                            <ul class="nav nav-main" id="navmenu" style="">
+                                <li class="nav-active" data-menuPageId="home">
+                                    <a href="/DashBoard">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                        <span>Lookup</span>
+                                    </a>
+                                </li>
+                                <li class="nav" data-menuPageId="products">
+                                    <a href="/Product">
+                                        <i class="fa-brands fa-product-hunt" aria-hidden="true"></i>
+                                        <span>Products</span>
+                                    </a>
+                                </li>
+                                <li class="nav" data-menuPageId="contracts">
+                                    <a href="/Contract">
+                                        <i class="fas fa-file-contract" aria-hidden="true"></i>
+                                        <span>Contracts</span>
+                                    </a>
+                                </li>
+                                <li class="nav" data-menuPageId="report">
+                                    <a href="/ReportNew">
+                                        <i class="fa fa-chart-bar" aria-hidden="true"></i>
+                                        <span>Reports</span>
+                                    </a>
+                                </li>
+                                <li class="nav" data-menuPageId="settings">
+                                    <a href="#">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+
+            </aside>
+            <!-- end: sidebar -->
+            <section role="main" class="content-body" style="background-color: #ffffff; padding-top: 0px; border: 0px solid black; box-shadow: 0 3px 10px rgb(0 0 0 / 20%); border-radius: 16px; margin: 16px;">
+                @*@if (TempData["Message"] == null)
+                {
+                    <div class="alert alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <h4>Warning!</h4>
+                       test data
+                    </div>
+                }
+                @if (TempData["Error"] == null)
+                {
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <h4>Warning!</h4>
+                        test data
+                    </div>
+                }*@
+                @RenderBody()
+            </section>
+        </div>
+        <input type="hidden" id="currentPageId" value="@(ViewBag.Page ?? "home")" />
+
+    </section>
+
+    <!-- Vendor -->
+   
+    <script src="~/Theme/Scripts/jquery.browser.mobile.js"></script>
+    <script src="~/Theme/Scripts/bootstrap.min.js"></script>
+    <script src="~/Theme/Scripts/nanoscroller.js"></script>
+    <script src="~/Theme/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Theme/Scripts/magnific-popup.js"></script>
+    <script src="~/Theme/Scripts/jquery.placeholder.js"></script>
+    @*<script src="~/Theme/Scripts/jquery-ui-1.10.4.custom.min.js"></script>*@
+    <script src="~/Theme/Scripts/jquery.ui.touch-punch.js"></script>
+    <script src="~/Theme/Scripts/bootstrap-fileupload.min.js"></script>
+    <script src="~/Theme/Scripts/jquery-ui-1.13.0.js"></script>
+    <script src="~/Theme/Scripts/sweetalert.js"></script>
+   
+    @*<script src="~/Theme/Scripts/bootstrap-sortable.js"></script>*@
+    <!-- Demo Purpose Only -->
+    <script>
+        (function () {
+            $('#listenSlider').change(function () {
+                $('.output b').text(this.value);
+            });
+
+            $('#listenSlider2').change(function () {
+                var min = parseInt(this.value.split('/')[0], 10);
+                var max = parseInt(this.value.split('/')[1], 10);
+
+                $('.output2 b.min').text(min);
+                $('.output2 b.max').text(max);
+            });
+        })();
+    </script>
+    <script>
+        var showLoader = function (form) {
+            $("<div id='divLoading' />").css({
+                'position': 'absolute',
+                'left': 0,
+                'right': 0,
+                'bottom': 0,
+                'top': 0,
+                'background': '#0020ff36',
+                'z-index': '99',
+                'text-align': 'center'
+            }).appendTo($("body"))
+                .append(
+                    $("<img />").attr("src", "@Url.Content("~/Theme/Images/Loader.gif")")
+                );
+        }
+
+    </script>
+    <script>
+        $(function () {
+            var pageIdAttr = "data-menuPageId";
+            var currentPage = $("#currentPageId").attr("value");
+            var menu = $("#navmenu");
+            $("#navmenu > li").removeClass('nav-active');
+            $("li[" + pageIdAttr + "=\"" + currentPage + "\"]", menu).addClass('nav-active');
+            if (currentPage == 'search' || currentPage == 'summarybymember' || currentPage == 'summarybyproduct') {
+                $(".nav-parent").addClass('nav-expanded');
+            }
+        });
+    </script>
+    <script src="~/Theme/Scripts/jquery.validate.min.js"></script>
+    @*<script src="~/Theme/Scripts/pnotify.custom.js"></script>*@
+    @*<script src="~/Theme/Scripts/jquery.dataTables.js"></script>
+        <script src="~/Theme/Scripts/datatables.js"></script>*@
+    <script src="~/Theme/Scripts/jquery.dataTables.min.js"></script>
+
+    <!-- Theme Base, Components and Settings -->
+    <script src="~/Theme/Scripts/theme.js"></script>
+
+    <!-- Theme Custom -->
+    <script src="~/Theme/Scripts/theme.custom.js"></script>
+
+    <!-- Theme Initialization Files -->
+    <script src="~/Theme/Scripts/theme.init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Examples -->
+    @*<script src="~/assets/javascripts/dashboard/examples.dashboard.js"></script>*@
+    @*https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif*@
+    <script>
+        $(document).ready(function () {
+            $('#tblProduct').DataTable();
+            $('#tblEvents').DataTable({ "bPaginate": false });
+        });
+
+        document.onreadystatechange = function () {
+            var state = document.readyState
+            if (state == 'interactive') {
+                $("#load").show();
+            } else if (state == 'complete') {
+                setTimeout(function () {
+                    $("#load").hide(); // hide loader
+                }, 1000);
+            }
+        }
+
+    </script>
+    @*<script type="text/javascript">
+            $(document).ready(function () {
+                  var success = @((TempData["Message"] != null).ToString().ToLower());
+                if (success==true)
+                    {
+                        new PNotify({
+                    title: 'Congratulations',
+                    text: '@TempData["Message"]',
+                    type: 'custom',
+                    addclass: 'notification-success',
+                    icon: 'fa fa-check'
+                });
+
+                    }
+                });
+        </script>*@
+    @RenderSection("scripts", false)
+</body>
+</html>

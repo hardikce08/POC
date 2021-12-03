@@ -1,0 +1,419 @@
+﻿@model POC.DataAccess.Model.DashBoardView
+
+@{
+    ViewBag.Title = "Lookup";
+    ViewBag.Page = "home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+@*<link href="~/Theme/Css/CustomeTable.css" rel="stylesheet" />*@
+@*<div class="page-header" style="color: white; padding: 13px; font-size: large;background:#ff5f47;border-left:0px;box-shadow:none;">Dashboard</div>*@
+
+<style type="text/css">
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 15px;
+        border-radius: 5px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #04AA6D;
+            cursor: pointer;
+        }
+</style>
+@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <h3 style="text-align: center;"></h3>
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Coil</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("Model.Coil", (IEnumerable<SelectListItem>)
+                        ViewBag.Coil, " -- SELECT --",
+                        htmlAttributes: new { onchange = "this.form.submit();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Country of Origin </label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlCountryofOrigin", (List<SelectListItem>)
+                   ViewBag.CountryofOrigin,
+                   htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Country of Melt and Pour</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlCountryofMeltPour", (List<SelectListItem>)
+                        ViewBag.CountryofMeltPour,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Type of technology (EAF or BF)</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlTypeofTechnology", (List<SelectListItem>)
+                        ViewBag.TypeofTechnology,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Weight (kg)</label>
+                <div class="col-md-6">
+                    @Html.TextBox("myRange",(object)ViewBag.WeightKg, new { @class = "form-control", @style = "width:100%;" })
+                    @*<div class="slidecontainer">
+                        <input type="range" min="1" max="28000" value="@ViewBag.WeightKg" class="slider" id="myRange" name="myRange" />
+                        <span id="demo" style="font-weight:bold;color:red">48</span>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Grade</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlGrade", (List<SelectListItem>)
+                        ViewBag.Grade,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">HS Code (10 Digits)</label>
+                <div class="col-md-6">
+                    <div class="slidecontainer">
+                        @Html.DropDownList("ddlHSCode10digits", (List<SelectListItem>)
+                        ViewBag.HSCode10digits,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-6 control-label">HS Code Description</label>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>*@
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Length (cm)</label>
+                <div class="col-md-6">
+                    @Html.TextBox("LengthRange", (object)ViewBag.Lengthcm, new { @class = "form-control", @style = "width:100%;" })
+                    @*<div class="slidecontainer">
+                        <div class="slidecontainer">
+                            <input type="range" min="0.1" max="20.0" step="0.1" value="@ViewBag.Lengthcm" class="slider" id="LengthRange" name="LengthRange" />
+                            <span id="LengthRangeValue" name="LengthRangeValue" style="font-weight:bold;color:red">0.2</span>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    <div class="col-md-10">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Width (cm)</label>
+                <div class="col-md-6">
+                    @Html.TextBox("WidthRange", (object)ViewBag.Widthcm, new { @class = "form-control", @style = "width:100%;" })
+                    @*<div class="slidecontainer">
+                        <div class="slidecontainer">
+                            <input type="range" min="0" max="2000" value="@ViewBag.Widthcm" class="slider" id="WidthRange" name="WidthRange" />
+                            <span id="WidthRangeValue" name="WidthRangeValue" style="font-weight:bold;color:red">0.2</span>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Guage</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlGuage", (List<SelectListItem>)
+                       ViewBag.Guage,
+                       htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    @*<div class="col-md-10">
+
+            <div class="col-md-6">
+            </div>
+        </div>*@
+    <div class="raw">
+        <div class="col-md-5">
+
+
+        </div>
+        <div class="col-md-4">
+            <p>
+                <input name="btnfilter" type="submit" value="Create Product" class="btn btn-black" />
+                <button id="btntaxtype" class="btn btn-orange showdetail" type="button"><i class="icon-plus-sign"></i>Create Contract</button>
+            </p>
+        </div>
+        <div class="col-md-3">
+
+        </div>
+    </div>
+    if (@ViewBag.VCId != null)
+    {
+        <div class="col-md-10">
+            <p>
+                Generated Product Id : @ViewBag.VCId
+            </p>
+        </div>
+    }
+    if (Model.lstActiveProducts != null)
+    {
+
+        <table id="tbllst" class="table table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Technology</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">HsCode</th>
+                    <th scope="col">Facility Address Country</th>
+                    <th scope="col">Manufacturer</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Length</th>
+                    <th scope="col">Width</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.lstActiveProducts)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Technology</td>
+                        <td>@item.Description</td>
+                        <td>@item.HSCode</td>
+                        <td>@item.FacilityAddressCountry</td>
+                        <td>@item.Manufacturer</td>
+                        <td>@item.Weight</td>
+                        <td>@item.Length</td>
+                        <td>@item.Width</td>
+                        <td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>
+                    </tr>
+                    <tr id="tr_@item.id" style="display:none;">
+                        <td>&nbsp;</td>
+                        <td id="detailsGridData_@item.id" colspan="9"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+ 
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width:50% !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Contract</h4>
+
+            </div>
+            <div class="modal-body" id="modal_details">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-orange" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+
+
+    <script>
+    //var slider = document.getElementById("myRange");
+    //var output = document.getElementById("demo");
+    //output.innerHTML = slider.value; // Display the default slider value
+
+    //// Update the current slider value (each time you drag the slider handle)
+    //slider.oninput = function () {
+    //    output.innerHTML = this.value;
+    //}
+
+    //var Lengthslider = document.getElementById("LengthRange");
+    //var LengthRangeValue = document.getElementById("LengthRangeValue");
+    //LengthRangeValue.innerHTML = Lengthslider.value; // Display the default slider value
+
+    //// Update the current slider value (each time you drag the slider handle)
+    //Lengthslider.oninput = function () {
+    //    LengthRangeValue.innerHTML = this.value;
+    //}
+
+    //var Widthslider = document.getElementById("WidthRange");
+    //var WidthRangeValue = document.getElementById("WidthRangeValue");
+    //WidthRangeValue.innerHTML = Widthslider.value; // Display the default slider value
+
+    //// Update the current slider value (each time you drag the slider handle)
+    //Widthslider.oninput = function () {
+    //    WidthRangeValue.innerHTML = this.value;
+    //}
+        if ($('#Model_Coil').val() == '') {
+            $('#ddlCountryofOrigin').attr("disabled", true);
+            $('#ddlCountryofMeltPour').attr("disabled", true);
+            $('#ddlTypeofTechnology').attr("disabled", true);
+            $('#myRange').attr("disabled", true);
+            $('#ddlGrade').attr("disabled", true);
+            $('#ddlHSCode10digits').attr("disabled", true);
+            $('#LengthRange').attr("disabled", true);
+            $('#WidthRange').attr("disabled", true);
+            $('#ddlGuage').attr("disabled", true);
+        }
+        else
+        {
+            $('#ddlCountryofOrigin').attr("disabled", false);
+            $('#ddlCountryofMeltPour').attr("disabled", false);
+            $('#ddlTypeofTechnology').attr("disabled", false);
+            $('#myRange').attr("disabled", false);
+            $('#ddlGrade').attr("disabled", false);
+            $('#ddlHSCode10digits').attr("disabled", false);
+            $('#LengthRange').attr("disabled", false);
+            $('#WidthRange').attr("disabled", false);
+            $('#ddlGuage').attr("disabled", false);
+        }
+         
+
+    function getDetails(id) {
+        var DetailGridId = '#detailsGridData_' + id;
+        var DetailRow = "#tr_" + id;
+
+            if ($(DetailRow).is(":visible")) {
+                HideAllDetailRow();
+            }
+            else {
+                $("#divLoader").show();
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "@(Url.Action("_ProductDetail", "Home"))",
+                    data: { "id": "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5" },
+                    success: function (data) {
+                        $(DetailGridId).html(data);
+                        HideAllDetailRow();
+                        $(DetailRow).show();
+                        $("#divLoader").hide(); // hide loader
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $("#divLoader").hide(); // hide loader
+                        alert('Failed to retrieve detail data.');
+                    }
+                });
+            }
+        }
+
+        function HideAllDetailRow() {
+            $('#tbllst >tbody >tr').each(function () {
+                var tr = "#" + this.id;
+                $(tr).hide();
+            });
+        }
+
+        $(".showdetail").click(function () {
+            $.ajax({
+            type: "GET",
+            url: '@Url.Action("_CreateContract", "Contract")',
+            data: { Id: $(this).data("id") },
+            success: function (data) {
+                $("#modal_details").html(data);
+                $("#modal").modal('show');
+                //$(".form_datetime").datepicker("destroy");
+                $("#StartDate").datepicker({ dateFormat: "yy-mm-dd" });
+                $("#EndDate").datepicker({ dateFormat: "yy-mm-dd" });
+                $("#ddlCountry").prop('selectedIndex', 0);
+                //$("#StartDate").val('');
+                //$("#EndDate").val('');
+                //$("#ddlCountry").prop('selectedIndex', 0);
+                console.log(data);
+                    }
+         });
+        });
+    </script>
+    <script type="text/javascript">
+    $("#btnSaveContract").click(function () {
+        //alert($('#model_ContractRequest_receiver').val());
+        var datas = JSON.stringify(CreateModel());
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveContract", "Contract")',
+            data: {serializeddata: datas},
+             success: function (data) {
+                 Swal.fire({
+                     position: 'top-end',
+                     icon: 'success',
+                     title: 'New Contract Added',
+                     showConfirmButton: false,
+                     timer: 1500
+                 })
+                 setTimeout(function () {
+                     $('#btnClose').click();
+                 }, 1500);
+                 //$("#modal").modal('hide');
+                //alert(data);
+                //console.log(data);
+                    }
+         });
+    });
+    function CreateModel() {
+        var dest = {
+            startDate: $("#StartDate").val(),
+            endDate: $("#EndDate").val(),
+            destination: $("#ddlCountry").val(),
+            receiver: $('#model_ContractRequest_receiver').val()
+        };
+        return dest;
+    }
+
+    </script>
+}
+

@@ -1,0 +1,89 @@
+.info-box {
+    box-shadow: 0 2px 10px rgb(0 0 0 / 20%);
+    height: 80px;
+    display: flex;
+    cursor: default;
+    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+    .info-box .icon {
+        display: inline-block;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.12);
+        width: 80px;
+    }
+
+.bg-red {
+    background-color: #F44336 !important;
+    color: #fff;
+}
+
+.info-box .content {
+    display: inline-block;
+    padding: 7px 10px;
+}
+
+    .info-box .content .text {
+        font-size: 13px;
+        margin-top: 11px;
+        color: #555;
+    }
+
+    .info-box .content .number {
+        font-weight: normal;
+        font-size: 26px;
+        margin-top: -4 px;
+        color: #555;
+    }
+
+.bg-indigo {
+    background-color: #3F51B5 !important;
+    color: #fff;
+}
+
+.info-box .icon i {
+    color: #fff;
+    font-size: 50px;
+    line-height: 80px;
+}
+.info-box .icon .chart .chart-bar {
+    height: 100%;
+    line-height: 100px;
+}
+    .info-box .icon .chart .chart-bar canvas {
+        vertical-align: baseline !important;
+    }
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialicons/v115/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+.bg-purple {
+    background-color: #9C27B0 !important;
+    color: #fff;
+}
+
+.bg-deep-purple {
+    background-color: #673AB7 !important;
+    color: #fff;
+}

@@ -1,0 +1,148 @@
+﻿@model POC.DataAccess.Model.ReportView
+@{
+    ViewBag.Title = "Reports";
+    ViewBag.Page = "report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<style type="text/css">
+        .dataTables_wrapper .dataTables_filter label {
+            width:100% !important;
+        }
+    </style>*@
+@using (Html.BeginForm("Index", "Report", FormMethod.Post, new { @class = "form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    @*<h3 style="text-align: center;">Reports</h3>*@
+    <div class="col-md-12">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <div class="icon bg-red">
+                    <i class="material-icons">equalizer</i>
+                </div>
+                <div class="content">
+                    <div class="text">ACTIVE</div>
+                    <div class="number count-to">@Model.Active</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <div class="icon bg-indigo">
+                    <i class="material-icons">multiline_chart</i>
+                </div>
+                <div class="content">
+                    <div class="text">CONSUMED</div>
+                    <div class="number count-to">@Model.Consumed</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <div class="icon bg-purple">
+                    @*<i class="material-icons">bookmark</i>*@
+                    <i class="material-icons">insert_chart</i>
+                </div>
+                <div class="content">
+                    <div class="text">HISTORY</div>
+                    <div class="number count-to">@Model.History</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <div class="icon bg-deep-purple">
+                    <i class="material-icons">pie_chart</i>
+                </div>
+                <div class="content">
+                    <div class="text">SHARED WITH ME</div>
+                    <div class="number count-to">@Model.SharedWithme</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <canvas id="myChart" width="300" height="300"></canvas>
+        </div>
+
+        <div class="col-md-6">
+            <canvas id="myChartLine" width="300" height="300"></canvas>
+        </div>
+    </div>
+    <div id='divLoader' class="loaderdiv" style="display:none;">
+    </div>
+}
+@section scripts {
+
+
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'pie',
+            responsive: true,
+            animation: true,
+            height: "300px",
+            width: "300px",
+            legend: { position: 'bottom' },
+            data: {
+                labels: ['Active', 'Consumed', 'SharedWithme'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [@ViewBag.Active, @ViewBag.Consumed, @ViewBag.SharedWithme],
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(153, 102, 255)',
+                        'rgba(255, 159, 64)'
+                    ]
+
+                }]
+            }, options: {
+                // This chart will not respond to mousemove, etc
+               // events: ['click']
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTimeLineData", "Report")',
+            data: {},
+            contentType: "application/json",
+            dataType: "json",
+            success: function (chData) {
+                //alert(chData.data);
+                var graphData = JSON.parse(chData.data);
+                console.log(graphData);
+                //For Line Chart
+                var ctx1 = document.getElementById("myChartLine").getContext('2d');
+                var myChart1 = new Chart(ctx1, {
+                    type: 'line',
+                    height: "230px",
+                    width: "300px",
+                    responsive: true,
+                    animation: true,
+                    legend: { position: 'bottom' },
+                    data: {
+                        //labels: ["M", "T", "W", "T", "F", "S", "S"],
+                        labels: graphData[0],
+                        datasets: [{
+                            label: 'Per day Product Count',
+                            data: graphData[1],
+                            backgroundColor: "rgb(66, 134, 244)"
+                        }]
+                    }
+
+                });
+
+                    }
+        });
+
+    </script>
+}
+
+
+

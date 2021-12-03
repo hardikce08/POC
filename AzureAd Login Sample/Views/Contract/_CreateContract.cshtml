@@ -1,0 +1,58 @@
+﻿@model POC.DataAccess.Model.Contract
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label class="col-md-4 control-label">CounterParty</label>
+            <div class="col-md-8">
+                @*@Html.SelectList_Receiver(model => model.ContractRequest.receiver, new { @class = "form-control",@id= "receiver" })*@
+
+                @Html.DropDownList("model.ContractRequest.receiver", new List<SelectListItem>
+{
+new SelectListItem { Text = "mining co.", Value = "did:key:z6MkhUDRZpEmsxrjLGpDDmfMzvTp2Wji1PJRqWsi4EfnjJi4"},
+new SelectListItem { Text = "fabricator co.", Value = "did:key:z6Mko5QGjK56EwM59qdjn99TrJqQFvNcokxwwCTUJ8sfiG4Z"},
+new SelectListItem { Text = "carrier co.", Value = "did:key:z6MkppW5RmMY58oYSgwypFa2bL8NgDT96gzqKwZtZwm7oC78"}
+}, (string.IsNullOrEmpty(ViewBag.CounerParty) ? "Select Receiver": (string)ViewBag.CounerParty), new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-4 control-label">Destination</label>
+            <div class="col-md-8">
+                @Html.DropDownList("ddlCountry", (List<SelectListItem>)
+       ViewBag.Country,
+       htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Start Date</label>
+                <div class="col-md-8">
+                    @Html.TextBox("StartDate", (string)ViewBag.StartDate, new { @id = "StartDate", @class = "form-control form_datetime" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-4 control-label">End Date</label>
+            <div class="col-md-8">
+                @Html.TextBox("EndDate", (string)ViewBag.EndDate, new { @id = "EndDate", @class = "form-control form_datetime" })
+            </div>
+        </div>
+    </div>
+    @Html.Hidden("hdnContractId",Model.Id)
+    <div class="clearfix"></div>
+</div>
+@*<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ddlCountry option").filter(function () {
+            return this.text == 'USA';
+        }).attr('selected', true);
+    });
+</script>*@
+
+
+
+
+

@@ -1,0 +1,22 @@
+/* Add here all your CSS customizations */
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+        width: 1100px; /* New width for default modal */
+    }
+
+    .modal-sm {
+        width: 350px; /* New width for small modal */
+    }
+}
+
+@media screen and (min-width: 1092px) {
+    .modal-lg {
+        width: 1150px; /* New width for large modal */
+    }
+}
+
+@font-face {
+    font-family: 'VAG_Rounded_Light';
+    src: url('../fonts/VAG_Rounded_Light.ttf') format('truetype') /* Safari, Android, iOS */
+}
+ 

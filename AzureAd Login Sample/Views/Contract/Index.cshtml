@@ -1,0 +1,265 @@
+﻿@model POC.DataAccess.Model.ContracListView
+@{
+    ViewBag.Title = "Contracts";
+    ViewBag.Page = "contracts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #tblProduct_filter.dataTables_filter label {
+        width: 100%;
+    }
+
+    #tblProduct_length select {
+        margin-left: -15px;
+    }
+
+    .swal2-confirm {
+        margin-left: 20px !important;
+    }
+
+    #tblProduct tbody > tr:hover {
+        background-color: #ff6f47;
+    }
+
+        #tblProduct tbody > tr:hover > td > i {
+            background-color: #fff;
+        }
+
+    .table-striped > tbody > tr:nth-child(even):hover {
+        background-color: #ff6f47 !important;
+    }
+</style>
+@using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <h3 style="text-align: center;"></h3>
+    <div class="col-md-12">
+        <button class="btn btn-orange showdetail" data-id="0" type="button">Create Contract</button>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <a class="btn btn-black" id="All" href="~/Contract?Filterby=All">All</a>
+        <a class="btn btn-black" id="Day" href="~/Contract?Filterby=Day">Day</a>
+        <a class="btn btn-black" id="Week" href="~/Contract?Filterby=Week">Week</a>
+        <a class="btn btn-black" id="Month" href="~/Contract?Filterby=Month">Month</a>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        @if (Model.lst != null)
+        {
+            <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblProduct">
+                <thead>
+                    <tr>
+                        <th scope="col">ContractId</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">CounterParty</th>
+                        <th scope="col">StartsOn</th>
+                        <th scope="col">Expires On</th>
+                        <th scope="col">Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lst)
+                    {
+                        <tr>
+                            <td>@item.ContractId</td>
+                            <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
+                            <td>@item.CounterParty</td>
+                            <td>@item.StartDate.ToString("MMM dd,yyyy")</td>
+                            <td>@item.EndDate.ToString("MMM dd,yyyy")</td>
+                            <td>@item.Status</td>
+                            <td>
+                                <i class="material-icons showdetail" style="color: #ff6f47; cursor: pointer;" data-id="@item.ContractId">edit</i>
+                                <i class="material-icons delete" style="color: #ff6f47;cursor:pointer;" id="btnDelete" data-id="@item.ContractId">delete_forever</i>
+                            </td>
+                            @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
+                        </tr>
+                        @*<tr id="tr_@item.id" style="display:none;">
+                                <td>&nbsp;</td>
+                                <td id="detailsGridData_@item.id" colspan="9"></td>
+                            </tr>*@
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:50% !important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="modal-title">Add Contract</h4>
+                </div>
+                <div class="modal-body" id="modal_details">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-orange" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
+}
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var input = $('#tblProduct_filter label input');
+            $("#tblProduct_filter label").html('');
+            $("#tblProduct_filter label").append(input);
+            //$("div > div", "#tblProduct_wrapper")[0].remove();
+            $("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
+            $("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
+            $("div > div", "#tblProduct_wrapper").addClass('col-md-6');
+            $("select", "#tblProduct_length").addClass('form-control');
+
+            var filterbyval = $('#hdnFilterBy').val();
+            $('#' + filterbyval).removeClass('btn-black');
+            $('#' + filterbyval).addClass('btn-orange');
+        });
+        $(".showdetail").click(function () {
+            //alert($(this).data("id"));
+            $.ajax({
+            type: "GET",
+            url: '@Url.Action("_CreateContract", "Contract")',
+            data: { Id: $(this).data("id") },
+            success: function (data) {
+                $("#modal_details").html(data);
+                $("#modal").modal('show');
+                //$(".form_datetime").datepicker("destroy");
+                $("#StartDate").datepicker({ dateFormat: "yy-mm-dd" });
+                $("#EndDate").datepicker({ dateFormat: "yy-mm-dd" });
+                if ($(this).data("id") == 0) {
+
+                    //$("#StartDate").val('');
+                    //$("#EndDate").val('');
+                    $("#ddlCountry").prop('selectedIndex', 0);
+                    //$('#modaltitle').text('Hello World');
+                    //$('#modal').on('show.bs.modal', function (event) {
+                    //    $(this).find('h4#modal-title').text("You new title");
+                    //});
+                }
+                //console.log(data);
+                    }
+         });
+         });
+
+    $("#btnSaveContract").click(function () {
+        //alert($('#model_ContractRequest_receiver').val());
+        var datas = JSON.stringify(CreateModel());
+        if ($("#hdnContractId").val() == 0) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveContract", "Contract")',
+                data: { serializeddata: datas },
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'New Contract Added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                    //Swal.fire({
+                    //    title: 'Contract Created',
+                    //    showClass: {
+                    //        popup: 'animate__animated animate__fadeInDown'
+                    //    },
+                    //    hideClass: {
+                    //        popup: 'animate__animated animate__fadeOutUp'
+                    //    }
+                    //})
+                    //$('.swal2-confirm').click(function () { location.reload(); });
+
+                }
+            });
+        }
+        else {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateContract", "Contract")',
+                 data: { serializeddata: datas, id: $("#hdnContractId").val() },
+                 success: function (data) {
+                     Swal.fire({
+                         position: 'top-end',
+                         icon: 'success',
+                         title: 'Contract Updated',
+                         showConfirmButton: false,
+                         timer: 1500
+                     })
+                     setTimeout(function () {
+                         location.reload();
+                     }, 1500);
+                    //$("#modal").modal('hide');
+                    //alert(data);
+                    //console.log(data);
+                }
+            });
+        }
+    });
+    function CreateModel() {
+        var dest = {
+            startDate: $("#StartDate").val(),
+            endDate: $("#EndDate").val(),
+            destination: $("#ddlCountry").val(),
+            receiver: $('#model_ContractRequest_receiver').val()
+
+        };
+        return dest;
+        }
+
+        $(".delete").click(function () {
+            //alert($(this).data("id"));
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DeleteContract", "Contract")',
+                        data: { id: $(this).data("id") },
+                        success: function (data) {
+                            swalWithBootstrapButtons.fire(
+                                'Deleted!',
+                                'Your data has been deleted.',
+                                'success'
+                            );
+                            $('.swal2-confirm').click(function () { location.reload(); });
+                        }
+                    });
+
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+    });
+
+    </script>
+}
