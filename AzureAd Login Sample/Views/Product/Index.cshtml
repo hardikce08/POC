@@ -126,7 +126,7 @@
         $(".showdetail").click(function () {
             //alert($(this).data("id"));
             //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
-            var Id = $(this).data("id");
+            var Id = $(this).data("id"); 
             var url = "@Url.Action("_Detail", "Product")?id=" + Id;
             window.open(
                 url,
