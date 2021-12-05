@@ -59,11 +59,11 @@ namespace POC.Helpers
             return objWebResponse;
         }
 
-        public static WebResponse GetWebAPIResponseWithErrorDetails(string url, string contentType, string methodType = "GET", string postData = "", string header = "", string header1 = "", string accept = "")
+        public static WebResponse GetWebAPIResponseWithErrorDetails(string url, string contentType, string methodType = "GET", string postData = "", string header = "", string header1 = "", string accept = "",string BrarerToken="")
         {
             WebResponse objWebResponse = new WebResponse();
             string responseString = string.Empty;
-            var response = CallWebAPIResponseWithErrorDetails(url, contentType, out responseString, methodType, postData, header, header1, accept);
+            var response = CallWebAPIResponseWithErrorDetailsNew(url, contentType, out responseString, methodType, postData, header, header1, accept, BrarerToken);
             if (response != null)
             {
                 objWebResponse.ResponseCode = ((System.Net.HttpWebResponse)(response)).StatusCode;
@@ -144,7 +144,7 @@ namespace POC.Helpers
             return response;
         }
 
-        private static HttpWebResponse CallWebAPIResponseWithErrorDetails(string url, string contentType, out string responseString, string methodType = "GET", string postData = "", string header = "", string header1 = "", string accept = "")
+        private static HttpWebResponse CallWebAPIResponseWithErrorDetailsNew(string url, string contentType, out string responseString, string methodType = "GET", string postData = "", string header = "", string header1 = "", string accept = "",string BearerToken="")
         {
             System.Net.WebResponse response1 = null;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
@@ -172,6 +172,10 @@ namespace POC.Helpers
                 if (!string.IsNullOrEmpty(header1))
                 {
                     request.Headers.Add(header1);
+                }
+                if (!string.IsNullOrEmpty(BearerToken))
+                {
+                    request.Headers.Add("Authorization", "Bearer "+ BearerToken);
                 }
                 if (!string.IsNullOrWhiteSpace(postData))
                 {
