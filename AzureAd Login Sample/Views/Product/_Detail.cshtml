@@ -106,6 +106,7 @@
     var credentialsubject = @Model.result?.productVC?.credentialSubject;
     var lstSpecification = @Model.result?.productSpecs;
     var eventlst = Model.result.events;
+    var carbonfootprnts = new POC.DataAccess.Model.Co2eProduced();
     var res = @Model.result;
     <h3 style="text-align: center;"></h3>
     <div class="tabbable boxed parentTabs p-4">
@@ -294,14 +295,14 @@
                                             </td>
 
                                         </tr>
-                                        <tr>
-                                            <td class="graphdiv" data-latLng="-25.344,131.036">
-                                                <b>@item.eventType Product</b><br />
-                                                Submitted by: @item.eventVC.credentialSubject.initiator?.name<br />
-                                                @item.eventVC.credentialSubject.place.address.addressLocality ,  @item.eventVC.credentialSubject.place.address.addressRegion ,  @item.eventVC.credentialSubject.place.address.addressCountry <br />
-                                                <p class="rounddiv">@item.eventVC.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.eventVC.issuanceDate.ToString("hh:mm tt")</p>
-                                            </td>
-                                        </tr>
+                                        @*<tr>
+                                                <td class="graphdiv" data-latLng="-25.344,131.036">
+                                                    <b>@item.eventType Product</b><br />
+                                                    Submitted by: @item.eventVC.credentialSubject.initiator?.name<br />
+                                                    @item.eventVC.credentialSubject.place.address.addressLocality ,  @item.eventVC.credentialSubject.place.address.addressRegion ,  @item.eventVC.credentialSubject.place.address.addressCountry <br />
+                                                    <p class="rounddiv">@item.eventVC.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.eventVC.issuanceDate.ToString("hh:mm tt")</p>
+                                                </td>
+                                            </tr>*@
                                     }
                                 </tbody>
                             </table>
@@ -340,30 +341,33 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="col-md-4 background-fill">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">Product Id</label><br />
                                             @product.id
                                         </div>
-                                        <div class="col-md-3 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Product Type</label><br />
                                             @product.name
                                         </div>
-                                        <div class="col-md-3 background-fill">
+
+                                    </div>
+                                    @*<div class="col-md-12" style="margin-top:10px;"></div>*@
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">Technology Type</label><br />
                                             @credentialsubject.technologyType
                                         </div>
-                                    </div>
-                                    <div class="col-md-12" style="margin-top:10px;"></div>
-                                    <div class="col-md-12">
-                                        <div class="col-md-4 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Owner</label><br />
                                             @res.owner.name
                                         </div>
-                                        <div class="col-md-3 background-fill">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">Origin</label><br />
                                             @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
                                         </div>
-                                        <div class="col-md-3 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Current Location</label><br />
                                             @if (credentialsubject.facility.address != null)
                                             {
@@ -375,25 +379,26 @@
                                             }
                                         </div>
                                     </div>
-                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    @*<div class="col-md-12" style="margin-top:10px;"></div>*@
                                     <div class="col-md-12">
-                                        <div class="col-md-4 background-fill">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">Weight</label><br />
                                             @product.weight.value.ToString()  @product.weight.unitCode
                                         </div>
 
-                                        <div class="col-md-3 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Price per KG</label><br />
                                             N/A
                                         </div>
-                                        <div class="col-md-3 background-fill">
+
+                                    </div>
+                                    @*<div class="col-md-12" style="margin-top:10px;"></div>*@
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">HS Code</label><br />
                                             @credentialsubject.HSCode
                                         </div>
-                                    </div>
-                                    <div class="col-md-12" style="margin-top:10px;"></div>
-                                    <div class="col-md-12">
-                                        <div class="col-md-3 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Sku</label><br />
                                             @if (string.IsNullOrEmpty(credentialsubject.sku))
                                             {
@@ -440,6 +445,12 @@
                     </ul>
                     <div class="tab-content" style="min-height:550px;">
                         <div class="tab-pane fade active in" id="carboncerti">
+
+                            @if (Model.result.carbonFootprints.Count > 0)
+                            {
+                                carbonfootprnts = Model.result.carbonFootprints[0].carbonFootprintDetails?.carbonFootprintEvents?.events[0].Co2eProduced;
+                            }
+
                             <div class="col-md-12 form-group" style="margin-left:-35px !important;">
                                 <div class="col-md-4" style="text-align:center;">
                                     <img src="~/Theme/Images/environmental.png" style="margin-top:15px;" /><br />
@@ -451,55 +462,51 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="col-md-4 background-fill">
+                                        <div class="col-md-6 background-fill">
                                             <label class="control-label">CO2 Emissions</label><br />
-                                            @product.id
+                                            @carbonfootprnts.value  @carbonfootprnts.unitCode
+                                            39 Tonne
                                         </div>
-                                        <div class="col-md-3 background-fill">
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">NO2 Emissions</label><br />
-                                            @product.name
+                                            39 Tonne
                                         </div>
-                                        <div class="col-md-3 background-fill">
-                                            <label class="control-label">CH4 Emissions</label><br />
-                                            @credentialsubject.technologyType
-                                        </div>
+
                                     </div>
-                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    @*<div class="col-md-12" style="margin-top:10px;"></div>*@
                                     <div class="col-md-12">
-                                        <div class="col-md-4 background-fill">
+                                        <div class="col-md-6 background-fill">
+                                            <label class="control-label">CH4 Emissions</label><br />
+                                            39 Tonne
+                                        </div>
+                                        <div class="col-md-5 background-fill">
                                             <label class="control-label">Total CO2e Emissions</label><br />
-                                            @res.owner.name
+                                            39 Tonne
                                         </div>
-                                        <div class="col-md-3 background-fill">
-                                            <label class="control-label">Total Estimated CO2e Emissions</label><br />
-                                            @res.owner.name
-                                        </div>
-                                        @*<div class="col-md-3 background-fill">
-                            <label class="control-label">Current Location</label><br />
-                            @if (credentialsubject.facility.address != null)
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @credentialsubject.facility.address.addressCountry
-                            }
-                        </div>*@
                                     </div>
-                                    <div class="col-md-12" style="margin-top:10px;"></div>
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 background-fill">
+                                            <label class="control-label">Total Estimated CO2e Emissions</label><br />
+                                            39 Tonne
+                                        </div>
+                                        @*<div class="col-md-5 background-fill">
+                                                <label class="control-label">Total CO2e Emissions</label><br />
+                                                @res.owner.name
+                                            </div>*@
+                                    </div>
                                 </div>
                             </div>
                             @*<div class="col-md-12 form-group" style="margin-left:-35px !important;">
-                <div class="col-md-12">
-                    <p style="font-weight:bold;">Composition traceability tree</p>
-                </div>
-                <div class="col-md-12" style="border-radius: 10px; border: 1px solid #ccc; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; margin-left: 10px;">
-                    <p style="font-weight:bold;font-size:12px;margin:0px;">@product.name</p>
-                    @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i><br />
-                    @product.id
+                                    <div class="col-md-12">
+                                        <p style="font-weight:bold;">Composition traceability tree</p>
+                                    </div>
+                                    <div class="col-md-12" style="border-radius: 10px; border: 1px solid #ccc; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; margin-left: 10px;">
+                                        <p style="font-weight:bold;font-size:12px;margin:0px;">@product.name</p>
+                                        @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i><br />
+                                        @product.id
 
-                </div>
-            </div>*@
+                                    </div>
+                                </div>*@
                         </div>
                         <div class="tab-pane fade" id="carbonactivity">
                             <p>unique all content</p>

@@ -251,7 +251,10 @@ namespace POC.DataAccess.Model
         public DateTime issuanceDate { get; set; }
         public CredentialSubject credentialSubject { get; set; }
     }
-
+    public class FootPrintEvents
+    {
+        public Co2eProduced Co2eProduced { get; set; }
+    }
     public class Event
     {
         public string id { get; set; }
@@ -372,7 +375,7 @@ namespace POC.DataAccess.Model
 
     public class CarbonFootprintEvents
     {
-        public List<Event> events { get; set; }
+        public List<FootPrintEvents> events { get; set; }
         public int co2eEmissionsInTonnes { get; set; }
     }
 
