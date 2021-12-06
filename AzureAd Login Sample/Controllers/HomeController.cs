@@ -35,7 +35,8 @@ namespace POC.Controllers
                 //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
                 return RedirectToAction("Dashboard", "Home");
             }
-            return View();
+            // return View();
+            return RedirectToAction("SignIn", "Home");
         }
         public ActionResult Dashboard(DashBoardView model)
         {
