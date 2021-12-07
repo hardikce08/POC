@@ -28,81 +28,86 @@
     .table-striped > tbody > tr:nth-child(even):hover {
         background-color: #ff6f47 !important;
     }
+    .table-striped > tbody > tr:nth-child(even) {
+        opacity: unset;
+        background-color: #F8DFB6 !important;
+    }
 </style>
 @using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
-    <h3 style="text-align: center;"></h3>
-    <div class="col-md-12">
-        <button class="btn btn-orange showdetail" data-id="0" type="button">Create Contract</button>
-    </div>
     <div class="col-md-12" style="margin-top:10px;"></div>
     <div class="col-md-12">
-        <a class="btn btn-black" id="All" href="~/Contract?Filterby=All">All</a>
-        <a class="btn btn-black" id="Day" href="~/Contract?Filterby=Day">Day</a>
-        <a class="btn btn-black" id="Week" href="~/Contract?Filterby=Week">Week</a>
-        <a class="btn btn-black" id="Month" href="~/Contract?Filterby=Month">Month</a>
-    </div>
-    <div class="col-md-12" style="margin-top:10px;"></div>
-    <div class="col-md-12">
-        @if (Model.lst != null)
-        {
-            <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblProduct">
-                <thead>
-                    <tr>
-                        <th scope="col">ContractId</th>
-                        <th scope="col">Created</th>
-                        <th scope="col">CounterParty</th>
-                        <th scope="col">StartsOn</th>
-                        <th scope="col">Expires On</th>
-                        <th scope="col">Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.lst)
-                    {
+        <div class="col-md-10" style="padding-left: 0px;">
+            <a class="btn btn-black" id="All" href="~/Contract?Filterby=All">All</a>
+            <a class="btn btn-black" id="Day" href="~/Contract?Filterby=Day">Day</a>
+            <a class="btn btn-black" id="Week" href="~/Contract?Filterby=Week">Week</a>
+            <a class="btn btn-black" id="Month" href="~/Contract?Filterby=Month">Month</a>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-orange showdetail" data-id="0" type="button">Create Contract</button>
+        </div>
+        </div>
+        <div class="col-md-12" style="margin-top:10px;"></div>
+        <div class="col-md-12">
+            @if (Model.lst != null)
+            {
+                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblProduct">
+                    <thead>
                         <tr>
-                            <td>@item.ContractId</td>
-                            <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
-                            <td>@item.CounterParty</td>
-                            <td>@item.StartDate.ToString("MMM dd,yyyy")</td>
-                            <td>@item.EndDate.ToString("MMM dd,yyyy")</td>
-                            <td>@item.Status</td>
-                            <td>
-                                <i class="material-icons showdetail" style="color: #ff6f47; cursor: pointer;" data-id="@item.ContractId">edit</i>
-                                <i class="material-icons delete" style="color: #ff6f47;cursor:pointer;" id="btnDelete" data-id="@item.ContractId">delete_forever</i>
-                            </td>
-                            @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
+                            <th scope="col">ContractId</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">CounterParty</th>
+                            <th scope="col">StartsOn</th>
+                            <th scope="col">Expires On</th>
+                            <th scope="col">Status</th>
+                            <th></th>
                         </tr>
-                        @*<tr id="tr_@item.id" style="display:none;">
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.lst)
+                        {
+                            <tr>
+                                <td>@item.ContractId</td>
+                                <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
+                                <td>@item.CounterParty</td>
+                                <td>@item.StartDate.ToString("MMM dd,yyyy")</td>
+                                <td>@item.EndDate.ToString("MMM dd,yyyy")</td>
+                                <td>@item.Status</td>
+                                <td>
+                                    <i class="material-icons showdetail" style="color: #ff6f47; cursor: pointer;" data-id="@item.ContractId">edit</i>
+                                    <i class="material-icons delete" style="color: #ff6f47;cursor:pointer;" id="btnDelete" data-id="@item.ContractId">delete_forever</i>
+                                </td>
+                                @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
+                            </tr>
+                            @*<tr id="tr_@item.id" style="display:none;">
                                 <td>&nbsp;</td>
                                 <td id="detailsGridData_@item.id" colspan="9"></td>
                             </tr>*@
-                    }
-                </tbody>
-            </table>
-        }
-    </div>
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" style="width:50% !important;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="modal-title">Add Contract</h4>
-                </div>
-                <div class="modal-body" id="modal_details">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-orange" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:50% !important;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="modal-title">Add Contract</h4>
+                    </div>
+                    <div class="modal-body" id="modal_details">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-orange" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
-}
-@section scripts {
-    <script type="text/javascript">
+        <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
+        }
+        @section scripts {
+            <script type="text/javascript">
         $(document).ready(function () {
             var input = $('#tblProduct_filter label input');
             $("#tblProduct_filter label").html('');
@@ -261,5 +266,5 @@
 
     });
 
-    </script>
-}
+            </script>
+        }
