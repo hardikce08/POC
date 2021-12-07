@@ -130,7 +130,7 @@
             var url = "@Url.Action("_Detail", "Product")?id=" + Id;
             window.open(
                 url,
-                '_blank' // <- This is what makes it open in a new window.
+                '_self' // <- This is what makes it open in a new window.
             );
             @*$.ajax({
             type: "GET",

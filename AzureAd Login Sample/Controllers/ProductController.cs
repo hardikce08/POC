@@ -43,18 +43,24 @@ namespace AzureAd_Login_Sample.Controllers
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {
-
-                foreach (var activeproduct in Allproductresponse.products?.active)
+                if (Allproductresponse.statusCode != 404)
                 {
-                    ProductListView obj = new ProductListView();
-                    obj.Owner = activeproduct.owner?.name;
-                    obj.id = activeproduct.id;
-                    obj.CreatedOn = activeproduct.createdAt;
-                    obj.ProductType = activeproduct?.productVC?.credentialSubject?.product?.name;
-                    obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
-                    obj.Status = activeproduct.status;
-                    obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
-                    lst.Add(obj);
+                    foreach (var activeproduct in Allproductresponse.products?.active)
+                    {
+                        ProductListView obj = new ProductListView();
+                        obj.Owner = activeproduct.owner?.name;
+                        obj.id = activeproduct.id;
+                        obj.CreatedOn = activeproduct.createdAt;
+                        obj.ProductType = activeproduct?.productVC?.credentialSubject?.product?.name;
+                        obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
+                        obj.Status = activeproduct.status;
+                        obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
+                        lst.Add(obj);
+                    }
+                }
+                else
+                {
+                    throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
                 }
             }
             if (Filterby != "All")
@@ -122,8 +128,8 @@ namespace AzureAd_Login_Sample.Controllers
             //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
             //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
 
-            string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL + id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
+            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(ApiDomain + "/v1/products/" + id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
 
             model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
 

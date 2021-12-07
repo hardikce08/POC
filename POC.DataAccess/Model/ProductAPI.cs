@@ -455,6 +455,8 @@ namespace POC.DataAccess.Model
         public int offset { get; set; }
         public string category { get; set; }
         public Products products { get; set; }
+        public int statusCode { get; set; }
+        public string message { get; set; }
     }
 
     public class AllPRoductEventsLineGraph

@@ -13,8 +13,13 @@ using System.Web.Mvc;
 
 namespace POC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        public string GetAllProductAPIURL { get; set; } = string.Empty;
+        public HomeController()
+        {
+            GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+        }
         public ActionResult Index()
         {
             if (Request.IsAuthenticated)
@@ -101,7 +106,8 @@ namespace POC.Controllers
             if (Request.HttpMethod == "POST" && model.Coil > 0 && Request["btnfilter"] != null)
             {
                 //MAKE API call to get VCNumber
-                string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products";
+                //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products";
+                string APIURL = ApiDomain + "/v1/products";
                 VCRequest data = new VCRequest();
                 data.productName = "Stainless steel products";
                 data.hsCode = Request["ddlHSCode10digits"];
@@ -124,7 +130,7 @@ namespace POC.Controllers
 
                 var postString = JsonConvert.SerializeObject(data);
                 //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "Authorization:Bearer " + token, "", "");
-                var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "");
+                var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
                 var res = JsonConvert.DeserializeObject<VCResponse>(objResponse.ResponseString);
                 ViewBag.VCId = res.id;
 
@@ -132,33 +138,41 @@ namespace POC.Controllers
                 ds.UpdateVCId(model.Coil, res.id);
 
                 //Get All Active Product API
-                string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
-                var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+                //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+                //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+                var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
                 var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
                 if (Allproductresponse != null)
                 {
-                    model.lstActiveProducts = new List<ProductResult>();
-                    foreach (var activeproduct in Allproductresponse.products?.active)
+                    if (Allproductresponse.statusCode != 404)
                     {
-                        if (activeproduct.productVC != null)
+                        model.lstActiveProducts = new List<ProductResult>();
+                        foreach (var activeproduct in Allproductresponse.products?.active)
                         {
-                            ProductResult obj = new ProductResult();
-                            obj.id = activeproduct.id;
-                            obj.issuanceDate = activeproduct.productVC.issuanceDate;
-                            obj.Grade = activeproduct.productVC.credentialSubject?.grade;
-                            obj.HSCode = activeproduct.productVC.credentialSubject?.HSCode;
-                            obj.ProductName = activeproduct.productVC.credentialSubject?.product?.name;
-                            obj.Description = activeproduct.productVC.credentialSubject?.product?.description;
-                            obj.Manufacturer = activeproduct.productVC.credentialSubject?.product?.manufacturer?.name;
-                            obj.Technology = "ElectricArcFurnace";
-                            obj.FacilityAddressCountry = activeproduct.productVC.credentialSubject?.facility?.address?.addressCountry;
-                            obj.Width = activeproduct.productVC.credentialSubject?.product?.width?.value + " (" + activeproduct.productVC.credentialSubject?.product?.width?.unitCode + ")";
-                            obj.Length = activeproduct.productVC.credentialSubject?.product?.length?.value + " (" + activeproduct.productVC.credentialSubject?.product?.length?.unitCode + ")";
-                            obj.Weight = activeproduct.productVC.credentialSubject?.product?.weight?.value + " (" + activeproduct.productVC.credentialSubject?.product?.weight?.unitCode + ")";
-                            model.lstActiveProducts.Add(obj);
+                            if (activeproduct.productVC != null)
+                            {
+                                ProductResult obj = new ProductResult();
+                                obj.id = activeproduct.id;
+                                obj.issuanceDate = activeproduct.productVC.issuanceDate;
+                                obj.Grade = activeproduct.productVC.credentialSubject?.grade;
+                                obj.HSCode = activeproduct.productVC.credentialSubject?.HSCode;
+                                obj.ProductName = activeproduct.productVC.credentialSubject?.product?.name;
+                                obj.Description = activeproduct.productVC.credentialSubject?.product?.description;
+                                obj.Manufacturer = activeproduct.productVC.credentialSubject?.product?.manufacturer?.name;
+                                obj.Technology = "ElectricArcFurnace";
+                                obj.FacilityAddressCountry = activeproduct.productVC.credentialSubject?.facility?.address?.addressCountry;
+                                obj.Width = activeproduct.productVC.credentialSubject?.product?.width?.value + " (" + activeproduct.productVC.credentialSubject?.product?.width?.unitCode + ")";
+                                obj.Length = activeproduct.productVC.credentialSubject?.product?.length?.value + " (" + activeproduct.productVC.credentialSubject?.product?.length?.unitCode + ")";
+                                obj.Weight = activeproduct.productVC.credentialSubject?.product?.weight?.value + " (" + activeproduct.productVC.credentialSubject?.product?.weight?.unitCode + ")";
+                                model.lstActiveProducts.Add(obj);
+                            }
                         }
+                        model.lstActiveProducts = model.lstActiveProducts.OrderByDescending(p => p.issuanceDate).ToList();
                     }
-                    model.lstActiveProducts = model.lstActiveProducts.OrderByDescending(p => p.issuanceDate).ToList();
+                    else
+                    {
+                        throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+                    }
                 }
             }
             return View(model);
@@ -166,8 +180,8 @@ namespace POC.Controllers
         public PartialViewResult _ProductDetail(string id)
         {
             List<ProductDetail> lstProductDetail = new List<ProductDetail>();
-            string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL + id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
+            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(ApiDomain + "/v1/products/"+id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
             var res = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
             if (res.productVC != null)
             {
@@ -270,12 +284,13 @@ namespace POC.Controllers
             //TempData["Message"] = "test";
             ViewBag.Page = "report";
 
-            string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
-            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            // string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+            //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {
-             
+
 
                 ViewBag.Active = (int)Allproductresponse.totalProductsCount?.active;
                 ViewBag.Consumed = (int)Allproductresponse.totalProductsCount?.consumed;
@@ -299,5 +314,5 @@ namespace POC.Controllers
             }
             return View();
         }
-        }
+    }
 }

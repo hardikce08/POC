@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using POC.Controllers;
 using POC.DataAccess.Model;
 using POC.Helpers;
 using System;
@@ -11,8 +12,13 @@ using System.Web.Services;
 
 namespace AzureAd_Login_Sample.Controllers
 {
-    public class ReportController : Controller
+    public class ReportController : BaseController
     {
+        public string GetAllProductAPIURL { get; set; } = string.Empty;
+        public ReportController()
+        {
+            GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+        }
         // GET: Report
         public ActionResult Index(ReportView model)
         {
@@ -40,8 +46,9 @@ namespace AzureAd_Login_Sample.Controllers
             //TempData["Message"] = "test";
             ViewBag.Page = "report";
 
-            string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
-            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+            //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {
@@ -83,8 +90,8 @@ namespace AzureAd_Login_Sample.Controllers
             List<AllPRoductEventsLineGraph> AllProductEvents = new List<AllPRoductEventsLineGraph>();
             if (TempData["Events"] == null)
             {
-                string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
-                var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+                //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+                var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
                 var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
                 if (Allproductresponse.products.active != null)
                 {
