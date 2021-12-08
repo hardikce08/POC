@@ -219,21 +219,20 @@
             <!-- end: sidebar -->
             <section role="main" class="content-body" style="background-color: #ffffff; padding-top: 0px; border: 0px solid black; box-shadow: 0 3px 10px rgb(0 0 0 / 20%); border-radius: 16px; margin: 16px;">
                 @*@if (TempData["Message"] == null)
+        {
+            <div class="alert alert-block">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <h4>Warning!</h4>
+               test data
+            </div>
+        }*@
+                @if (TempData["Error"] != null)
                 {
-                    <div class="alert alert-block">
+                    <div class="alert alert-error" style="font-weight:bold;color:red;">
                         <button type="button" class="close" data-dismiss="alert">×</button>
-                        <h4>Warning!</h4>
-                       test data
+                        <h4>@TempData["Error"] </h4>
                     </div>
                 }
-                @if (TempData["Error"] == null)
-                {
-                    <div class="alert alert-error">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <h4>Warning!</h4>
-                        test data
-                    </div>
-                }*@
                 @RenderBody()
             </section>
         </div>

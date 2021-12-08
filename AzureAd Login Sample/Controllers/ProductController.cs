@@ -60,7 +60,8 @@ namespace AzureAd_Login_Sample.Controllers
                 }
                 else
                 {
-                    throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+                    TempData["Error"] = "Get All Product List API Error:" + Allproductresponse.message;
+                    //throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
                 }
             }
             if (Filterby != "All")
