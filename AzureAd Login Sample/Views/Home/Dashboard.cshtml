@@ -71,7 +71,7 @@
         vertical-align: top;
     }
 </style>
-@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data",  @novalidate = "novalidate" }))
 {
     <h3 style="text-align: center;"></h3>
     <div class="col-sm-12 col-md-12 instructionheader">

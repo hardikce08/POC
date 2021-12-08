@@ -43,7 +43,7 @@ namespace AzureAd_Login_Sample.Controllers
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {
-                if (Allproductresponse.statusCode == 200)
+                if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
                 {
                     foreach (var activeproduct in Allproductresponse.products?.active)
                     {

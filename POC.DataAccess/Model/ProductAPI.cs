@@ -280,84 +280,84 @@ namespace POC.DataAccess.Model
         public string role { get; set; }
     }
 
-    public class PhoenixTrainerArgMax0
-    {
-        public int _0 { get; set; }
-    }
+    //public class PhoenixTrainerArgMax0
+    //{
+    //    public int _0 { get; set; }
+    //}
 
-    public class PhoenixTrainerSoftmax0
-    {
-        public double _0 { get; set; }
-        public double _1 { get; set; }
-    }
+    //public class PhoenixTrainerSoftmax0
+    //{
+    //    public double _0 { get; set; }
+    //    public double _1 { get; set; }
+    //}
 
-    public class PhoenixTrainerLogSoftmax0
-    {
-        public double _0 { get; set; }
-        public double _1 { get; set; }
-    }
+    //public class PhoenixTrainerLogSoftmax0
+    //{
+    //    public double _0 { get; set; }
+    //    public double _1 { get; set; }
+    //}
 
-    public class PhoenixEnsemblerTruediv0
-    {
-        public double _0 { get; set; }
-        public double _1 { get; set; }
-    }
+    //public class PhoenixEnsemblerTruediv0
+    //{
+    //    public double _0 { get; set; }
+    //    public double _1 { get; set; }
+    //}
 
     public class CarbonAnomaly
     {
         [JsonProperty("Phoenix/Trainer/ArgMax:0")]
-        public PhoenixTrainerArgMax0 PhoenixTrainerArgMax0 { get; set; }
+        public object PhoenixTrainerArgMax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/Softmax:0")]
-        public PhoenixTrainerSoftmax0 PhoenixTrainerSoftmax0 { get; set; }
+        public object PhoenixTrainerSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/LogSoftmax:0")]
-        public PhoenixTrainerLogSoftmax0 PhoenixTrainerLogSoftmax0 { get; set; }
+        public object PhoenixTrainerLogSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/Ensembler/truediv:0")]
-        public PhoenixEnsemblerTruediv0 PhoenixEnsemblerTruediv0 { get; set; }
+        public object PhoenixEnsemblerTruediv0 { get; set; }
     }
 
-    public class PhoenixSearchGenerator0LastDense24Logits0
-    {
-        public double _0 { get; set; }
-        public double _1 { get; set; }
-    }
+    //public class PhoenixSearchGenerator0LastDense24Logits0
+    //{
+    //    public double _0 { get; set; }
+    //    public double _1 { get; set; }
+    //}
 
     public class OriginAnomaly
     {
         [JsonProperty("Phoenix/Trainer/ArgMax:0")]
-        public PhoenixTrainerArgMax0 PhoenixTrainerArgMax0 { get; set; }
+        public object PhoenixTrainerArgMax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/Softmax:0")]
-        public PhoenixTrainerSoftmax0 PhoenixTrainerSoftmax0 { get; set; }
+        public object PhoenixTrainerSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/LogSoftmax:0")]
-        public PhoenixTrainerLogSoftmax0 PhoenixTrainerLogSoftmax0 { get; set; }
+        public object PhoenixTrainerLogSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/search_generator_0/last_dense_24/logits:0")]
-        public PhoenixSearchGenerator0LastDense24Logits0 PhoenixSearchGenerator0LastDense24Logits0 { get; set; }
+        public object PhoenixSearchGenerator0LastDense24Logits0 { get; set; }
     }
 
-    public class PhoenixSearchGenerator0LastDense238081Logits0
-    {
-        public double _0 { get; set; }
-        public double _1 { get; set; }
-    }
+    //public class PhoenixSearchGenerator0LastDense238081Logits0
+    //{
+    //    public double _0 { get; set; }
+    //    public double _1 { get; set; }
+    //}
 
     public class PriceAnomaly
     {
         [JsonProperty("Phoenix/Trainer/ArgMax:0")]
-        public PhoenixTrainerArgMax0 PhoenixTrainerArgMax0 { get; set; }
+        public object PhoenixTrainerArgMax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/Softmax:0")]
-        public PhoenixTrainerSoftmax0 PhoenixTrainerSoftmax0 { get; set; }
+        public object PhoenixTrainerSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/Trainer/LogSoftmax:0")]
-        public PhoenixTrainerLogSoftmax0 PhoenixTrainerLogSoftmax0 { get; set; }
+        public object PhoenixTrainerLogSoftmax0 { get; set; }
 
         [JsonProperty("Phoenix/search_generator_0/last_dense_238081/logits:0")]
-        public PhoenixSearchGenerator0LastDense238081Logits0 PhoenixSearchGenerator0LastDense238081Logits0 { get; set; }
+        public object PhoenixSearchGenerator0LastDense238081Logits0 { get; set; }
     }
 
     public class Anomaly
