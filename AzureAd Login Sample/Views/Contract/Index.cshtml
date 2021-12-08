@@ -32,6 +32,9 @@
         opacity: unset;
         background-color: #F8DFB6 !important;
     }
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 4px 6px !important;
+    }
 </style>
 @using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {

@@ -273,7 +273,8 @@
     </script>
     <script>
         var showLoader = function (form) {
-            $("<div id='divLoading' />").css({
+            $("#load").show();
+            @*$("<div id='divLoading' />").css({
                 'position': 'absolute',
                 'left': 0,
                 'right': 0,
@@ -285,7 +286,7 @@
             }).appendTo($("body"))
                 .append(
                     $("<img />").attr("src", "@Url.Content("~/Theme/Images/Loader.gif")")
-                );
+                );*@
         }
 
     </script>

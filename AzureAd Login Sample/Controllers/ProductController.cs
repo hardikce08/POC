@@ -43,7 +43,7 @@ namespace AzureAd_Login_Sample.Controllers
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {
-                if (Allproductresponse.statusCode != 404)
+                if (Allproductresponse.statusCode == 200)
                 {
                     foreach (var activeproduct in Allproductresponse.products?.active)
                     {
@@ -129,11 +129,13 @@ namespace AzureAd_Login_Sample.Controllers
             //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
             //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
 
-            //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(ApiDomain + "/v1/products/" + id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
+            //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/" + id;
+            string APIURL= ApiDomain + "/v1/products/" + id;
+            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
 
             model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
-
+            var _events = new List<String> { "Raw Material Supply","Transportation of Raw Materials","Manufacturing(Selection from Scrap Yard,Electric Arc Furnace,Blast Furnace,Ladle Furnace,Continuous Casting)","Transportation","Downstream Processing(Rolling,Finishing,Fabrication)" };
+            ViewBag.Events = new SelectList(_events);
             return View(model);
         }
     }

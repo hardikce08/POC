@@ -140,40 +140,41 @@ namespace POC.Controllers
                 //Get All Active Product API
                 //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
                 //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
-                var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
-                if (Allproductresponse != null)
-                {
-                    if (Allproductresponse.statusCode != 404)
-                    {
-                        model.lstActiveProducts = new List<ProductResult>();
-                        foreach (var activeproduct in Allproductresponse.products?.active)
-                        {
-                            if (activeproduct.productVC != null)
-                            {
-                                ProductResult obj = new ProductResult();
-                                obj.id = activeproduct.id;
-                                obj.issuanceDate = activeproduct.productVC.issuanceDate;
-                                obj.Grade = activeproduct.productVC.credentialSubject?.grade;
-                                obj.HSCode = activeproduct.productVC.credentialSubject?.HSCode;
-                                obj.ProductName = activeproduct.productVC.credentialSubject?.product?.name;
-                                obj.Description = activeproduct.productVC.credentialSubject?.product?.description;
-                                obj.Manufacturer = activeproduct.productVC.credentialSubject?.product?.manufacturer?.name;
-                                obj.Technology = "ElectricArcFurnace";
-                                obj.FacilityAddressCountry = activeproduct.productVC.credentialSubject?.facility?.address?.addressCountry;
-                                obj.Width = activeproduct.productVC.credentialSubject?.product?.width?.value + " (" + activeproduct.productVC.credentialSubject?.product?.width?.unitCode + ")";
-                                obj.Length = activeproduct.productVC.credentialSubject?.product?.length?.value + " (" + activeproduct.productVC.credentialSubject?.product?.length?.unitCode + ")";
-                                obj.Weight = activeproduct.productVC.credentialSubject?.product?.weight?.value + " (" + activeproduct.productVC.credentialSubject?.product?.weight?.unitCode + ")";
-                                model.lstActiveProducts.Add(obj);
-                            }
-                        }
-                        model.lstActiveProducts = model.lstActiveProducts.OrderByDescending(p => p.issuanceDate).ToList();
-                    }
-                    else
-                    {
-                        throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
-                    }
-                }
+                //var SpecificProductDetailURL = ApiDomain + "/v1/products/" + res.id;
+                //var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(SpecificProductDetailURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
+                //if (Allproductresponse != null)
+                //{
+                //    if (Allproductresponse.statusCode != 404)
+                //    {
+                //        model.lstActiveProducts = new List<ProductResult>();
+                //        foreach (var activeproduct in Allproductresponse.products?.active)
+                //        {
+                //            if (activeproduct.productVC != null)
+                //            {
+                //                ProductResult obj = new ProductResult();
+                //                obj.id = activeproduct.id;
+                //                obj.issuanceDate = activeproduct.productVC.issuanceDate;
+                //                obj.Grade = activeproduct.productVC.credentialSubject?.grade;
+                //                obj.HSCode = activeproduct.productVC.credentialSubject?.HSCode;
+                //                obj.ProductName = activeproduct.productVC.credentialSubject?.product?.name;
+                //                obj.Description = activeproduct.productVC.credentialSubject?.product?.description;
+                //                obj.Manufacturer = activeproduct.productVC.credentialSubject?.product?.manufacturer?.name;
+                //                obj.Technology = "ElectricArcFurnace";
+                //                obj.FacilityAddressCountry = activeproduct.productVC.credentialSubject?.facility?.address?.addressCountry;
+                //                obj.Width = activeproduct.productVC.credentialSubject?.product?.width?.value + " (" + activeproduct.productVC.credentialSubject?.product?.width?.unitCode + ")";
+                //                obj.Length = activeproduct.productVC.credentialSubject?.product?.length?.value + " (" + activeproduct.productVC.credentialSubject?.product?.length?.unitCode + ")";
+                //                obj.Weight = activeproduct.productVC.credentialSubject?.product?.weight?.value + " (" + activeproduct.productVC.credentialSubject?.product?.weight?.unitCode + ")";
+                //                model.lstActiveProducts.Add(obj);
+                //            }
+                //        }
+                //        model.lstActiveProducts = model.lstActiveProducts.OrderByDescending(p => p.issuanceDate).ToList();
+                //    }
+                //    else
+                //    {
+                //        throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+                //    }
+                //}
             }
             return View(model);
         }
@@ -181,7 +182,7 @@ namespace POC.Controllers
         {
             List<ProductDetail> lstProductDetail = new List<ProductDetail>();
             //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/";
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(ApiDomain + "/v1/products/"+id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
+            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(ApiDomain + "/v1/products/" + id, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             var res = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
             if (res.productVC != null)
             {
@@ -286,7 +287,7 @@ namespace POC.Controllers
 
             // string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
-            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
+            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
             if (Allproductresponse != null)
             {

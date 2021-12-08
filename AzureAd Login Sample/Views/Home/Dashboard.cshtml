@@ -4,7 +4,7 @@
     ViewBag.Title = "Lookup";
     ViewBag.Page = "home";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
 }
 @*<link href="~/Theme/Css/CustomeTable.css" rel="stylesheet" />*@
 @*<div class="page-header" style="color: white; padding: 13px; font-size: large;background:#ff5f47;border-left:0px;box-shadow:none;">Dashboard</div>*@
@@ -39,10 +39,55 @@
             background: #04AA6D;
             cursor: pointer;
         }
+
+    .instructionheader {
+        min-height: 20px;
+        padding-top: 19px;
+        padding-right: 19px;
+        padding-left: 19px;
+        margin-bottom: 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #e3e3e3;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+        box-shadow: inset 0 1px 1px rgb(0 0 0 / 5%);
+    }
+
+    .numberheading {
+        font-size: 50px;
+        color: red;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+
+    .instructiontext {
+        font-family: inherit;
+        font-weight: 500;
+        line-height: 1.1;
+        color: inherit;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+        vertical-align: top;
+    }
 </style>
 @using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
     <h3 style="text-align: center;"></h3>
+    <div class="col-sm-12 col-md-12 instructionheader">
+        <p>
+            <span class="numberheading">1</span><span class="instructiontext">
+                To Begin, Please select an available coil from the drop down list
+            </span>
+        </p>
+    </div>
+    <div class="col-sm-12 col-md-12 instructionheader">
+        <p>
+            <span class="numberheading">2</span><span class="instructiontext">
+                Once Coil has been selected, Please select create product to generate a VC for the coil
+            </span>
+        </p>
+    </div>
     <div class="col-md-10">
         <div class="col-md-6">
             <div class="form-group">
@@ -94,11 +139,11 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Weight (kg)</label>
                 <div class="col-md-6">
-                    @Html.TextBox("myRange",(object)ViewBag.WeightKg, new { @class = "form-control", @style = "width:100%;" })
+                    @Html.TextBox("myRange", (object)ViewBag.WeightKg, new { @class = "form-control", @style = "width:100%;" })
                     @*<div class="slidecontainer">
-                        <input type="range" min="1" max="28000" value="@ViewBag.WeightKg" class="slider" id="myRange" name="myRange" />
-                        <span id="demo" style="font-weight:bold;color:red">48</span>
-                    </div>*@
+                            <input type="range" min="1" max="28000" value="@ViewBag.WeightKg" class="slider" id="myRange" name="myRange" />
+                            <span id="demo" style="font-weight:bold;color:red">48</span>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -140,11 +185,11 @@
                 <div class="col-md-6">
                     @Html.TextBox("LengthRange", (object)ViewBag.Lengthcm, new { @class = "form-control", @style = "width:100%;" })
                     @*<div class="slidecontainer">
-                        <div class="slidecontainer">
-                            <input type="range" min="0.1" max="20.0" step="0.1" value="@ViewBag.Lengthcm" class="slider" id="LengthRange" name="LengthRange" />
-                            <span id="LengthRangeValue" name="LengthRangeValue" style="font-weight:bold;color:red">0.2</span>
-                        </div>
-                    </div>*@
+                            <div class="slidecontainer">
+                                <input type="range" min="0.1" max="20.0" step="0.1" value="@ViewBag.Lengthcm" class="slider" id="LengthRange" name="LengthRange" />
+                                <span id="LengthRangeValue" name="LengthRangeValue" style="font-weight:bold;color:red">0.2</span>
+                            </div>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -158,11 +203,11 @@
                 <div class="col-md-6">
                     @Html.TextBox("WidthRange", (object)ViewBag.Widthcm, new { @class = "form-control", @style = "width:100%;" })
                     @*<div class="slidecontainer">
-                        <div class="slidecontainer">
-                            <input type="range" min="0" max="2000" value="@ViewBag.Widthcm" class="slider" id="WidthRange" name="WidthRange" />
-                            <span id="WidthRangeValue" name="WidthRangeValue" style="font-weight:bold;color:red">0.2</span>
-                        </div>
-                    </div>*@
+                            <div class="slidecontainer">
+                                <input type="range" min="0" max="2000" value="@ViewBag.Widthcm" class="slider" id="WidthRange" name="WidthRange" />
+                                <span id="WidthRangeValue" name="WidthRangeValue" style="font-weight:bold;color:red">0.2</span>
+                            </div>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -202,53 +247,53 @@
     {
         <div class="col-md-10">
             <p>
-                Generated Product Id : @ViewBag.VCId
+                Generated Product Id : @ViewBag.VCId <button class="showproductdetail" type="button" data-id="@ViewBag.VCId">Show Detail</button>
             </p>
         </div>
     }
-    if (Model.lstActiveProducts != null)
-    {
+    @*if (Model.lstActiveProducts != null)
+        {
 
-        <table id="tbllst" class="table table-condensed table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Technology</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">HsCode</th>
-                    <th scope="col">Facility Address Country</th>
-                    <th scope="col">Manufacturer</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Length</th>
-                    <th scope="col">Width</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.lstActiveProducts)
-                {
+            <table id="tbllst" class="table table-condensed table-bordered">
+                <thead>
                     <tr>
-                        <td>@item.ProductName</td>
-                        <td>@item.Technology</td>
-                        <td>@item.Description</td>
-                        <td>@item.HSCode</td>
-                        <td>@item.FacilityAddressCountry</td>
-                        <td>@item.Manufacturer</td>
-                        <td>@item.Weight</td>
-                        <td>@item.Length</td>
-                        <td>@item.Width</td>
-                        <td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Technology</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">HsCode</th>
+                        <th scope="col">Facility Address Country</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Length</th>
+                        <th scope="col">Width</th>
+                        <th scope="col"></th>
                     </tr>
-                    <tr id="tr_@item.id" style="display:none;">
-                        <td>&nbsp;</td>
-                        <td id="detailsGridData_@item.id" colspan="9"></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstActiveProducts)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.Technology</td>
+                            <td>@item.Description</td>
+                            <td>@item.HSCode</td>
+                            <td>@item.FacilityAddressCountry</td>
+                            <td>@item.Manufacturer</td>
+                            <td>@item.Weight</td>
+                            <td>@item.Length</td>
+                            <td>@item.Width</td>
+                            <td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>
+                        </tr>
+                        <tr id="tr_@item.id" style="display:none;">
+                            <td>&nbsp;</td>
+                            <td id="detailsGridData_@item.id" colspan="9"></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }*@
 }
- 
+
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" style="width:50% !important;">
@@ -322,8 +367,27 @@
             $('#WidthRange').attr("disabled", false);
             $('#ddlGuage').attr("disabled", false);
         }
-         
 
+        $(".showproductdetail").click(function () {
+            //alert($(this).data("id"));
+            //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
+            var Id = $(this).data("id");
+            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
+            window.open(
+                url,
+                '_self' // <- This is what makes it open in a new window.
+            );
+            @*$.ajax({
+            type: "GET",
+            url: '@Url.Action("_Detail", "Product")',
+                /*data: { Id: $(this).data("id") },*/
+                data: { Id: "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5" },
+            success: function (data) {
+                $("#modal_details").html(data);
+                $("#modal").modal('show');
+                    }
+         });*@
+        });
     function getDetails(id) {
         var DetailGridId = '#detailsGridData_' + id;
         var DetailRow = "#tr_" + id;
@@ -332,7 +396,7 @@
                 HideAllDetailRow();
             }
             else {
-                $("#divLoader").show();
+                $("#load").show();
                 $.ajax({
                     cache: false,
                     type: "GET",
@@ -342,7 +406,7 @@
                         $(DetailGridId).html(data);
                         HideAllDetailRow();
                         $(DetailRow).show();
-                        $("#divLoader").hide(); // hide loader
+                        $("#load").show();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         $("#divLoader").hide(); // hide loader
