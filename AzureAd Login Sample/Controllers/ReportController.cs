@@ -119,7 +119,7 @@ namespace AzureAd_Login_Sample.Controllers
                 }
                 if (AllProductEvents.Count > 0)
                 {
-                    labels = AllProductEvents.OrderByDescending(c => c.IssuedDate).Select(p => p.CreatedDate).Take(7).Distinct().ToList();
+                    labels = AllProductEvents.OrderBy(c => c.IssuedDate).Select(p => p.CreatedDate).Distinct().Take(7).ToList();
                     iData.Add(labels);
                     foreach (var datestr in labels)
                     {
