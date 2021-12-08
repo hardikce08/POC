@@ -121,7 +121,7 @@ namespace POC.Controllers
                     latitude = "43.2557",
                     longitude = "-79.8711"
                 };
-                data.manufacturer = new VCManufacturer { name = "ArcelorMittal Dofasco" };
+                data.manufacturer = new VCManufacturer { name = "Steel Co." };
                 data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"] };
                 data.length = new UnitofMeasure { unit = "CM", value = Request["LengthRange"] };
                 data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] };
