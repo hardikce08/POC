@@ -22,6 +22,7 @@ namespace POC.DataAccess.Model
     public class VCResponse
     {
         public string id { get; set; }
+        public string message { get; set; }
     }
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class VCFacility

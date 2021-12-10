@@ -375,7 +375,7 @@ namespace POC.DataAccess.Model
 
     public class CarbonFootprintEvents
     {
-        public List<FootPrintEvents> events { get; set; }
+        public List<string> events { get; set; }
         public int co2eEmissionsInTonnes { get; set; }
     }
 
@@ -390,7 +390,7 @@ namespace POC.DataAccess.Model
     public class CarbonFootprint
     {
         public int id { get; set; }
-        public CarbonFootprintDetails carbonFootprintDetails { get; set; }
+        public EmissionCarbonFootprintDetails carbonFootprintDetails { get; set; }
     }
 
     public class Active
@@ -466,4 +466,123 @@ namespace POC.DataAccess.Model
         public int Count { get; set; }
     }
 
+    #region Event Emission
+    public class Amount
+    {
+        public List<string> type { get; set; }
+        public string unitCode { get; set; }
+        public string value { get; set; }
+    }
+
+    public class ProcessMaterialsDetail
+    {
+        public string processMaterial { get; set; }
+        public Amount amount { get; set; }
+    }
+
+    public class ProcessEmission
+    {
+        public int co2EmissionsInTonnes { get; set; }
+        public int co2eEmissionsInTonnes { get; set; }
+        public List<ProcessMaterialsDetail> processMaterialsDetails { get; set; }
+    }
+
+    public class FuelUsage
+    {
+        public List<string> type { get; set; }
+        public string unitCode { get; set; }
+        public string value { get; set; }
+    }
+
+    public class FuelTypesDetail
+    {
+        public string fuelType { get; set; }
+        public FuelUsage fuelUsage { get; set; }
+    }
+
+    public class StationaryCombustion
+    {
+        public int co2EmissionsInTonnes { get; set; }
+        public int co2eEmissionsInTonnes { get; set; }
+        public int ch4EmissionsInTonnes { get; set; }
+        public int no2EmissionsInTonnes { get; set; }
+        public List<FuelTypesDetail> fuelTypesDetails { get; set; }
+    }
+
+    public class MobileCombustionUsage
+    {
+        public int co2EmissionsInTonnes { get; set; }
+        public int co2eEmissionsInTonnes { get; set; }
+        public int ch4EmissionsInTonnes { get; set; }
+        public int no2EmissionsInTonnes { get; set; }
+        public string fuelType { get; set; }
+        public FuelUsage fuelUsage { get; set; }
+    }
+
+    public class DistanceDetail
+    {
+        public string vehicleType { get; set; }
+        public string fuelType { get; set; }
+        public string unitCode { get; set; }
+        public string value { get; set; }
+    }
+
+    public class MobileCombustionDistance
+    {
+        public int co2EmissionsInTonnes { get; set; }
+        public int co2eEmissionsInTonnes { get; set; }
+        public int ch4EmissionsInTonnes { get; set; }
+        public int no2EmissionsInTonnes { get; set; }
+        public List<DistanceDetail> distanceDetails { get; set; }
+    }
+
+    public class ElectricityConsumption
+    {
+        public List<string> type { get; set; }
+        public string unitCode { get; set; }
+        public string value { get; set; }
+    }
+
+    public class PurchasedElectricity
+    {
+        public int co2EmissionsInTonnes { get; set; }
+        public int co2eEmissionsInTonnes { get; set; }
+        public string subregion { get; set; }
+        public ElectricityConsumption electricityConsumption { get; set; }
+    }
+
+    public class EmissionCarbonFootprintEvents
+    {
+        public int co2eEmissionsInTonnes { get; set; }
+        public List<string> events { get; set; }
+    }
+
+    public class SaveEmissionRequest
+    {
+        public string productid { get; set; }
+        public string startDate { get; set; }
+        public string endDate { get; set; }
+        public string co2emissionintonnes { get; set; }
+        public string Event { get; set; }
+
+    }
+    public class EmissionCarbonFootprintDetails
+    {
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public string role { get; set; }
+        public ProcessEmission processEmission { get; set; }
+        public StationaryCombustion stationaryCombustion { get; set; }
+        public MobileCombustionUsage mobileCombustionUsage { get; set; }
+        public MobileCombustionDistance mobileCombustionDistance { get; set; }
+        public PurchasedElectricity purchasedElectricity { get; set; }
+        public EmissionCarbonFootprintEvents carbonFootprintEvents { get; set; }
+    }
+
+    public class EmissionEventRequest
+    {
+        public string productId { get; set; }
+        public EmissionCarbonFootprintDetails carbonFootprintDetails { get; set; }
+    }
+    #endregion
 }

@@ -110,13 +110,13 @@ namespace POC.Controllers
                 string APIURL = ApiDomain + "/v1/products";
                 VCRequest data = new VCRequest();
                 data.productName = "Stainless steel products";
-                data.hsCode = Request["ddlHSCode10digits"];
+                data.hsCode = Request["txtHSCode10digits"];
                 data.facility = new VCFacility
                 {
                     addressLocality = "Hamilton",
                     addressRegion = "Ontario",
                     postalCode = "",
-                    addressCountry = Request["ddlCountryofOrigin"],
+                    addressCountry = Request["txtCountryofOrigin"],
                     streetAddress = "",
                     latitude = "43.2557",
                     longitude = "-79.8711"
@@ -133,10 +133,15 @@ namespace POC.Controllers
                 var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
                 var res = JsonConvert.DeserializeObject<VCResponse>(objResponse.ResponseString);
                 ViewBag.VCId = res.id;
-
-                //update VC number in Database from above result
-                ds.UpdateVCId(model.Coil, res.id);
-
+                if (res.id == null)
+                {
+                    TempData["Error"] = res.message;
+                }
+                else
+                {
+                    //update VC number in Database from above result
+                    ds.UpdateVCId(model.Coil, res.id);
+                }
                 //Get All Active Product API
                 //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
                 //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";

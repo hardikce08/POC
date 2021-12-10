@@ -108,6 +108,8 @@
     var eventlst = Model.result.events;
     var carbonfootprnts = new POC.DataAccess.Model.Co2eProduced();
     var res = @Model.result;
+    int co2emission = 0;
+    int co2eemission = 0;
     <h3 style="text-align: center;"></h3>
     <div class="tabbable boxed parentTabs p-4">
         <ul class="nav nav-tabs">
@@ -442,16 +444,17 @@
                         <li>
                             <a href="#carbonactivity" class="nav-link">Record Activity Data</a>
                         </li>
-                        <li>
-                            <a href="#carbonemission" class="nav-link">Record Emissions</a>
-                        </li>
+                        @*<li>
+                                <a href="#carbonemission" class="nav-link">Record Emissions</a>
+                            </li>*@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" style="height:50vh;" id="carboncerti">
 
-                            @if (Model.result.carbonFootprints.Count > 0)
+                            @if (Model.result.carbonFootprints != null && Model.result.carbonFootprints.Count > 0)
                             {
-                                carbonfootprnts = Model.result.carbonFootprints[0].carbonFootprintDetails?.carbonFootprintEvents?.events[0].Co2eProduced;
+                                co2emission = Model.result.carbonFootprints[0].carbonFootprintDetails.processEmission.co2EmissionsInTonnes;
+                                co2eemission = Model.result.carbonFootprints[0].carbonFootprintDetails.processEmission.co2EmissionsInTonnes;
                             }
 
                             <div class="col-md-12 form-group" style="margin-left:-35px !important;">
@@ -467,7 +470,7 @@
                                     <div class="col-md-12">
                                         <div class="col-md-6 background-fill">
                                             <label class="control-label">CO2 Emissions</label><br />
-                                            @carbonfootprnts.value  @carbonfootprnts.unitCode
+                                            @co2emission  Tonnes
                                         </div>
                                         <div class="col-md-5 background-fill">
                                             <label class="control-label">NO2 Emissions</label><br />
@@ -483,7 +486,7 @@
                                         </div>
                                         <div class="col-md-5 background-fill">
                                             <label class="control-label">Total CO2e Emissions</label><br />
-                                            39 Tonne
+                                            @co2eemission Tonnes
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -497,6 +500,49 @@
                                             </div>*@
                                     </div>
                                 </div>
+
+                                <div class="col-md-12">
+                                    <p><b>Please enter the emisson deatils that correspond to the selected time range</b></p>
+                                    <div class="col-md-12" style="text-align:right;">
+                                        <button class="btn btn-orange" id="btnsaveemissionevent" data-id="0" type="button">Save Information</button>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+
+                                    <div class="col-md-12">
+
+                                        <label class="col-md-2 control-label">Start Date</label>
+                                        <div class="col-md-4">
+                                            @Html.TextBox("StartDate", (string)ViewBag.StartDate, new { @id = "StartDate", @class = "form-control form_datetime", @autocomplete = "off" })
+                                        </div>
+
+                                        <label class="col-md-2 control-label">Event</label>
+                                        <div class="col-md-4">
+                                            @Html.DropDownList("ddlEvent", (IEnumerable<SelectListItem>)
+                                                ViewBag.Events, " -- SELECT --",
+                                                htmlAttributes: new { @class = "form-control" })
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="col-md-12" style="margin-top:10px;"></div>
+
+                                    <div class="col-md-12">
+
+
+                                        <label class="col-md-2 control-label">End Date</label>
+                                        <div class="col-md-4">
+                                            @Html.TextBox("EndDate", (string)ViewBag.EndDate, new { @id = "EndDate", @class = "form-control form_datetime", @autocomplete = "off" })
+                                        </div>
+
+                                        <label class="col-md-2 control-label">CO2e in Tonnes</label>
+                                        <div class="col-md-4">
+                                            @Html.TextBox("EmissioninTonne", "", new { @id = "EmissioninTonne", @class = "form-control form_datetime", @autocomplete = "off" })
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </div>
                             @*<div class="col-md-12 form-group" style="margin-left:-35px !important;">
                                     <div class="col-md-12">
@@ -513,54 +559,6 @@
                         <div class="tab-pane fade" id="carbonactivity">
                             @*<p>unique all content</p>*@
                         </div>
-                        <div class="tab-pane fade" style="height:50vh;" id="carbonemission">
-                            <p><b>Please enter the emisson deatils that correspond to the selected time range</b></p>
-                            <div class="col-md-2">
-                                <button class="btn btn-orange" data-id="0" type="button">Save Information</button>
-                            </div>
-                            <div class="col-md-12" style="margin-top:10px;"></div>
-
-                            <div class="col-md-12">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">Start Date</label>
-                                        <div class="col-md-8">
-                                            @Html.TextBox("StartDate", (string)ViewBag.StartDate, new { @id = "StartDate", @class = "form-control form_datetime", @autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="col-md-4 control-label">End Date</label>
-                                    <div class="col-md-8">
-                                        @Html.TextBox("EndDate", (string)ViewBag.EndDate, new { @id = "EndDate", @class = "form-control form_datetime", @autocomplete = "off" })
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12" style="margin-top:10px;"></div>
-
-                            <div class="col-md-12">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">Event</label>
-                                        <div class="col-md-8">
-                                            @Html.DropDownList("Event", (IEnumerable<SelectListItem>)
-                                                ViewBag.Events, " -- SELECT --",
-                                                htmlAttributes: new { @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">Start Date</label>
-                                        <div class="col-md-8">
-                                            @Html.TextBox("StartDate1", (string)ViewBag.StartDate, new { @id = "StartDate", @class = "form-control form_datetime", @autocomplete = "off" })
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -568,10 +566,62 @@
     </div>
     <div id='divLoader' class="loaderdiv" style="display:none;">
     </div>
+    <input type="hidden" id="hdnProductId" name="hdnProductId" value="@ViewBag.ProductId" />
 }
 @section scripts{
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDakum_wOxLE9c3_Www1wTo-Lsnd58yoRo&libraries=&v=weekly"></script>
     <script type="text/javascript">
+        function CreateModel() {
+            var dest = {
+                startDate: $("#StartDate").val(),
+                endDate: $("#EndDate").val(),
+                Event: $("#ddlEvent").val(),
+                co2emissionintonnes: $('#EmissioninTonne').val(),
+                productid: $("#hdnProductId").val()
+
+            };
+            return dest;
+        }
+        $("#btnsaveemissionevent").click(function () {
+            //alert($(this).attr("data-id"));
+            var datas = JSON.stringify(CreateModel());
+            //alert(datas);
+               $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveEmissionEvent", "Product")',
+                   data: { serializeddata: datas },
+                   success: function (data) {
+                       //alert(data);
+                       //alert(data.ResponseCode);
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'New Event Added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                       $("#ddlEvent").prop('selectedIndex', 0);
+                       $("#EndDate").val('');
+                       $("#StartDate").val('');
+                       $('#EmissioninTonne').val('');
+                    //setTimeout(function () {
+                    //    location.reload();
+                    //}, 1500);
+                    //Swal.fire({
+                    //    title: 'Contract Created',
+                    //    showClass: {
+                    //        popup: 'animate__animated animate__fadeInDown'
+                    //    },
+                    //    hideClass: {
+                    //        popup: 'animate__animated animate__fadeOutUp'
+                    //    }
+                    //})
+                    //$('.swal2-confirm').click(function () { location.reload(); });
+
+                }
+            });
+        });
+
         $("ul.nav-tabs a").click(function (e) {
             e.preventDefault();
             $(this).tab('show');

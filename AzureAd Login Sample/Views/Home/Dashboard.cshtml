@@ -70,8 +70,13 @@
         font-size: 1.8rem;
         vertical-align: top;
     }
+
+    .DisableTextbox {
+        pointer-events: none;
+        background: lightgray;
+    }
 </style>
-@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data",  @novalidate = "novalidate" }))
+@using (Html.BeginForm("Dashboard", "Home", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @novalidate = "novalidate" }))
 {
     <h3 style="text-align: center;"></h3>
     <div class="col-sm-12 col-md-12 instructionheader">
@@ -103,9 +108,11 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Country of Origin </label>
                 <div class="col-md-6">
-                    @Html.DropDownList("ddlCountryofOrigin", (List<SelectListItem>)
-                   ViewBag.CountryofOrigin,
-                   htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                    @*@Html.DropDownList("ddlCountryofOrigin", (List<SelectListItem>)
+                        ViewBag.CountryofOrigin,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+
+                    @Html.TextBox("txtCountryofOrigin", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                 </div>
             </div>
         </div>
@@ -116,9 +123,11 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Country of Melt and Pour</label>
                 <div class="col-md-6">
-                    @Html.DropDownList("ddlCountryofMeltPour", (List<SelectListItem>)
+                    @*@Html.DropDownList("ddlCountryofMeltPour", (List<SelectListItem>)
                         ViewBag.CountryofMeltPour,
-                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+
+                    @Html.TextBox("txtCountryofMeltPour", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                 </div>
             </div>
         </div>
@@ -126,9 +135,11 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Type of technology (EAF or BF)</label>
                 <div class="col-md-6">
-                    @Html.DropDownList("ddlTypeofTechnology", (List<SelectListItem>)
+                    @*@Html.DropDownList("ddlTypeofTechnology", (List<SelectListItem>)
                         ViewBag.TypeofTechnology,
-                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                    @Html.TextBox("txtTypeofTechnology", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
+
                 </div>
             </div>
         </div>
@@ -139,7 +150,7 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Weight (kg)</label>
                 <div class="col-md-6">
-                    @Html.TextBox("myRange", (object)ViewBag.WeightKg, new { @class = "form-control", @style = "width:100%;" })
+                    @Html.TextBox("myRange", (object)ViewBag.WeightKg, new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                     @*<div class="slidecontainer">
                             <input type="range" min="1" max="28000" value="@ViewBag.WeightKg" class="slider" id="myRange" name="myRange" />
                             <span id="demo" style="font-weight:bold;color:red">48</span>
@@ -151,9 +162,10 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Grade</label>
                 <div class="col-md-6">
-                    @Html.DropDownList("ddlGrade", (List<SelectListItem>)
+                    @*@Html.DropDownList("ddlGrade", (List<SelectListItem>)
                         ViewBag.Grade,
-                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                    @Html.TextBox("txtGrade", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                 </div>
             </div>
         </div>
@@ -165,9 +177,10 @@
                 <label class="col-md-6 control-label">HS Code (10 Digits)</label>
                 <div class="col-md-6">
                     <div class="slidecontainer">
-                        @Html.DropDownList("ddlHSCode10digits", (List<SelectListItem>)
-                        ViewBag.HSCode10digits,
-                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                        @*@Html.DropDownList("ddlHSCode10digits", (List<SelectListItem>)
+        ViewBag.HSCode10digits,
+        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                        @Html.TextBox("txtHSCode10digits", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                     </div>
                 </div>
             </div>
@@ -183,7 +196,7 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Length (cm)</label>
                 <div class="col-md-6">
-                    @Html.TextBox("LengthRange", (object)ViewBag.Lengthcm, new { @class = "form-control", @style = "width:100%;" })
+                    @Html.TextBox("LengthRange", (object)ViewBag.Lengthcm, new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                     @*<div class="slidecontainer">
                             <div class="slidecontainer">
                                 <input type="range" min="0.1" max="20.0" step="0.1" value="@ViewBag.Lengthcm" class="slider" id="LengthRange" name="LengthRange" />
@@ -201,7 +214,7 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Width (cm)</label>
                 <div class="col-md-6">
-                    @Html.TextBox("WidthRange", (object)ViewBag.Widthcm, new { @class = "form-control", @style = "width:100%;" })
+                    @Html.TextBox("WidthRange", (object)ViewBag.Widthcm, new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                     @*<div class="slidecontainer">
                             <div class="slidecontainer">
                                 <input type="range" min="0" max="2000" value="@ViewBag.Widthcm" class="slider" id="WidthRange" name="WidthRange" />
@@ -215,9 +228,10 @@
             <div class="form-group">
                 <label class="col-md-6 control-label">Guage</label>
                 <div class="col-md-6">
-                    @Html.DropDownList("ddlGuage", (List<SelectListItem>)
-                       ViewBag.Guage,
-                       htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                    @*@Html.DropDownList("ddlGuage", (List<SelectListItem>)
+        ViewBag.Guage,
+        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                    @Html.TextBox("txtGuage", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                 </div>
             </div>
         </div>
@@ -344,30 +358,19 @@
     //Widthslider.oninput = function () {
     //    WidthRangeValue.innerHTML = this.value;
     //}
-        if ($('#Model_Coil').val() == '') {
-            $('#ddlCountryofOrigin').attr("disabled", true);
-            $('#ddlCountryofMeltPour').attr("disabled", true);
-            $('#ddlTypeofTechnology').attr("disabled", true);
-            $('#myRange').attr("disabled", true);
-            $('#ddlGrade').attr("disabled", true);
-            $('#ddlHSCode10digits').attr("disabled", true);
-            $('#LengthRange').attr("disabled", true);
-            $('#WidthRange').attr("disabled", true);
-            $('#ddlGuage').attr("disabled", true);
-        }
-        else
-        {
-            $('#ddlCountryofOrigin').attr("disabled", false);
-            $('#ddlCountryofMeltPour').attr("disabled", false);
-            $('#ddlTypeofTechnology').attr("disabled", false);
-            $('#myRange').attr("disabled", false);
-            $('#ddlGrade').attr("disabled", false);
-            $('#ddlHSCode10digits').attr("disabled", false);
-            $('#LengthRange').attr("disabled", false);
-            $('#WidthRange').attr("disabled", false);
-            $('#ddlGuage').attr("disabled", false);
-        }
 
+
+        if ($('#Model_Coil').val() != null && $('#Model_Coil').val() != '') {
+            //alert($('#Model_Coil').val());
+            $('#txtCountryofOrigin').val('@ViewBag.SelectedCountry');
+            $('#txtCountryofMeltPour').val('@ViewBag.SelectedCountryofMeltPourlst');
+            $('#txtTypeofTechnology').val('@ViewBag.SelectedTypeofTechnology');
+            $('#txtGrade').val('@ViewBag.SelectedGrade');
+            $('#txtHSCode10digits').val('@ViewBag.SelectedHSCode10Digits');
+            $('#LengthRange').val('@ViewBag.Lengthcm');
+            $('#WidthRange').val('@ViewBag.Widthcm');
+            $('#txtGuage').val('@ViewBag.SelectedGuage');
+        }
         $(".showproductdetail").click(function () {
             //alert($(this).data("id"));
             //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
@@ -442,9 +445,8 @@
                     }
          });
         });
-    </script>
-    <script type="text/javascript">
-    $("#btnSaveContract").click(function () {
+
+         $("#btnSaveContract").click(function () {
         //alert($('#model_ContractRequest_receiver').val());
         var datas = JSON.stringify(CreateModel());
          $.ajax({
@@ -477,7 +479,6 @@
         };
         return dest;
     }
-
     </script>
 }
 
