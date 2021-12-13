@@ -240,8 +240,9 @@ namespace POC.Controllers
         {
             if (!Request.IsAuthenticated)
             {
+               var t= System.Configuration.ConfigurationManager.AppSettings["RedirectUri"];
                 HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
+                    new AuthenticationProperties { RedirectUri = t },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
             }
         }

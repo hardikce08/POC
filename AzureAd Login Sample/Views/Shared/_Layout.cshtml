@@ -72,7 +72,7 @@
             font-weight: bold;
         }
 
-        
+
 
         .btn-orange {
             background: #ff6f47;
@@ -93,7 +93,7 @@
             height: 100%;
             background: #0020ff36;
             z-index: 9999;
-            background: url('../../Theme/Images/Loader.gif') 50% 50% no-repeat #0020ff36;
+            background: url('@Url.Content("~/Theme/Images/Loader.gif")') 50% 50% no-repeat #0020ff36;
         }
 
         .logo-container {
@@ -105,7 +105,7 @@
                 text-decoration:none;
             }
        /* .form-bordered h3 {
-            margin-top:10px !important;            
+            margin-top:10px !important;
         }*/
     </style>
 </head>
@@ -148,7 +148,7 @@
                         <ul class="list-unstyled">
                             <li class="divider"></li>
                             <li>
-                                <a role="menuitem" tabindex="-1" href="/Home/SignOut"><i class="fa fa-power-off"></i> Logout</a>
+                                <a role="menuitem" tabindex="-1" href="~/Home/SignOut"><i class="fa fa-power-off"></i> Logout</a>
                             </li>
                         </ul>
                     </div>
@@ -177,25 +177,25 @@
                         <nav id="menu" class="nav-main" role="navigation">
                             <ul class="nav nav-main" id="navmenu" style="">
                                 <li class="nav-active" data-menuPageId="home">
-                                    <a href="/DashBoard">
+                                    <a href="~/DashBoard">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                         <span>Lookup</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="products">
-                                    <a href="/Product">
+                                    <a href="~/Product">
                                         <i class="fa-brands fa-product-hunt" aria-hidden="true"></i>
                                         <span>Products</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="contracts">
-                                    <a href="/Contract">
+                                    <a href="~/Contract">
                                         <i class="fas fa-file-contract" aria-hidden="true"></i>
                                         <span>Contracts</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="report">
-                                    <a href="/ReportNew">
+                                    <a href="~/ReportNew">
                                         <i class="fa fa-chart-bar" aria-hidden="true"></i>
                                         <span>Reports</span>
                                     </a>
