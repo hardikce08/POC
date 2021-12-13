@@ -205,7 +205,6 @@
     <Content Include="Theme\Css\default.css" />
     <Content Include="Theme\Css\font-awesome.min.css" />
     <Content Include="Theme\Css\Googlefonts.css" />
-    <Content Include="Theme\Css\kendo.default-main.min.css" />
     <Content Include="Theme\Css\ReportPageCustom.css" />
     <Content Include="Theme\Css\responsive.bootstrap4.min.css" />
     <Content Include="Theme\Css\Sweetalert.css" />
@@ -244,6 +243,7 @@
     <Content Include="Theme\Scripts\bootstrap.min.js" />
     <Content Include="Theme\Scripts\datatables.js" />
     <Content Include="Theme\Scripts\examples.wizard.js" />
+    <Content Include="Theme\Scripts\highcharts-3d.js" />
     <Content Include="Theme\Scripts\jquery-ui-1.13.0.js" />
     <Content Include="Theme\Scripts\jquery-ui-1.10.4.custom.min.js" />
     <Content Include="Theme\Scripts\jquery-ui-timepicker-addon.js" />
@@ -252,8 +252,7 @@
     <Content Include="Theme\Scripts\jquery.dataTables.js" />
     <Content Include="Theme\Scripts\jquery.dataTables.min.js" />
     <Content Include="Theme\Scripts\jquery.js" />
-    <Content Include="Theme\Scripts\kendo.all.min.js" />
-    <Content Include="Theme\Scripts\kendo.aspnetmvc.min.js" />
+    <Content Include="Theme\Scripts\highchart.js" />
     <Content Include="Theme\Scripts\sweetalert.js" />
     <Content Include="Theme\Scripts\jquery.placeholder.js" />
     <Content Include="Theme\Scripts\jquery.ui.touch-punch.js" />
