@@ -182,6 +182,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Documents\MetalTrailGuide.pdf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -193,6 +194,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Theme\Css\buttons.dataTables.min.css" />
     <Content Include="Theme\Css\datepicker.css" />
     <Content Include="Theme\Css\default _16112021.css" />
     <Content Include="Theme\Css\flags.css" />
@@ -241,6 +243,8 @@
     <Content Include="Theme\Scripts\bootstrap-fileupload.min.js" />
     <Content Include="Theme\Scripts\bootstrap-sortable.js" />
     <Content Include="Theme\Scripts\bootstrap.min.js" />
+    <Content Include="Theme\Scripts\jszip.min.js" />
+    <Content Include="Theme\Scripts\buttons.html5.min.js" />
     <Content Include="Theme\Scripts\datatables.js" />
     <Content Include="Theme\Scripts\examples.wizard.js" />
     <Content Include="Theme\Scripts\highcharts-3d.js" />
@@ -250,6 +254,7 @@
     <Content Include="Theme\Scripts\jquery.bootstrap.wizard.js" />
     <Content Include="Theme\Scripts\jquery.browser.mobile.js" />
     <Content Include="Theme\Scripts\jquery.dataTables.js" />
+    <Content Include="Theme\Scripts\dataTables.buttons.min.js" />
     <Content Include="Theme\Scripts\jquery.dataTables.min.js" />
     <Content Include="Theme\Scripts\jquery.js" />
     <Content Include="Theme\Scripts\highchart.js" />

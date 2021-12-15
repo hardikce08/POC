@@ -202,6 +202,12 @@
                                         <span>Reports</span>
                                     </a>
                                 </li>
+                                <li class="nav" data-menuPageId="report">
+                                    <a href="~/Documents/MetalTrailGuide.pdf" target="_blank">
+                                        <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                        <span>Help</span>
+                                    </a>
+                                </li>
                                 @*<li class="nav" data-menuPageId="settings">
                                         <a href="#">
                                             <i class="fa fa-cog" aria-hidden="true"></i>
@@ -306,10 +312,10 @@
     @*<script src="~/Theme/Scripts/jquery.dataTables.js"></script>
         <script src="~/Theme/Scripts/datatables.js"></script>*@
     <script src="~/Theme/Scripts/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    
+    <script src="~/Theme/Scripts/dataTables.buttons.min.js"></script>
+    <script src="~/Theme/Scripts/buttons.html5.min.js"></script>
+    <script src="~/Theme/Scripts/jszip.min.js"></script>
+     
     <!-- Theme Base, Components and Settings -->
     <script src="~/Theme/Scripts/theme.js"></script>
 
@@ -324,19 +330,20 @@
     @*https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif*@
     <script>
         $(document).ready(function () {
-            $('#tblProduct').DataTable({
-                dom: 'lBfrtip',
-                buttons: [
-                    {
-                        extend: 'csv',
-                        title: 'Product Data export'
-                    },
-                    {
-                        extend: 'excel',
-                        title: 'Product Data export'
-                    }
-                ]
-            });
+            $('#tblProduct').DataTable();
+            //$('#tblProduct').DataTable({
+            //    dom: 'lBfrtip',
+            //    buttons: [
+            //        {
+            //            extend: 'csv',
+            //            title: 'Product Data export'
+            //        },
+            //        {
+            //            extend: 'excel',
+            //            title: 'Product Data export'
+            //        }
+            //    ]
+            //});
             $('#tblEvents').DataTable({ "bPaginate": false });
             $('#tblContract').DataTable({
                 dom: 'lBfrtip',
@@ -357,7 +364,7 @@
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6]
                         }
-                    } 
+                    }
                 ]
             });
         });
