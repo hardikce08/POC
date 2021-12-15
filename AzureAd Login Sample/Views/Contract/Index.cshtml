@@ -35,6 +35,14 @@
     table.dataTable tbody th, table.dataTable tbody td {
         padding: 4px 6px !important;
     }
+    .dt-buttons {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+
+    .customheightselect {
+        height: 30px;
+    }
 </style>
 @using (Html.BeginForm("Index", "Contract", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
@@ -46,15 +54,15 @@
             <a class="btn btn-black" id="Week" href="~/Contract?Filterby=Week">Week</a>
             <a class="btn btn-black" id="Month" href="~/Contract?Filterby=Month">Month</a>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-orange showdetail" data-id="0" type="button">Create Contract</button>
+        <div class="col-md-2" style="text-align:right; padding-right:0px;">
+            <button class="btn btn-orange showdetail"  data-id="0" type="button">Create Contract</button>
         </div>
         </div>
         <div class="col-md-12" style="margin-top:10px;"></div>
         <div class="col-md-12">
             @if (Model.lst != null)
             {
-                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblProduct">
+                <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblContract">
                     <thead>
                         <tr>
                             <th scope="col">ContractId</th>
@@ -112,15 +120,16 @@
         @section scripts {
             <script type="text/javascript">
         $(document).ready(function () {
-            var input = $('#tblProduct_filter label input');
-            $("#tblProduct_filter label").html('');
-            $("#tblProduct_filter label").append(input);
+            var input = $('#tblContract_filter label input');
+            $("#tblContract_filter label").html('');
+            $("#tblContract_filter label").append(input);
             //$("div > div", "#tblProduct_wrapper")[0].remove();
-            $("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
-            $("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
-            $("div > div", "#tblProduct_wrapper").addClass('col-md-6');
-            $("select", "#tblProduct_length").addClass('form-control');
-
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
+            //$("div > div", "#tblProduct_wrapper").addClass('col-md-6');
+            $("select", "#tblContract_length").addClass('customheightselect');
+            $("button", ".dt-buttons").addClass('btn btn-orange');
+            $("#tblContract_length").addClass('col-md-6');
             var filterbyval = $('#hdnFilterBy').val();
             $('#' + filterbyval).removeClass('btn-black');
             $('#' + filterbyval).addClass('btn-orange');

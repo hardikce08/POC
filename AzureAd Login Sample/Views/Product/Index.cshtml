@@ -30,9 +30,11 @@
     table.dataTable thead th, table.dataTable thead td {
         border-bottom: 1px solid #ff6f47;
     }
+
     table.dataTable tbody th, table.dataTable tbody td {
         padding: 6px 6px !important;
     }
+
     .table-striped > tbody > tr:nth-child(even):hover {
         background-color: #ff6f47 !important;
     }
@@ -40,6 +42,13 @@
     .table-striped > tbody > tr:nth-child(even) {
         opacity: unset;
         background-color: #F8DFB6 !important;
+    }
+    .dt-buttons {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+    .customheightselect {
+        height:30px;
     }
 </style>
 @*<h4>Dashboard</h4>*@
@@ -124,11 +133,12 @@
             $("#tblProduct_filter label").html('');
             $("#tblProduct_filter label").append(input);
             //$("div > div", "#tblProduct_wrapper")[0].remove();
-            $("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
-            $("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
-            $("div > div", "#tblProduct_wrapper").addClass('col-md-6');
-            $("select", "#tblProduct_length").addClass('form-control');
-
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
+            //$("div > div", "#tblProduct_wrapper").addClass('col-md-6');
+            $("select", "#tblProduct_length").addClass('customheightselect');
+            $("button", ".dt-buttons").addClass('btn btn-orange');
+            $("#tblProduct_length").addClass('col-md-6');
             var filterbyval = $('#hdnFilterBy').val();
             $('#' + filterbyval).removeClass('btn-black');
             $('#' + filterbyval).addClass('btn-orange');
@@ -137,7 +147,7 @@
         $(".showdetail").click(function () {
             //alert($(this).data("id"));
             //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
-            var Id = $(this).data("id"); 
+            var Id = $(this).data("id");
             var url = "@Url.Action("_Detail", "Product")?id=" + Id;
             window.open(
                 url,
@@ -155,6 +165,8 @@
          });*@
         });
     </script>
+    
+    
 }
 
 

@@ -14,6 +14,8 @@
     @Styles.Render("~/Content/DashboardCSS")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Theme/Css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link hre="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+    
     <link href="~/Theme/Css/responsive.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Theme/Css/jquery-ui.css" rel="stylesheet" />
     <link href="~/Theme/Css/ReportPageCustom.css" rel="stylesheet" />
@@ -124,10 +126,10 @@
                 <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
                     <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
                 </div>
-                
+
             </div>
             <!-- start: search & user box -->
-           
+
             <div class="header-right">
                 <div class="pageheader"> @ViewBag.Title</div>
                 <span class="separator"></span>
@@ -201,11 +203,11 @@
                                     </a>
                                 </li>
                                 @*<li class="nav" data-menuPageId="settings">
-                                    <a href="#">
-                                        <i class="fa fa-cog" aria-hidden="true"></i>
-                                        <span>Settings</span>
-                                    </a>
-                                </li>*@
+                                        <a href="#">
+                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>*@
                             </ul>
                         </nav>
                     </div>
@@ -216,13 +218,13 @@
             <!-- end: sidebar -->
             <section role="main" class="content-body" style="background-color: #ffffff; padding-top: 0px; border: 0px solid black; box-shadow: 0 3px 10px rgb(0 0 0 / 20%); border-radius: 16px; margin: 16px;">
                 @*@if (TempData["Message"] == null)
-        {
-            <div class="alert alert-block">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <h4>Warning!</h4>
-               test data
-            </div>
-        }*@
+                    {
+                        <div class="alert alert-block">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <h4>Warning!</h4>
+                           test data
+                        </div>
+                    }*@
                 @if (TempData["Error"] != null)
                 {
                     <div class="alert alert-error" style="font-weight:bold;color:red;">
@@ -238,7 +240,7 @@
     </section>
 
     <!-- Vendor -->
-   
+
     <script src="~/Theme/Scripts/jquery.browser.mobile.js"></script>
     <script src="~/Theme/Scripts/bootstrap.min.js"></script>
     @*<script src="~/Theme/Scripts/nanoscroller.js"></script>*@
@@ -250,7 +252,7 @@
     <script src="~/Theme/Scripts/bootstrap-fileupload.min.js"></script>
     <script src="~/Theme/Scripts/jquery-ui-1.13.0.js"></script>
     <script src="~/Theme/Scripts/sweetalert.js"></script>
-   
+
     @*<script src="~/Theme/Scripts/bootstrap-sortable.js"></script>*@
     <!-- Demo Purpose Only -->
     <script>
@@ -304,7 +306,10 @@
     @*<script src="~/Theme/Scripts/jquery.dataTables.js"></script>
         <script src="~/Theme/Scripts/datatables.js"></script>*@
     <script src="~/Theme/Scripts/jquery.dataTables.min.js"></script>
-
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    
     <!-- Theme Base, Components and Settings -->
     <script src="~/Theme/Scripts/theme.js"></script>
 
@@ -319,8 +324,42 @@
     @*https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif*@
     <script>
         $(document).ready(function () {
-            $('#tblProduct').DataTable();
+            $('#tblProduct').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'Product Data export'
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Product Data export'
+                    }
+                ]
+            });
             $('#tblEvents').DataTable({ "bPaginate": false });
+            $('#tblContract').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        footer: false,
+                        title: 'Contract Data export',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6]
+                        }
+
+                    },
+                    {
+                        extend: 'excel',
+                        footer: false,
+                        title: 'Contract Data export',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6]
+                        }
+                    } 
+                ]
+            });
         });
 
         document.onreadystatechange = function () {
