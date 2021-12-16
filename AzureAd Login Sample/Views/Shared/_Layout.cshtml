@@ -14,8 +14,7 @@
     @Styles.Render("~/Content/DashboardCSS")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Theme/Css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link hre="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css" rel="stylesheet" />
-    
+    <link hre="~/Theme/Css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="~/Theme/Css/responsive.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/Theme/Css/jquery-ui.css" rel="stylesheet" />
     <link href="~/Theme/Css/ReportPageCustom.css" rel="stylesheet" />
@@ -202,7 +201,7 @@
                                         <span>Reports</span>
                                     </a>
                                 </li>
-                                <li class="nav" data-menuPageId="report">
+                                <li class="nav" data-menuPageId="help">
                                     <a href="~/Documents/MetalTrailGuide.pdf" target="_blank">
                                         <i class="fa fa-question-circle" aria-hidden="true"></i>
                                         <span>Help</span>
@@ -324,26 +323,26 @@
 
     <!-- Theme Initialization Files -->
     <script src="~/Theme/Scripts/theme.init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
     <!-- Examples -->
     @*<script src="~/assets/javascripts/dashboard/examples.dashboard.js"></script>*@
     @*https://mir-s3-cdn-cf.behance.net/project_modules/disp/35771931234507.564a1d2403b3a.gif*@
     <script>
         $(document).ready(function () {
-            $('#tblProduct').DataTable();
-            //$('#tblProduct').DataTable({
-            //    dom: 'lBfrtip',
-            //    buttons: [
-            //        {
-            //            extend: 'csv',
-            //            title: 'Product Data export'
-            //        },
-            //        {
-            //            extend: 'excel',
-            //            title: 'Product Data export'
-            //        }
-            //    ]
-            //});
+            //$('#tblProduct').DataTable();
+            $('#tblProduct').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        title: 'Product Data export'
+                    },
+                    {
+                        extend: 'excel',
+                        title: 'Product Data export'
+                    }
+                ]
+            });
             $('#tblEvents').DataTable({ "bPaginate": false });
             $('#tblContract').DataTable({
                 dom: 'lBfrtip',
