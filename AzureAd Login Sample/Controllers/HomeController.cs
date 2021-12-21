@@ -83,7 +83,7 @@ namespace POC.Controllers
                     ViewBag.SelectedHSCode10Digits = ds.GetHSCode(info.MES_PCE_IDENT_NO)?.Trim();
                     ViewBag.SelectedGuage = info.TYP?.Trim();
                     ViewBag.WeightKg = (int)info.PCE_WT;
-                    ViewBag.Lengthcm = info.PCE_THK;
+                    ViewBag.Lengthcm = info.PCE_LGT;
                     ViewBag.Widthcm = (int)info.PCE_WDT;
                 }
             }
