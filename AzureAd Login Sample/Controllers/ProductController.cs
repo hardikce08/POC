@@ -15,27 +15,27 @@ namespace AzureAd_Login_Sample.Controllers
     {
         public ActionResult Index(string Filterby = "All")
         {
-            if (Request.IsAuthenticated)
-            {
-                var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+            //if (Request.IsAuthenticated)
+            //{
+            //    var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
 
-                //You get the user's first and last name below:
-                ViewBag.Name = userClaims?.FindFirst("name")?.Value;
-                ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
-                // The 'preferred_username' claim can be used for showing the username
-                ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
+            //    //You get the user's first and last name below:
+            //    ViewBag.Name = userClaims?.FindFirst("name")?.Value;
+            //    ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
+            //    // The 'preferred_username' claim can be used for showing the username
+            //    ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
 
-                // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
-                ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            //    // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
+            //    ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-                // TenantId is the unique Tenant Id - which represents an organization in Azure AD
-                ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
-                //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //    // TenantId is the unique Tenant Id - which represents an organization in Azure AD
+            //    ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
+            //    //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             List<ProductListView> lst = new List<ProductListView>();
             //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
@@ -104,27 +104,27 @@ namespace AzureAd_Login_Sample.Controllers
         [HttpGet]
         public ActionResult _Detail(string id)
         {
-            if (Request.IsAuthenticated)
-            {
-                var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+            //if (Request.IsAuthenticated)
+            //{
+            //    var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
 
-                //You get the user's first and last name below:
-                ViewBag.Name = userClaims?.FindFirst("name")?.Value;
-                ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
-                // The 'preferred_username' claim can be used for showing the username
-                ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
+            //    //You get the user's first and last name below:
+            //    ViewBag.Name = userClaims?.FindFirst("name")?.Value;
+            //    ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
+            //    // The 'preferred_username' claim can be used for showing the username
+            //    ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
 
-                // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
-                ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            //    // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
+            //    ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-                // TenantId is the unique Tenant Id - which represents an organization in Azure AD
-                ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
-                //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //    // TenantId is the unique Tenant Id - which represents an organization in Azure AD
+            //    ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
+            //    //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             ProductDetailView model = new ProductDetailView();
             //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
             //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
