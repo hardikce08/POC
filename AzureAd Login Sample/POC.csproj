@@ -164,6 +164,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\TransferRequestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -310,6 +311,7 @@
     <Content Include="Theme\fonts\fa-thin-100.woff2" />
     <Content Include="Theme\fonts\fa-brands-400.ttf" />
     <Content Include="Theme\fonts\fa-duotone-900.ttf" />
+    <Content Include="Views\TransferRequest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

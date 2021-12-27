@@ -33,6 +33,11 @@ namespace POC
               defaults: new { controller = "Product", action = "Index", id = UrlParameter.Optional }
           );
             routes.MapRoute(
+             name: "TransferRequest",
+             url: "TransferRequest",
+             defaults: new { controller = "TransferRequest", action = "Index", id = UrlParameter.Optional }
+         );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Dashboard", id = UrlParameter.Optional }

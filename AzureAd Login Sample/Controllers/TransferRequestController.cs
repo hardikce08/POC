@@ -1,0 +1,93 @@
+﻿using Newtonsoft.Json;
+using POC.Controllers;
+using POC.DataAccess.Model;
+using POC.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+
+namespace AzureAd_Login_Sample.Controllers
+{
+    public class TransferRequestController : BaseController
+    {
+        // GET: TransferRequest
+        public ActionResult Index(TransferRequestViewModel model, string Filterby = "ALL", string Status = "ALL", string Type = "ALL")
+        {
+            string GetAllTransferRequestAPIURL = ApiDomain + "/v1/products/transfer/requests";
+            var AllTransferRequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllTransferRequestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            var AllTransferresponse = JsonConvert.DeserializeObject<List<AllTransferRequestResponse>>(AllTransferRequest.ResponseString);
+            if (AllTransferresponse != null)
+            {
+                model.lst = new List<TransferRequests>();
+                if (Filterby != "All")
+                {
+                    if (Filterby == "Day")
+                    {
+                        AllTransferresponse = AllTransferresponse.Where(p => p.createdAt >= DateTime.Now.Date.AddHours(-24)).ToList();
+                    }
+                    if (Filterby == "Week")
+                    {
+                        AllTransferresponse = AllTransferresponse.Where(p => p.createdAt >= DateTime.Now.Date.AddDays(-7)).ToList();
+                    }
+                    if (Filterby == "Month")
+                    {
+                        AllTransferresponse = AllTransferresponse.Where(p => p.createdAt >= DateTime.Now.Date.AddMonths(-1)).ToList();
+                    }
+                }
+
+                var _Status = AllTransferresponse.Select(p => p.status).Distinct().ToList();
+                ViewBag.StatusList = PopulateDropdownListValues(_Status, Status);
+                var _Type = AllTransferresponse.Select(p => p.type).Distinct().ToList();
+                ViewBag.TypeList = PopulateDropdownListValues(_Type, Type);
+                if (Status.ToUpper() != "ALL")
+                {
+                    AllTransferresponse = AllTransferresponse.Where(p => p.status == Status).ToList();
+                }
+                if (Type.ToUpper() != "ALL")
+                {
+                    AllTransferresponse = AllTransferresponse.Where(p => p.type == Type).ToList();
+                }
+                foreach (var transfer in AllTransferresponse)
+                {
+                    TransferRequests obj = new TransferRequests();
+                    obj.RequestId = transfer.id;
+                    obj.Updated = transfer.updatedAt;
+                    obj.Type = transfer.type;
+                    obj.CreatedBy = "Steel Co.";
+                    obj.ProductType = "Stainless Steel Products";
+                    obj.Quantity = transfer.weight;
+                    obj.Status = transfer.status;
+                    model.lst.Add(obj);
+                }
+                ViewBag.Filterby = Filterby;
+                ViewBag.Status = Status;
+                ViewBag.Type = Type;
+            }
+
+            return View(model);
+        }
+        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue)
+        {
+            string SelectText = "ALL";
+            List<SelectListItem> result = (from p in lst.AsEnumerable()
+                                           select new SelectListItem
+                                           {
+                                               Text = p.Trim(),
+                                               Value = p.Trim()
+                                           }).ToList();
+            result.Insert(0, new SelectListItem
+            {
+                Text = SelectText,
+                Value = SelectText
+            });
+            if (!string.IsNullOrEmpty(SelectedValue))
+            {
+                result.Find(c => c.Value == SelectedValue).Selected = true;
+            }
+            return result;
+        }
+    }
+}

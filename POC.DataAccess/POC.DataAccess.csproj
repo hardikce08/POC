@@ -56,6 +56,7 @@
     <Compile Include="Model\ProductAPI.cs" />
     <Compile Include="Model\ProductView.cs" />
     <Compile Include="Model\ReportView.cs" />
+    <Compile Include="Model\TransferRequests.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\VCRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

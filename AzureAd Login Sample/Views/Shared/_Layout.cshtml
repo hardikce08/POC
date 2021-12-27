@@ -194,6 +194,12 @@
                                         <span>Contracts</span>
                                     </a>
                                 </li>
+                                <li class="nav" data-menuPageId="transferrequests">
+                                    <a href="~/TransferRequest">
+                                        <i class="fas fa-exchange" aria-hidden="true"></i>
+                                        <span>Transfer Requests</span>
+                                    </a>
+                                </li>
                                 <li class="nav" data-menuPageId="report">
                                     <a href="~/ReportNew">
                                         <i class="fa fa-chart-bar" aria-hidden="true"></i>
@@ -207,11 +213,11 @@
                                     </a>
                                 </li>
                                 @*<li class="nav" data-menuPageId="settings">
-                                        <a href="#">
-                                            <i class="fa fa-cog" aria-hidden="true"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>*@
+            <a href="#">
+                <i class="fa fa-cog" aria-hidden="true"></i>
+                <span>Settings</span>
+            </a>
+        </li>*@
                             </ul>
                         </nav>
                     </div>
@@ -362,6 +368,22 @@
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6]
                         }
+                    }
+                ]
+            });
+
+            $('#tblTransferRequests').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        footer: false,
+                        title: 'TransferRequests Data export' 
+                    },
+                    {
+                        extend: 'excel',
+                        footer: false,
+                        title: 'TransferRequests Data export' 
                     }
                 ]
             });
