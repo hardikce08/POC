@@ -371,7 +371,7 @@
                     }
                 ]
             });
-
+           /* $('#tblTransferRequests').DataTable({});*/
             $('#tblTransferRequests').DataTable({
                 dom: 'lBfrtip',
                 buttons: [
@@ -386,6 +386,16 @@
                         title: 'TransferRequests Data export' 
                     }
                 ]
+            });
+            $("#exporttocsvTransferRequest").on("click", function () {
+                var table = $('#tblTransferRequests').DataTable(); 
+                table.button('.buttons-csv').trigger();
+                 
+            });
+            $("#exporttoexcelTransferRequest").on("click", function () {
+                var table = $('#tblTransferRequests').DataTable();
+                table.button('.buttons-excel').trigger();
+                
             });
         });
 

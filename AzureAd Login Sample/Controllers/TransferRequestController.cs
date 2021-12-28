@@ -52,14 +52,16 @@ namespace AzureAd_Login_Sample.Controllers
                 }
                 foreach (var transfer in AllTransferresponse)
                 {
+                    var productweight = transfer.product.productVC.credentialSubject.product.weight;
                     TransferRequests obj = new TransferRequests();
                     obj.RequestId = transfer.id;
                     obj.Updated = transfer.updatedAt;
                     obj.Type = transfer.type;
                     obj.CreatedBy = "Steel Co.";
                     obj.ProductType = "Stainless Steel Products";
-                    obj.Quantity = transfer.weight;
+                    obj.Quantity = productweight == null ? "" : (productweight.value + " " + productweight.unitCode);
                     obj.Status = transfer.status;
+                    obj.ProductId = transfer.product.id;
                     model.lst.Add(obj);
                 }
                 ViewBag.Filterby = Filterby;

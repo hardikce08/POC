@@ -55,17 +55,29 @@
         padding-bottom:0px !important;
         margin-bottom:0px !important;
     }
+    .dt-buttons {
+        display:none;
+    }
+    .dataTables_filter {
+        margin-top:-20px;
+    }
+    .dt-buttons1 {
+        text-align: right;
+        padding-right: 0px;
+    }
 </style>
 @using (Html.BeginForm("Index", "TransferRequest", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
     <div class="col-md-12" style="margin-top:10px;"></div>
     <div class="col-md-12">
-        <div class="col-md-12" style="padding-left: 0px;">
+        <div class="col-md-10" style="padding-left: 0px;">
             <input type="button" class="btn btn-black applydatefilter" id="ALL" value="All" />
-            <input type="button" class="btn btn-black applydatefilter" id="Day" value="Day" /> 
+            <input type="button" class="btn btn-black applydatefilter" id="Day" value="Day" />
             <input type="button" class="btn btn-black applydatefilter" id="Week" value="Week" />
-            <input type="button" class="btn btn-black applydatefilter" id="Month" value="Month" /> 
+            <input type="button" class="btn btn-black applydatefilter" id="Month" value="Month" />
         </div>
+        <div class="dt-buttons1 col-md-2"> 
+        <button class="buttons-html5 btn btn-orange" id="exporttocsvTransferRequest" tabindex="0" aria-controls="tblTransferRequests" type="button"><span>CSV</span></button> <button id="exporttoexcelTransferRequest" class="buttons-html5 btn btn-orange" tabindex="0" aria-controls="tblTransferRequests" type="button"><span>Excel</span></button> </div>
         <div class="form-inline col-md-12" style="padding-top:5px;">
             <div class="form-group col-md-4" style="padding-left:0px;margin-left:-30px;">
                 <label class="col-sm-2 col-form-label">Status:</label>
@@ -84,7 +96,7 @@
  htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
                 </div>
             </div>
-            <button type="button"  class="btn btn-orange applyfilter">Apply Filter</button>
+            <button type="button" class="btn btn-orange applyfilter">Apply Filter</button>
         </div>
     </div>
     <div class="col-md-12" style="margin-top:10px;"></div>
@@ -95,6 +107,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Request Id</th>
+                        <th scope="col">Product Id</th>
                         <th scope="col">Updated</th>
                         <th scope="col">Type</th>
                         <th scope="col">Created by</th>
@@ -106,15 +119,16 @@
                 <tbody>
                     @foreach (var item in Model.lst)
                     {
-                        <tr>
-                            <td>@item.RequestId</td>
-                            <td>@item.Updated.ToString("MMM dd,yyyy")</td>
-                            <td>@item.Type</td>
-                            <td>@item.CreatedBy</td>
-                            <td>@item.ProductType</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Status</td>
-                        </tr>
+                    <tr>
+                        <td>@item.RequestId</td>
+                        <td>@item.ProductId</td>
+                        <td>@item.Updated.ToString("MMM dd,yyyy")</td>
+                        <td>@item.Type</td>
+                        <td>@item.CreatedBy</td>
+                        <td>@item.ProductType</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Status</td>
+                    </tr>
                     }
                 </tbody>
             </table>

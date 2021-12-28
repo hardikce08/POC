@@ -17,6 +17,7 @@ namespace POC.DataAccess.Model
         public string ProductType { get; set; }
         public string Quantity { get; set; }
         public DateTime CreatedOn { get; set; }
+        public string ProductId { get; set; }
     }
     public class TransferRequestViewModel
     {
