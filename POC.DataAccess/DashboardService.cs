@@ -133,6 +133,23 @@ namespace POC.DataAccess
             }
         }
 
+        public IQueryable<Port> Ports
+        {
+            get
+            {
+                return from r in db.Ports
+                       select new Port
+                       {
+                           Id = r.Id,
+                           Town = r.Town,
+                           Province = r.Province,
+                           Ports = r.Ports1,
+                           ReceiptLocation = r.ReceiptLocation,
+                           Latitude = r.Latitude,
+                           Longitude = r.Longitude,
+                       };
+            }
+        }
         public IQueryable<HSCode> HSCodes
         {
             get

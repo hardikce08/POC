@@ -114,6 +114,18 @@ warning 6002: The table/view 'MetalTrail.dbo.Hscode' does not have a primary key
           <Property Name="WEIGHTDEFAULT_IMP" Type="nvarchar" MaxLength="50" />
           <Property Name="VCId" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Ports">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Town" Type="nvarchar" MaxLength="200" />
+          <Property Name="Province" Type="nvarchar" MaxLength="200" />
+          <Property Name="Ports" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReceiptLocation" Type="nvarchar" MaxLength="500" />
+          <Property Name="Latitude" Type="varchar" MaxLength="50" />
+          <Property Name="Longitude" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="UserID" />
@@ -128,6 +140,7 @@ warning 6002: The table/view 'MetalTrail.dbo.Hscode' does not have a primary key
         </EntityType>
         <EntityContainer Name="POCModelStoreContainer">
           <EntitySet Name="PieceInfo" EntityType="Self.PieceInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ports" EntityType="Self.Ports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hscode" EntityType="Self.Hscode" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -153,6 +166,7 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
           <EntitySet Name="Hscode" EntityType="Self.Hscode" />
           <EntitySet Name="Users" EntityType="POCModel.Users" />
           <EntitySet Name="PieceInfo" EntityType="POCModel.PieceInfo" />
+          <EntitySet Name="Ports" EntityType="POCModel.Ports" />
         </EntityContainer>
         <EntityType Name="Users">
           <Key>
@@ -264,6 +278,18 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
           <Property Name="WEIGHTDEFAULT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="WEIGHTDEFAULT_IMP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="VCId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Ports">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Town" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Ports1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -393,6 +419,19 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Ports">
+            <EntityTypeMapping TypeName="POCModel.Ports">
+              <MappingFragment StoreEntitySet="Ports">
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="ReceiptLocation" ColumnName="ReceiptLocation" />
+                <ScalarProperty Name="Ports1" ColumnName="Ports" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -419,6 +458,7 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
         <EntityTypeShape EntityType="POCModel.Hscode" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="POCModel.Users" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="POCModel.PieceInfo" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="POCModel.Ports" Width="1.5" PointX="3.375" PointY="4.75" />
       </Diagram>
     </Diagrams>
   </Designer>

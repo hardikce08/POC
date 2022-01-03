@@ -216,4 +216,22 @@ namespace POC.DataAccess.Model
 
         public List<ProductResult> lstActiveProducts { get; set; }
     }
+
+    public class Port
+    {
+
+        public int Id { get; set; }
+
+        public string Town { get; set; }
+
+        public string Province { get; set; }
+
+        public string Ports { get; set; }
+
+        public string ReceiptLocation { get; set; }
+
+        public string Latitude { get; set; }
+
+        public string Longitude { get; set; }
+    }
 }

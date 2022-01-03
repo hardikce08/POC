@@ -88,7 +88,7 @@ namespace POC.Controllers
                 }
             }
             List<SelectListItem> items = new List<SelectListItem>();
-            var _Coil = ds.PieceInfos.Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
+            var _Coil = ds.PieceInfos.Where(p => p.VCId == null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
             ViewBag.Coil = new SelectList(_Coil);
 
             var _CountryofOrigin = ds.PieceInfos.Select(p => p.ORIGN_COUNTRY_CD_TEXT).Distinct().ToList();

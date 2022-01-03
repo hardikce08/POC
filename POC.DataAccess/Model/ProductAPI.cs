@@ -437,7 +437,19 @@ namespace POC.DataAccess.Model
         //public Anomaly anomaly { get; set; }
           
     }
-
+    public class EventDisplayList
+    {
+        public object Latitude { get; set; }
+        public object Longitude { get; set; }
+        public string EventType { get; set; }
+        public string InitiatorName { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string addressCountry { get; set; }
+        public DateTime issuanceDate { get; set; }
+        public object Latitude2 { get; set; }
+        public object Longitude2 { get; set; }
+    }
     public class Products
     {
         public List<Active> active { get; set; }

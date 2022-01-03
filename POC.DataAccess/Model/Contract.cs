@@ -20,6 +20,25 @@ namespace POC.DataAccess.Model
         public string startDate { get; set; }
         public string endDate { get; set; }
     }
+
+    public class TransferofOwnerShipAPIRequest
+    {
+        public int contractId { get; set; }
+        public string receiver { get; set; }
+        public bool hasDocuments { get; set; }
+        public string price { get; set; }
+        public string productId { get; set; }
+    }
+    public class TransferofCustodyData
+    {
+        public int contractId { get; set; }
+        public string receiver { get; set; }
+        public string countryOfDestination { get; set; }
+        public string portOfEntry { get; set; }
+        public string portOfDestination { get; set; }
+        public string receiptLocation { get; set; }
+        public string productId { get; set; }
+    }
     public class ContractUpdateRequest
     {
         public int contractId { get; set; }
@@ -84,6 +103,61 @@ namespace POC.DataAccess.Model
         public Sender sender { get; set; }
         public ContractReceiver receiver { get; set; }
     }
+
+    public class AllOrganizationResponse
+    {
+        public int id { get; set; }
+        public string did { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string address { get; set; }
+        public string phone { get; set; }
+        public int mill { get; set; }
+        public string role { get; set; }
+    }
+
+    #region Transfer of Custody 
+    public class TransferCustodyPortOfEntry
+    {
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string addressCountry { get; set; }
+    }
+
+    public class TransferCustodyPortOfDestination
+    {
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string postalCode { get; set; }
+        public string addressCountry { get; set; }
+    }
+
+    public class TransferCustodyReceiptLocation
+    {
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string streetAddress { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string addressCountry { get; set; }
+    }
+
+    public class TransferCustodyAPIRequest
+    {
+        public string productId { get; set; }
+        public string contractId { get; set; }
+        public string countryOfDestination { get; set; }
+        public TransferCustodyPortOfEntry portOfEntry { get; set; }
+        public TransferCustodyPortOfDestination portOfDestination { get; set; }
+        public TransferCustodyReceiptLocation receiptLocation { get; set; }
+        public string receiver { get; set; }
+        public bool hasDocuments { get; set; }
+    }
+    #endregion
 
 
 }

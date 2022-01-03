@@ -38,6 +38,11 @@ namespace POC
              defaults: new { controller = "TransferRequest", action = "Index", id = UrlParameter.Optional }
          );
             routes.MapRoute(
+           name: "Event",
+           url: "Event",
+           defaults: new { controller = "Event", action = "Index", id = UrlParameter.Optional }
+       );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Dashboard", id = UrlParameter.Optional }

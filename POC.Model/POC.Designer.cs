@@ -112,6 +112,22 @@ namespace POC.Model
             }
         }
         private ObjectSet<PieceInfo> _PieceInfo;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Ports> Ports
+        {
+            get
+            {
+                if ((_Ports == null))
+                {
+                    _Ports = base.CreateObjectSet<Ports>("Ports");
+                }
+                return _Ports;
+            }
+        }
+        private ObjectSet<Ports> _Ports;
 
         #endregion
 
@@ -139,6 +155,14 @@ namespace POC.Model
         public void AddToPieceInfo(PieceInfo pieceInfo)
         {
             base.AddObject("PieceInfo", pieceInfo);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Ports EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToPorts(Ports ports)
+        {
+            base.AddObject("Ports", ports);
         }
 
         #endregion
@@ -2636,6 +2660,206 @@ namespace POC.Model
         private global::System.String _VCId;
         partial void OnVCIdChanging(global::System.String value);
         partial void OnVCIdChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="POCModel", Name="Ports")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Ports : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Ports object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        public static Ports CreatePorts(global::System.Int32 id)
+        {
+            Ports ports = new Ports();
+            ports.Id = id;
+            return ports;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value, "Id");
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Town
+        {
+            get
+            {
+                return _Town;
+            }
+            set
+            {
+                OnTownChanging(value);
+                ReportPropertyChanging("Town");
+                _Town = StructuralObject.SetValidValue(value, true, "Town");
+                ReportPropertyChanged("Town");
+                OnTownChanged();
+            }
+        }
+        private global::System.String _Town;
+        partial void OnTownChanging(global::System.String value);
+        partial void OnTownChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Province
+        {
+            get
+            {
+                return _Province;
+            }
+            set
+            {
+                OnProvinceChanging(value);
+                ReportPropertyChanging("Province");
+                _Province = StructuralObject.SetValidValue(value, true, "Province");
+                ReportPropertyChanged("Province");
+                OnProvinceChanged();
+            }
+        }
+        private global::System.String _Province;
+        partial void OnProvinceChanging(global::System.String value);
+        partial void OnProvinceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Ports1
+        {
+            get
+            {
+                return _Ports1;
+            }
+            set
+            {
+                OnPorts1Changing(value);
+                ReportPropertyChanging("Ports1");
+                _Ports1 = StructuralObject.SetValidValue(value, true, "Ports1");
+                ReportPropertyChanged("Ports1");
+                OnPorts1Changed();
+            }
+        }
+        private global::System.String _Ports1;
+        partial void OnPorts1Changing(global::System.String value);
+        partial void OnPorts1Changed();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ReceiptLocation
+        {
+            get
+            {
+                return _ReceiptLocation;
+            }
+            set
+            {
+                OnReceiptLocationChanging(value);
+                ReportPropertyChanging("ReceiptLocation");
+                _ReceiptLocation = StructuralObject.SetValidValue(value, true, "ReceiptLocation");
+                ReportPropertyChanged("ReceiptLocation");
+                OnReceiptLocationChanged();
+            }
+        }
+        private global::System.String _ReceiptLocation;
+        partial void OnReceiptLocationChanging(global::System.String value);
+        partial void OnReceiptLocationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Latitude
+        {
+            get
+            {
+                return _Latitude;
+            }
+            set
+            {
+                OnLatitudeChanging(value);
+                ReportPropertyChanging("Latitude");
+                _Latitude = StructuralObject.SetValidValue(value, true, "Latitude");
+                ReportPropertyChanged("Latitude");
+                OnLatitudeChanged();
+            }
+        }
+        private global::System.String _Latitude;
+        partial void OnLatitudeChanging(global::System.String value);
+        partial void OnLatitudeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Longitude
+        {
+            get
+            {
+                return _Longitude;
+            }
+            set
+            {
+                OnLongitudeChanging(value);
+                ReportPropertyChanging("Longitude");
+                _Longitude = StructuralObject.SetValidValue(value, true, "Longitude");
+                ReportPropertyChanged("Longitude");
+                OnLongitudeChanged();
+            }
+        }
+        private global::System.String _Longitude;
+        partial void OnLongitudeChanging(global::System.String value);
+        partial void OnLongitudeChanged();
 
         #endregion
 

@@ -1,0 +1,123 @@
+﻿
+
+<style>
+    .control-label {
+        text-align:left !important;
+    }
+</style>
+<div class="row" id="dvTransferofOwnership">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label class="col-md-5 control-label">Select Contract</label>
+            <div class="col-md-12">
+                @*@Html.SelectList_Receiver(model => model.ContractRequest.receiver, new { @class = "form-control",@id= "receiver" })*@
+
+                @Html.DropDownList("Model.Contract", (IEnumerable<SelectListItem>)
+                       ViewBag.Contracts,
+                       htmlAttributes: new { @onchange = "return SelectReceiver();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-8 control-label">Country of Destination</label>
+            <div class="col-md-12">
+                @Html.DropDownList("Model.CountryofDestination", (IEnumerable<SelectListItem>)
+                       ViewBag.Country,
+                       htmlAttributes: new { @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label class="col-md-5 control-label">Port of Entry</label>
+            <div class="col-md-12">
+                @Html.DropDownList("Model.Portofentry", (IEnumerable<SelectListItem>)
+                       ViewBag.Ports,
+                       htmlAttributes: new {  @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-5 control-label">Port of Destination</label>
+            <div class="col-md-12">
+                @Html.DropDownList("Model.PortofDestination", (IEnumerable<SelectListItem>)
+                       ViewBag.Ports,
+                       htmlAttributes: new { @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <label class="col-md-5 control-label">Receipt Location</label>
+            <div class="col-md-12">
+                @Html.DropDownList("Model.ReceiptLocation", (IEnumerable<SelectListItem>)
+                       ViewBag.ReceiptLocation,
+                       htmlAttributes: new { @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-5 control-label">Transporter Name</label>
+            <div class="col-md-12">
+                @*@Html.SelectList_Receiver(model => model.ContractRequest.receiver, new { @class = "form-control",@id= "receiver" })*@
+
+                @Html.DropDownList("Model.ReceiptCompany", (IEnumerable<SelectListItem>)
+                       ViewBag.Organisations,
+                       htmlAttributes: new { @disabled = "Disabled", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12 row">
+        <div class="col-md-6">
+            <label class="col-md-4 control-label"> </label>
+            <div class="col-md-8">
+                <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-orange" id="btnSaveOwnerShip">Save <i class="icon-disk bigger-110"></i></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function SelectReceiver() {
+        var c = $('select#Model_Contract option:selected').val();
+        $('select#Model_ReceiptCompany option[value="' + c + '"]').attr("selected", "selected");
+    }
+    $("#btnSaveOwnerShip").click(function () {
+        //alert($('#model_ContractRequest_receiver').val());
+        var datas = JSON.stringify(CreateModel());
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveTransferofCustody", "Event")',
+                data: { serializeddata: datas },
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'New Event Added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                }
+            });
+    });
+    function CreateModel() {
+        var dest = {
+            contractId: $('select#Model_Contract option:selected').text().replace('#',''),
+            countryOfDestination: $("#Model_CountryofDestination").val(),
+            receiver: $('select#Model_ReceiptCompany option:selected').val(),
+            productid: $('#hdnProductId').val(),
+            portOfEntry: $("#Model_Portofentry").val(),
+            portOfDestination: $("#Model_PortofDestination").val(),
+            receiptLocation: $("#Model_ReceiptLocation").val(),
+        };
+
+      
+        return dest;
+        }
+</script>

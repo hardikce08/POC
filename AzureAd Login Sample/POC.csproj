@@ -161,6 +161,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClaimsController.cs" />
     <Compile Include="Controllers\ContractController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -312,6 +313,11 @@
     <Content Include="Theme\fonts\fa-brands-400.ttf" />
     <Content Include="Theme\fonts\fa-duotone-900.ttf" />
     <Content Include="Views\TransferRequest\Index.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
+    <Content Include="Views\Event\_CreateEvent.cshtml" />
+    <Content Include="Views\Event\_Inspect.cshtml" />
+    <Content Include="Views\Event\_TransferofCustody.cshtml" />
+    <Content Include="Views\Event\_StartStorage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

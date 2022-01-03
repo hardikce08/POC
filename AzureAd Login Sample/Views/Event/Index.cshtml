@@ -1,0 +1,318 @@
+﻿@model POC.DataAccess.Model.EventView
+@{
+    ViewBag.Title = "Events";
+    ViewBag.Page = "events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #tblEvents_filter.dataTables_filter label {
+        width: 100%;
+    }
+
+    #tblEvents_filter label {
+        visibility: hidden
+    }
+
+        #tblEvents_filter label input {
+            visibility: visible
+        }
+
+
+    #tblEvents thead {
+        display: none;
+    }
+
+    .datatables-footer {
+        display: none !important;
+    }
+
+    .dataTables_filter label {
+        width: 100% !important;
+    }
+
+    #tblEvents.dataTable th {
+        visibility: hidden;
+    }
+
+    #tblEvents.dataTable {
+        width: 100% !important;
+    }
+
+    #tblEvents_filter.dataTables_filter {
+        width: 100%;
+        padding: 0px;
+    }
+
+    table.dataTable.no-footer {
+        border: 0px;
+    }
+
+    #map-canvas {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+    }
+
+    .graphdiv {
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .grpahselected {
+        background: #ff6f47 !important;
+    }
+
+    #tblEvents tbody td {
+        border-top: 0px;
+        border-radius: 20px;
+        background: #ddd;
+    }
+    /* #tblEvents thead tr {
+        display:none;
+    }*/
+    #tblEvents.dataTable {
+        border-collapse: separate;
+        border-spacing: 0 1em;
+    }
+    .pac-container {
+        z-index: 10000 !important;
+    }
+</style>
+@using (Html.BeginForm("Index", "Event", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label class="col-md-1 control-label">Coil</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("Model.Coil", (IEnumerable<SelectListItem>)
+                        ViewBag.Coil, " -- SELECT --",
+                        htmlAttributes: new { onchange = "this.form.submit();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+                </div>
+                <div class="col-md-5 addneweventbutton">
+                    @*<input name="btnfilter" type="submit" value="Get Events" class="btn btn-black" />*@
+                    @*<button class="btn btn-orange showdetail" data-id="0" type="button">Add New Event</button>*@
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-orange dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Add New Event <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="showdetail" data-title="Inspect" data-id="/Event/_Inspect?id=@ViewBag.ProductId"><a href="#">Inspect</a></li>
+                            <li class="showdetail" data-title="Start Storage" data-id="@Url.Action("_StartStorage", "Event",new { Type = "StorageStart" })"><a href="#">Start storage</a></li>
+                            <li class="showdetail" data-title="End Storage" data-id="@Url.Action("_StartStorage", "Event",new { Type = "StorageEnd" })"><a href="#">End storage</a></li>
+                            <li class="showdetail" data-title="Transfer of Custody" data-id="@Url.Action("_TransferofCustody", "Event")"><a href="#">Transfer of custody</a></li>
+                            <li class="showdetail" data-title="Transfer of Ownership" data-id='@Url.Action("_CreateEvent", "Event")'><a href="#">Transfer of ownership</a></li>
+                            @*<li role="separator" class="divider"></li>
+        <li><a href="#">Separated link</a></li>*@
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6" style="padding-top: 25px;">
+            <div id="map-canvas"></div>
+        </div>
+        <div class="col-md-6">
+            @if (Model.events != null)
+            {
+                <table class="table " id="tblEvents">
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.events)
+                        {
+                            <tr>
+                                <td class="graphdiv" value="graph" data-desc="@item.EventType" data-latLng="@item.Latitude,@item.Longitude" data-latLng2="@item.Latitude2,@item.Longitude2">
+                                    <b>@item.EventType</b><br />
+                                    Submitted by: @item.InitiatorName<br />
+                                    @item.addressLocality ,  @item.addressRegion ,  @item.addressCountry <br />
+                                    <p class="rounddiv">@item.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.issuanceDate.ToString("hh:mm tt")</p>
+                                </td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:50% !important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="modal-title">Add New Event - <label id="lblmodalheader" style="font-weight:bold;font-style:italic"></label></h4>
+                </div>
+                <div class="modal-body" id="modal_details">
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdnProductId" name="hdnProductId" value="@ViewBag.ProductId" />
+}
+@section scripts {
+    @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDakum_wOxLE9c3_Www1wTo-Lsnd58yoRo&libraries=&v=weekly"></script>*@
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDakum_wOxLE9c3_Www1wTo-Lsnd58yoRo&libraries=places"></script>
+    <script type="text/javascript">
+        var formname = "";
+        $(".graphdiv").click(function () {
+            $(".graphdiv").each(function () {
+                $(this).removeClass('grpahselected');
+            });
+
+            //alert($(this).attr("data-latLng"));
+            var latLng = $(this).attr("data-latLng");
+            var latLng2 = $(this).attr("data-latLng2");
+            $(this).addClass('grpahselected');
+            initialize(latLng, latLng2);
+        });
+        function initialize(latLng, latLng2) {
+            latLng = latLng.split(",") //split
+            latLng2 = latLng2.split(",") //split
+            var data = "Test Data for now!";
+            var infowindow = new google.maps.InfoWindow({
+                content: data
+            });
+            const map = new google.maps.Map(document.getElementById("map-canvas"), {
+                zoom: 2,
+                center: new google.maps.LatLng(latLng[0], latLng[1]),
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latLng[0], latLng[1]),
+                map: map,
+                title: "Hello World!"
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+
+            if (latLng2[0] != "") {
+                const marker2 = new google.maps.Marker({
+                    position: new google.maps.LatLng(latLng2[0], latLng2[1]),
+                    map: map,
+                    title: "Hello World!"
+                });
+
+                google.maps.event.addListener(marker2, 'click', function () {
+                    infowindow.open(map, marker2);
+                });
+            }
+        }
+        $(document).ready(function () {
+            if ($("div > div", "#tblEvents_wrapper")[0] != undefined) {
+                $("div > div", "#tblEvents_wrapper")[0].remove();
+            }
+            //$("div > div", "#tblEvents_wrapper").removeClass('col-sm-12');
+            $("div > div", "#tblEvents_wrapper").removeClass('col-md-6');
+            if ($('#hdnProductId').val() != "") {
+                $(".addneweventbutton").show();
+            }
+            else {
+                $(".addneweventbutton").hide();
+            }
+
+            if ($(".graphdiv").length > 0) {
+                LoadDefaultMap();
+            }
+        });
+
+        function LoadDefaultMap() {
+            var locations = new Array();
+            var i = 1;
+            $(".graphdiv").each(function () {
+                var latLng = $(this).attr("data-latLng").split(",");
+                var latLng2 = $(this).attr("data-latLng2").split(",");
+                //alert($(this).attr("data-desc"));
+                locations.push([$(this).attr("data-desc"), latLng[0], latLng[1], i]);
+                if (latLng2[0] != '') { locations.push([$(this).attr("data-desc"), latLng2[0], latLng2[1], i]); }
+                i = i + 1;
+            });
+
+            window.map = new google.maps.Map(document.getElementById('map-canvas'), {
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var bounds = new google.maps.LatLngBounds();
+
+            for (i = 0; i < locations.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map
+                });
+
+                bounds.extend(marker.position);
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+
+            map.fitBounds(bounds);
+
+            var listener = google.maps.event.addListener(map, "idle", function () {
+                map.setZoom(3);
+                google.maps.event.removeListener(listener);
+            });
+        }
+
+        $(".showdetail").click(function () {
+            $("#lblmodalheader").html($(this).data("title"));
+            $.ajax({
+                type: "GET",
+                url: $(this).data("id"),
+                data: { Id: $(this).data("id") },
+                success: function (data) {
+                    $("#modal_details").html(data);
+                    $("#modal").modal('show');
+                    if ($("#Model_StoreLocation") != undefined) {
+                            var options = {
+                                types: ['(cities)'],
+                                componentRestrictions: { country: ["US", "CA"] }
+                            };
+                            var input = document.getElementById('Model_StoreLocation');
+                        var places = new google.maps.places.Autocomplete(input, options);
+                        google.maps.event.addListener(places, 'place_changed', function () {
+                            var place = places.getPlace();
+                            var address = place.formatted_address;
+                            $('#hdnlatitude').val(place.geometry.location.lat());
+                            $('#hdnlongitude').val(place.geometry.location.lng());
+                        });
+                    }
+                    //$(".form_datetime").datepicker("destroy");
+                    //$("#StartDate").datepicker({ dateFormat: "yy-mm-dd" });
+                    //$("#EndDate").datepicker({ dateFormat: "yy-mm-dd" });
+                    if ($(this).data("id") == 0) {
+
+                        //$("#StartDate").val('');
+                        //$("#EndDate").val('');
+                        //$("#ddlCountry").prop('selectedIndex', 0);
+                        //$('#modaltitle').text('Hello World');
+                        //$('#modal').on('show.bs.modal', function (event) {
+                        //    $(this).find('h4#modal-title').text("You new title");
+                        //});
+                    }
+                    //console.log(data);
+                }
+            });
+        });
+
+    </script>
+}

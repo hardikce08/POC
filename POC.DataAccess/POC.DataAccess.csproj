@@ -52,6 +52,8 @@
     <Compile Include="DataHelper.cs" />
     <Compile Include="Function.cs" />
     <Compile Include="Model\Contract.cs" />
+    <Compile Include="Model\Events.cs" />
+    <Compile Include="Model\InpectEvent.cs" />
     <Compile Include="Model\PieceInfo.cs" />
     <Compile Include="Model\ProductAPI.cs" />
     <Compile Include="Model\ProductView.cs" />

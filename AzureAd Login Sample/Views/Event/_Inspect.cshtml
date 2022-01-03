@@ -1,0 +1,112 @@
+﻿@model POC.DataAccess.Model.ProductDetailView
+<style>
+    .background-fill {
+        background-color: whitesmoke;
+        border-radius: 10px;
+        margin: 10px;
+    }
+    .control-label {
+        font-weight:bold;
+    }
+</style>
+@if (Model.result != null)
+{
+    var product = @Model.result?.productVC?.credentialSubject?.product;
+    var credentialsubject = @Model.result?.productVC?.credentialSubject;
+    var res = @Model.result;
+<div class="row" id="dvTransferofOwnership">
+    <div class="col-md-12">
+        <div class="col-md-5 background-fill">
+            <label class="control-label">Product Type</label><br />
+            @product.name
+        </div>
+        <div class="col-md-6 background-fill">
+            <label class="control-label">Product Id</label><br />
+            @product.id
+        </div>
+        <div class="col-md-5 background-fill">
+            <label class="control-label">HS Code</label><br />
+            @credentialsubject.HSCode
+        </div>
+        <div class="col-md-6 background-fill">
+            <label class="control-label">Origin</label><br />
+            @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
+        </div>
+        <div class="col-md-5 background-fill">
+            <label class="control-label">Weight</label><br />
+            @product.weight.value.ToString()  @product.weight.unitCode
+        </div>
+        <div class="col-md-6 background-fill">
+            <label class="control-label">UoM</label><br />
+            --
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+            <table class="table table-condensed table-bordered">
+                <div style="color:black;font-weight:bold;text-align:center;margin-bottom:10px;">Chemical Specs</div>
+                <thead>
+                    <tr>
+                        <th>Charachteristics</th>
+                        <th>Value %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <td>Aluminum</td>
+                            <td>@Html.TextBox("Model.AluminumPercentage", "", new { @class = "form-control", @style = "width:20%;" })</td>
+                        </tr>
+                    
+                </tbody>
+            </table>
+
+      
+
+    </div>
+
+    <div class="col-md-12 form-group">
+        <div class="col-md-12">
+            <label class="col-md-4 control-label"> </label>
+            <div class="col-md-8">
+                <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-orange" id="btnSaveInspect">Save <i class="icon-disk bigger-110"></i></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+}
+<script>
+    $("#btnSaveInspect").click(function () {
+        //alert($('#model_ContractRequest_receiver').val());
+        //var datas = JSON.stringify(CreateModel());
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveInspect", "Event")',
+                data: { id: $('#hdnProductId').val(), value: $('#Model_AluminumPercentage').val() },
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'New Event Added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                }
+            });
+    });
+    //function CreateModel() {
+    //    var dest = {
+    //        contractId: $('select#Model_Contract option:selected').text().replace('#',''),
+    //        price: $("#Model_PriceperKg").val(),
+    //        receiver: $('select#Model_ReceiptCompany option:selected').val(),
+    //        productid: $('#hdnProductId').val()
+    //    };
+    //    return dest;
+    //    }
+</script>
