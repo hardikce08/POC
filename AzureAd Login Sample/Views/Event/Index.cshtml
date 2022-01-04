@@ -75,6 +75,7 @@
         border-collapse: separate;
         border-spacing: 0 1em;
     }
+
     .pac-container {
         z-index: 10000 !important;
     }
@@ -100,12 +101,19 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li class="showdetail" data-title="Inspect" data-id="/Event/_Inspect?id=@ViewBag.ProductId"><a href="#">Inspect</a></li>
-                            <li class="showdetail" data-title="Start Storage" data-id="@Url.Action("_StartStorage", "Event",new { Type = "StorageStart" })"><a href="#">Start storage</a></li>
-                            <li class="showdetail" data-title="End Storage" data-id="@Url.Action("_StartStorage", "Event",new { Type = "StorageEnd" })"><a href="#">End storage</a></li>
+                            @if (ViewBag.IsStorageEndVisible == true)
+                            {
+                                <li class="showdetail" data-title="End Storage" data-id="@Url.Action("_StartStorage", "Event", new { Type = "StorageEnd" })"><a href="#">End storage</a></li>
+                            }
+                            else
+                            {
+                                <li class="showdetail" data-title="Start Storage" data-id="@Url.Action("_StartStorage", "Event",new { Type = "StorageStart" })"><a href="#">Start storage</a></li>
+
+                            }
                             <li class="showdetail" data-title="Transfer of Custody" data-id="@Url.Action("_TransferofCustody", "Event")"><a href="#">Transfer of custody</a></li>
                             <li class="showdetail" data-title="Transfer of Ownership" data-id='@Url.Action("_CreateEvent", "Event")'><a href="#">Transfer of ownership</a></li>
                             @*<li role="separator" class="divider"></li>
-        <li><a href="#">Separated link</a></li>*@
+                                <li><a href="#">Separated link</a></li>*@
                         </ul>
                     </div>
 
@@ -283,11 +291,11 @@
                     $("#modal_details").html(data);
                     $("#modal").modal('show');
                     if ($("#Model_StoreLocation") != undefined) {
-                            var options = {
-                                types: ['(cities)'],
-                                componentRestrictions: { country: ["US", "CA"] }
-                            };
-                            var input = document.getElementById('Model_StoreLocation');
+                        var options = {
+                            types: ['(cities)'],
+                            componentRestrictions: { country: ["US", "CA"] }
+                        };
+                        var input = document.getElementById('Model_StoreLocation');
                         var places = new google.maps.places.Autocomplete(input, options);
                         google.maps.event.addListener(places, 'place_changed', function () {
                             var place = places.getPlace();

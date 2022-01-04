@@ -36,7 +36,7 @@ namespace AzureAd_Login_Sample.Controllers
                             var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
                             var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
                             List<EventDisplayList> eventslst = new List<EventDisplayList>();
-                            foreach (var item in productresult.events)
+                            foreach (var item in productresult?.events)
                             {
                                 EventDisplayList obj = new EventDisplayList();
                                 obj.EventType = item.eventType;
@@ -56,6 +56,14 @@ namespace AzureAd_Login_Sample.Controllers
                             }
                             model.events = eventslst;
                             ViewBag.ProductId = data.VCId;
+                            if (eventslst.Where(p => p.EventType == "StorageStart").FirstOrDefault() != null)
+                            {
+                                ViewBag.IsStorageEndVisible = true;
+                            }
+                            else
+                            {
+                                ViewBag.IsStorageEndVisible = false;
+                            }
                         }
                         else
                         {
