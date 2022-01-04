@@ -17,83 +17,97 @@ namespace AzureAd_Login_Sample.Controllers
         // GET: Event
         public ActionResult Index(EventView model)
         {
-            DashboardService ds = new DashboardService();
-            List<SelectListItem> items = new List<SelectListItem>();
-            var _Coil = ds.PieceInfos.Where(p => p.VCId != null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
-            ViewBag.Coil = new SelectList(_Coil);
-            if (Request.HttpMethod == "POST" && model.Coil > 0)
+            try
             {
-                var data = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
-                if (data != null)
+                DashboardService ds = new DashboardService();
+                List<SelectListItem> items = new List<SelectListItem>();
+                var _Coil = ds.PieceInfos.Where(p => p.VCId != null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
+                ViewBag.Coil = new SelectList(_Coil);
+                if (Request.HttpMethod == "POST" && model.Coil > 0)
                 {
-                    if (!string.IsNullOrEmpty(data.VCId))
+                    var data = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
+                    if (data != null)
                     {
-                        //get list of all events for selected Coild VCId
-                        //data.VCId = "73280271-74f4-4012-a0e2-5583c6f6cbdd";
-                        string APIURL = ApiDomain + "/v1/products/" + data.VCId;
-                        var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                        var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
-                        List<EventDisplayList> eventslst = new List<EventDisplayList>();
-                        foreach (var item in productresult.events)
+                        if (!string.IsNullOrEmpty(data.VCId))
                         {
-                            EventDisplayList obj = new EventDisplayList();
-                            obj.EventType = item.eventType;
-                            obj.InitiatorName = item.eventVC.credentialSubject.initiator.name;
-                            obj.issuanceDate = item.createdAt;
-                            obj.addressLocality = item.eventVC?.credentialSubject?.place?.address?.addressLocality;
-                            obj.addressRegion = item.eventVC?.credentialSubject?.place?.address?.addressRegion;
-                            obj.addressCountry = item.eventVC?.credentialSubject?.place?.address?.addressCountry;
-                            obj.Latitude = item.eventVC.credentialSubject?.place?.geo?.latitude;
-                            obj.Longitude = item.eventVC.credentialSubject?.place?.geo?.longitude;
-                            if (item.eventType == "TransferCustody")
+                            //get list of all events for selected Coild VCId
+                            //data.VCId = "73280271-74f4-4012-a0e2-5583c6f6cbdd";
+                            string APIURL = ApiDomain + "/v1/products/" + data.VCId;
+                            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                            var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                            List<EventDisplayList> eventslst = new List<EventDisplayList>();
+                            foreach (var item in productresult.events)
                             {
-                                obj.Latitude2 = item.eventVC.credentialSubject.portOfEntry?.geo?.latitude;
-                                obj.Longitude2 = item.eventVC.credentialSubject?.portOfEntry?.geo?.longitude;
+                                EventDisplayList obj = new EventDisplayList();
+                                obj.EventType = item.eventType;
+                                obj.InitiatorName = item.eventVC.credentialSubject.initiator.name;
+                                obj.issuanceDate = item.createdAt;
+                                obj.addressLocality = item.eventVC?.credentialSubject?.place?.address?.addressLocality;
+                                obj.addressRegion = item.eventVC?.credentialSubject?.place?.address?.addressRegion;
+                                obj.addressCountry = item.eventVC?.credentialSubject?.place?.address?.addressCountry;
+                                obj.Latitude = item.eventVC.credentialSubject?.place?.geo?.latitude;
+                                obj.Longitude = item.eventVC.credentialSubject?.place?.geo?.longitude;
+                                if (item.eventType == "TransferCustody")
+                                {
+                                    obj.Latitude2 = item.eventVC.credentialSubject.portOfEntry?.geo?.latitude;
+                                    obj.Longitude2 = item.eventVC.credentialSubject?.portOfEntry?.geo?.longitude;
+                                }
+                                eventslst.Add(obj);
                             }
-                            eventslst.Add(obj);
+                            model.events = eventslst;
+                            ViewBag.ProductId = data.VCId;
                         }
-                        model.events = eventslst;
-                        ViewBag.ProductId = data.VCId;
+                        else
+                        {
+                            TempData["Error"] = "Product VC Id is not associated for selected coil";
+                        }
                     }
-                    else
-                    {
-                        TempData["Error"] = "Product VC Id is not associated for selected coil";
-                    }
-                }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error while Loading Events";
             }
             return View(model);
         }
         [HttpGet]
         public ActionResult _CreateEvent()
         {
-            string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
-            var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
-            if (Allcontractresponse != null)
+            try
             {
-                //filter only Active Contracts
-                Allcontractresponse = Allcontractresponse.Where(p => p.status != "EXPIRED").ToList();
-                Dictionary<string, string> contracts = new Dictionary<string, string>();
-                foreach (var active in Allcontractresponse)
+                string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
+                var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                if (Allcontractresponse != null)
                 {
-                    contracts.Add("#" + active.id.ToString(), active.sender.did);
+                    //filter only Active Contracts
+                    Allcontractresponse = Allcontractresponse.Where(p => p.status != "EXPIRED").ToList();
+                    Dictionary<string, string> contracts = new Dictionary<string, string>();
+                    foreach (var active in Allcontractresponse)
+                    {
+                        contracts.Add("#" + active.id.ToString(), active.sender.did);
+                    }
+                    ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
                 }
-                ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
+                string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
+                var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                if (AllOrganizationresponse != null)
+                {
+                    Dictionary<string, string> contracts = new Dictionary<string, string>();
+                    foreach (var active in AllOrganizationresponse)
+                    {
+                        contracts.Add(active.name.ToString(), active.did);
+                    }
+                    ViewBag.Organisations = PopulateDropdownListValues(contracts, null);
+                }
+                ViewBag.EventTitle = "Transfer of Ownership";
             }
-            string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
-            var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
-            if (AllOrganizationresponse != null)
+            catch (Exception ex)
             {
-                Dictionary<string, string> contracts = new Dictionary<string, string>();
-                foreach (var active in AllOrganizationresponse)
-                {
-                    contracts.Add(active.name.ToString(), active.did);
-                }
-                ViewBag.Organisations = PopulateDropdownListValues(contracts, null);
+                ViewBag.Error = "Error during data load";
             }
-            ViewBag.EventTitle = "Transfer of Ownership";
             return PartialView();
         }
         public ActionResult SaveTransferofOwnership(string serializeddata)
@@ -163,14 +177,21 @@ namespace AzureAd_Login_Sample.Controllers
         }
         public ActionResult _Inspect(string id)
         {
-            string APIURL = ApiDomain + "/v1/products/" + id;
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             ProductDetailView model = new ProductDetailView();
-            model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
-            ViewBag.EventTitle = "Inspect";
+            try
+            {
+                string APIURL = ApiDomain + "/v1/products/" + id;
+                var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                ViewBag.EventTitle = "Inspect";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error during data load";
+            }
             return PartialView(model);
         }
-        public ActionResult SaveInspect(string id,string value)
+        public ActionResult SaveInspect(string id, string value)
         {
             string APIURL = ApiDomain + "/v1/products/" + id;
             var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
@@ -178,12 +199,12 @@ namespace AzureAd_Login_Sample.Controllers
             var product = activeproduct.productVC.credentialSubject.product;
             var facility = activeproduct.productVC.credentialSubject.facility;
             InspectEventAPIRequest data = new InspectEventAPIRequest();
-            data.initiator= new InspectInitiator { name = "Steel Co." };
+            data.initiator = new InspectInitiator { name = "Steel Co." };
             data.product = new InspectProduct { id = id, name = product.name };
             data.product.weight = new InspectWeight { unit = product.weight.unitCode, value = product.weight.value };
             data.product.length = new InspectLength { unit = product.length.unitCode, value = product.length.value };
             data.product.width = new InspectWidth { unit = product.width.unitCode, value = product.width.value };
-            data.product.manufacturer = new InspectManufacturer {name=product.manufacturer.name };
+            data.product.manufacturer = new InspectManufacturer { name = product.manufacturer.name };
             data.observation = new List<InspectObservation> { new InspectObservation { name = "aluminum", type = "ChemicalProperty", description = "Aluminum", unit = "%", value = value } };
             data.place = new InspectPlace { addressCountry = facility.address.addressCountry, addressLocality = facility.address.addressLocality, addressRegion = facility.address.addressRegion, latitude = facility.geo.latitude?.ToString(), longitude = facility.geo.longitude?.ToString() };
             string CraeteContractAPIURL = ApiDomain + "/v1/products/inspect";
@@ -195,40 +216,47 @@ namespace AzureAd_Login_Sample.Controllers
 
         public ActionResult _TransferofCustody()
         {
-            string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
-            var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
-            if (Allcontractresponse != null)
+            try
             {
-                //filter only Active Contracts
-                Allcontractresponse = Allcontractresponse.Where(p => p.status == "ACTIVE").ToList();
-                Dictionary<string, string> contracts = new Dictionary<string, string>();
-                foreach (var active in Allcontractresponse)
+                string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
+                var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                if (Allcontractresponse != null)
                 {
-                    contracts.Add("#" + active.id.ToString(), active.sender.did);
+                    //filter only Active Contracts
+                    Allcontractresponse = Allcontractresponse.Where(p => p.status == "ACTIVE").ToList();
+                    Dictionary<string, string> contracts = new Dictionary<string, string>();
+                    foreach (var active in Allcontractresponse)
+                    {
+                        contracts.Add("#" + active.id.ToString(), active.sender.did);
+                    }
+                    ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
                 }
-                ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
-            }
-            string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
-            var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
-            if (AllOrganizationresponse != null)
-            {
-                Dictionary<string, string> contracts = new Dictionary<string, string>();
-                foreach (var active in AllOrganizationresponse)
+                string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
+                var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                if (AllOrganizationresponse != null)
                 {
-                    contracts.Add(active.name.ToString(), active.did);
+                    Dictionary<string, string> contracts = new Dictionary<string, string>();
+                    foreach (var active in AllOrganizationresponse)
+                    {
+                        contracts.Add(active.name.ToString(), active.did);
+                    }
+                    ViewBag.Organisations = PopulateDropdownListValues(contracts, null);
                 }
-                ViewBag.Organisations = PopulateDropdownListValues(contracts, null);
-            }
-            var _Country = new List<string> { "CANADA", "USA" };
-            ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
+                var _Country = new List<string> { "CANADA", "USA" };
+                ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
 
-            DashboardService ds = new DashboardService();
-            var Ports = ds.Ports.ToList();
-            ViewBag.Ports = PopulateDropdownListValues(Ports.Select(p=>p.Ports).ToList(), ViewBag.SelectedCountry);
-            ViewBag.ReceiptLocation = PopulateDropdownListValues(Ports.Select(p => p.ReceiptLocation).ToList(), ViewBag.SelectedCountry);
-            ViewBag.EventTitle = "Transfer of Custody";
+                DashboardService ds = new DashboardService();
+                var Ports = ds.Ports.ToList();
+                ViewBag.Ports = PopulateDropdownListValues(Ports.Select(p => p.Ports).ToList(), ViewBag.SelectedCountry);
+                ViewBag.ReceiptLocation = PopulateDropdownListValues(Ports.Select(p => p.ReceiptLocation).ToList(), ViewBag.SelectedCountry);
+                ViewBag.EventTitle = "Transfer of Custody";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error during data load";
+            }
             return PartialView();
         }
         public ActionResult SaveTransferofCustody(string serializeddata)
@@ -245,7 +273,7 @@ namespace AzureAd_Login_Sample.Controllers
             var portOfEntry = Ports.Where(p => p.Ports == model.portOfEntry).FirstOrDefault();
             data.portOfEntry = new TransferCustodyPortOfEntry { addressCountry = model.countryOfDestination, addressLocality = portOfEntry.Town, addressRegion = portOfEntry.Province, latitude = portOfEntry.Latitude, longitude = portOfEntry.Longitude };
             var portOfDestination = Ports.Where(p => p.Ports == model.portOfDestination).FirstOrDefault();
-            data.portOfDestination = new  TransferCustodyPortOfDestination { addressCountry = model.countryOfDestination, addressLocality = portOfEntry.Town, addressRegion = portOfEntry.Province, latitude = portOfEntry.Latitude, longitude = portOfEntry.Longitude };
+            data.portOfDestination = new TransferCustodyPortOfDestination { addressCountry = model.countryOfDestination, addressLocality = portOfEntry.Town, addressRegion = portOfEntry.Province, latitude = portOfEntry.Latitude, longitude = portOfEntry.Longitude };
             var receiptLocation = Ports.Where(p => p.Ports == model.portOfDestination).FirstOrDefault();
             data.receiptLocation = new TransferCustodyReceiptLocation { addressCountry = model.countryOfDestination, addressLocality = portOfEntry.Town, addressRegion = portOfEntry.Province, latitude = portOfEntry.Latitude, longitude = portOfEntry.Longitude };
 
@@ -260,18 +288,25 @@ namespace AzureAd_Login_Sample.Controllers
 
         public ActionResult _StartStorage(string Type)
         {
-            //string APIURL = ApiDomain + "/v1/products/" + id;
-            //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            //ProductDetailView model = new ProductDetailView();
-            //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
-            var _UoM = new List<string> { "KG", "Tonne" };
-            ViewBag.StorageEventType = Type;
-            ViewBag.UoM = PopulateDropdownListValues(_UoM, ViewBag.SelectedCountry);
-            ViewBag.EventTitle = Type;
+            try
+            {
+                //string APIURL = ApiDomain + "/v1/products/" + id;
+                //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //ProductDetailView model = new ProductDetailView();
+                //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                var _UoM = new List<string> { "KG", "Tonne" };
+                ViewBag.StorageEventType = Type;
+                ViewBag.UoM = PopulateDropdownListValues(_UoM, ViewBag.SelectedCountry);
+                ViewBag.EventTitle = Type;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error during data load";
+            }
             return PartialView();
         }
 
-        public ActionResult SaveStartStorage(string EventType , string id, string latitude,string longitude,string address,string weightUnit,string weightValue)
+        public ActionResult SaveStartStorage(string EventType, string id, string latitude, string longitude, string address, string weightUnit, string weightValue)
         {
             string APIURL = ApiDomain + "/v1/products/" + id;
             var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
@@ -279,7 +314,7 @@ namespace AzureAd_Login_Sample.Controllers
             var product = activeproduct.productVC.credentialSubject.product;
             StartStorageAPIRequest data = new StartStorageAPIRequest();
             data.eventType = EventType;
-            data.storedWeight= new InspectWidth { unit = weightUnit, value = weightValue };
+            data.storedWeight = new InspectWidth { unit = weightUnit, value = weightValue };
             data.initiator = new InspectInitiator { name = "Steel Co." };
             data.product = new InspectProduct { id = id, name = product.name };
             data.product.weight = new InspectWeight { unit = product.weight.unitCode, value = product.weight.value };

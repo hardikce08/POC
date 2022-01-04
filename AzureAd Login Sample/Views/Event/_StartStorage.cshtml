@@ -5,6 +5,13 @@
         text-align: left !important;
     }
 </style>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-error" style="font-weight:bold;color:red;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4>@ViewBag.Error </h4>
+    </div>
+}
 <div class="row" id="dvTransferofOwnership">
     <div class="col-md-12">
         <div class="col-md-4">
@@ -66,5 +73,5 @@
         }
         });
     });
-   
+
 </script>

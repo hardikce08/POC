@@ -5,44 +5,52 @@
         border-radius: 10px;
         margin: 10px;
     }
+
     .control-label {
-        font-weight:bold;
+        font-weight: bold;
     }
 </style>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-error" style="font-weight:bold;color:red;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4>@ViewBag.Error </h4>
+    </div>
+}
 @if (Model.result != null)
 {
     var product = @Model.result?.productVC?.credentialSubject?.product;
     var credentialsubject = @Model.result?.productVC?.credentialSubject;
     var res = @Model.result;
-<div class="row" id="dvTransferofOwnership">
-    <div class="col-md-12">
-        <div class="col-md-5 background-fill">
-            <label class="control-label">Product Type</label><br />
-            @product.name
+    <div class="row" id="dvTransferofOwnership">
+        <div class="col-md-12">
+            <div class="col-md-5 background-fill">
+                <label class="control-label">Product Type</label><br />
+                @product.name
+            </div>
+            <div class="col-md-6 background-fill">
+                <label class="control-label">Product Id</label><br />
+                @product.id
+            </div>
+            <div class="col-md-5 background-fill">
+                <label class="control-label">HS Code</label><br />
+                @credentialsubject.HSCode
+            </div>
+            <div class="col-md-6 background-fill">
+                <label class="control-label">Origin</label><br />
+                @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
+            </div>
+            <div class="col-md-5 background-fill">
+                <label class="control-label">Weight</label><br />
+                @product.weight.value.ToString()  @product.weight.unitCode
+            </div>
+            <div class="col-md-6 background-fill">
+                <label class="control-label">UoM</label><br />
+                --
+            </div>
         </div>
-        <div class="col-md-6 background-fill">
-            <label class="control-label">Product Id</label><br />
-            @product.id
-        </div>
-        <div class="col-md-5 background-fill">
-            <label class="control-label">HS Code</label><br />
-            @credentialsubject.HSCode
-        </div>
-        <div class="col-md-6 background-fill">
-            <label class="control-label">Origin</label><br />
-            @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
-        </div>
-        <div class="col-md-5 background-fill">
-            <label class="control-label">Weight</label><br />
-            @product.weight.value.ToString()  @product.weight.unitCode
-        </div>
-        <div class="col-md-6 background-fill">
-            <label class="control-label">UoM</label><br />
-            --
-        </div>
-    </div>
-    <div class="col-md-12" style="margin-top:10px;"></div>
-    <div class="col-md-12">
+        <div class="col-md-12" style="margin-top:10px;"></div>
+        <div class="col-md-12">
             <table class="table table-condensed table-bordered">
                 <div style="color:black;font-weight:bold;text-align:center;margin-bottom:10px;">Chemical Specs</div>
                 <thead>
@@ -52,30 +60,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                        <tr>
-                            <td>Aluminum</td>
-                            <td>@Html.TextBox("Model.AluminumPercentage", "", new { @class = "form-control", @style = "width:20%;" })</td>
-                        </tr>
-                    
+
+                    <tr>
+                        <td>Aluminum</td>
+                        <td>@Html.TextBox("Model.AluminumPercentage", "", new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+
                 </tbody>
             </table>
 
-      
 
-    </div>
 
-    <div class="col-md-12 form-group">
-        <div class="col-md-12">
-            <label class="col-md-4 control-label"> </label>
-            <div class="col-md-8">
-                <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-orange" id="btnSaveInspect">Save <i class="icon-disk bigger-110"></i></button>
-            </div>
         </div>
 
+        <div class="col-md-12 form-group">
+            <div class="col-md-12">
+                <label class="col-md-4 control-label"> </label>
+                <div class="col-md-8">
+                    <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-orange" id="btnSaveInspect">Save <i class="icon-disk bigger-110"></i></button>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 }
 <script>
     $("#btnSaveInspect").click(function () {
