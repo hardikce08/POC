@@ -39,6 +39,15 @@ a,
     html.sidebar-left-collapsed.boxed .sidebar-left .nav-main > li:hover > a span.label {
         background-color: #0088cc;
     }
+    .logo {
+        float: none !important;
+        text-align: center !important;
+    }
+
+    .logo-container {
+        text-align: center;
+        padding-top: 10px;
+    }
 }
 /* Layout Boxed - small than min-width */
 @media only screen and (max-width: 1199px) {

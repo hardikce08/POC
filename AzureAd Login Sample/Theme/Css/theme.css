@@ -1416,17 +1416,17 @@ html.fixed .visible-xl-inline-block {
     z-index: 1000;
 }
 
-    .header .logo {
-        float: left;
-        margin: 10px 0 0 125px;
-    }
+    
 
-        .header .logo img {
+       .header .logo img {
             color: transparent;
             height: 60px;
             width: 60px;
+            
+            
         }
 
+        
     .header .separator {
         background-color: #f6f6f6;
         background-image: -webkit-linear-gradient(#f6f6f6 60%, #ededed);
@@ -1470,19 +1470,22 @@ html.fixed .visible-xl-inline-block {
         background-image: linear-gradient(#f6f6f6 0%, white 45%);
         border-bottom: 1px solid #E9E9E6;
         border-top: 3px solid #EDEDED;
+        position:relative
     }
 
         .header .logo-container .logo {
             float: none;
             display: inline-block;
             line-height: 57px;
-            margin-top: 0;
+            margin-top: -5px;
         }
-
-    .header .search,
-    .header .separator {
-        display: none;
-    }
+        .header .logo-container img {
+            background: #ff3700;
+        }
+        .header .search,
+        .header .separator {
+            display: none;
+        }
 }
 /* Header Dark */
 html.dark .header,
@@ -17089,10 +17092,11 @@ html.search-results body {
 }
 .pageheader {
     float: left;
-    width: 450px;
+    width: 1000px;
     padding-top: 28px;
     height: 56px;
     font-size: 2.4rem;
+    text-align: center;
 }
 
 .loaderdiv {
@@ -17122,10 +17126,13 @@ html.search-results body {
     .pageheader {
         float: left;
         width: 300px;
-        padding-top: 28px;
+        padding-top: 18px;
         height: 60px;
         font-size: 2.4rem;
         text-align: center;
+        position: absolute;
+        top: 4px;
+        z-index: 9999;
     }
     .loaderdiv {
         position: absolute;
