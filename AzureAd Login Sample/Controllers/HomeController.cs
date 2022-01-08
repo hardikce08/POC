@@ -1,11 +1,15 @@
-﻿using Microsoft.Owin.Security;
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using POC.DataAccess;
 using POC.DataAccess.Model;
 using POC.Helpers;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -22,50 +26,80 @@ namespace POC.Controllers
         }
         public ActionResult Index()
         {
-            if (Request.IsAuthenticated)
+            if (Request.Cookies["UserToken"] != null)
             {
-                var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
-
-                //You get the user's first and last name below:
-                ViewBag.Name = userClaims?.FindFirst("name")?.Value;
-                ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
                 // The 'preferred_username' claim can be used for showing the username
-                ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
-
-                // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
-                ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-                // TenantId is the unique Tenant Id - which represents an organization in Azure AD
-                ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
-                //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
                 return RedirectToAction("Dashboard", "Home");
             }
-            // return View();
-            return RedirectToAction("SignIn", "Home");
+            else
+            {
+                var parameters = new Dictionary<string, string>
+                {
+                    { "response_mode", "form_post" },
+                     { "response_type", "token" },
+                    { "client_id", System.Configuration.ConfigurationManager.AppSettings["ClientId"] },
+                    { "redirect_uri", System.Configuration.ConfigurationManager.AppSettings["redirectUri"] },
+                    { "prompt", "login"},
+                    {"nonce","678910" },
+                      {"state","12345" },
+                    { "scope", "openid"}
+                };
+
+                var requestUrl = string.Format("{0}/authorize?{1}", EndPointUrl, BuildQueryString(parameters));
+
+                Response.Redirect(requestUrl);
+            }
+            return View();
+
+        }
+        public ActionResult CallBack()
+        {
+            if (Request.Params["access_token"] != null)
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var decodedValue = handler.ReadJwtToken(Request.Params["access_token"]);
+                var userClaims = decodedValue.Payload;
+                //ViewBag.Name = userClaims["name"]?.Value;
+                //ViewBag.UserGuid = userClaims["aud"]?.Value;
+                //ViewBag.Username = userClaims["unique_name"]?.Value;
+                DateTime expiredate = DateTime.Now.AddHours(12);
+                var UserToken = new HttpCookie("UserToken");
+                UserToken.Expires = expiredate;
+                UserToken.Value = Request.Params["access_token"].ToString();
+                HttpContext.Response.Cookies.Add(UserToken);
+                var UserEmail = new HttpCookie("UserEmail");
+                UserEmail.Expires = expiredate;
+                UserEmail.Value = userClaims["unique_name"]?.ToString();
+                HttpContext.Response.Cookies.Add(UserEmail);
+                var UserName = new HttpCookie("UserName");
+                UserName.Expires = expiredate;
+                UserName.Value = userClaims["name"]?.ToString();
+                HttpContext.Response.Cookies.Add(UserName);
+                var UserGuid = new HttpCookie("UserGuid");
+                UserGuid.Expires = expiredate;
+                UserGuid.Value = userClaims["aud"]?.ToString();
+                HttpContext.Response.Cookies.Add(UserGuid);
+                return RedirectToAction("Dashboard", "Home");
+            }
+            return View();
         }
         public ActionResult Dashboard(DashBoardView model)
         {
-            //if (Request.IsAuthenticated)
-            //{
-            //    var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
-
-            //    //You get the user's first and last name below:
-            //    ViewBag.Name = userClaims?.FindFirst("name")?.Value;
-            //    ViewBag.UserGuid = userClaims?.FindFirst("aud")?.Value;
-            //    // The 'preferred_username' claim can be used for showing the username
-            //    ViewBag.Username = userClaims?.FindFirst("preferred_username")?.Value;
-
-            //    // The subject/ NameIdentifier claim can be used to uniquely identify the user across the web
-            //    ViewBag.Subject = userClaims?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            //    // TenantId is the unique Tenant Id - which represents an organization in Azure AD
-            //    ViewBag.TenantId = userClaims?.FindFirst("http://schemas.microsoft.com/identity/claims/tenantid")?.Value;
-            //    //Session["UserID"]= userClaims?.FindFirst("aud")?.Value;
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             DashboardService ds = new DashboardService();
             ViewBag.WeightKg = 0;
@@ -240,7 +274,7 @@ namespace POC.Controllers
         {
             if (!Request.IsAuthenticated)
             {
-               var t= System.Configuration.ConfigurationManager.AppSettings["RedirectUri"];
+                var t = System.Configuration.ConfigurationManager.AppSettings["RedirectUri"];
                 HttpContext.GetOwinContext().Authentication.Challenge(
                     new AuthenticationProperties { RedirectUri = t },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
@@ -252,9 +286,38 @@ namespace POC.Controllers
         /// </summary>
         public void SignOut()
         {
-            HttpContext.GetOwinContext().Authentication.SignOut(
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType,
-                    CookieAuthenticationDefaults.AuthenticationType);
+            Response.Cookies.Clear();
+            HttpCookie myCookie = Request.Cookies["UserGuid"];
+            if (myCookie != null)
+            {
+                myCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(myCookie);
+            }
+            HttpCookie UserName = Request.Cookies["UserEmail"];
+            if (UserName != null)
+            {
+                UserName.Expires = DateTime.Now;
+                Response.Cookies.Add(UserName);
+            }
+            HttpCookie UsernameCookie = Request.Cookies["UserName"];
+            if (UsernameCookie != null)
+            {
+                UsernameCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(UsernameCookie);
+            }
+            HttpCookie UserTokenCookie = Request.Cookies["UserToken"];
+            if (UserTokenCookie != null)
+            {
+                UserTokenCookie.Expires = DateTime.Now;
+                Response.Cookies.Add(UserTokenCookie);
+            }
+            var parameters = new Dictionary<string, string>
+                {
+                    { "post_logout_redirect_uri", System.Configuration.ConfigurationManager.AppSettings["redirectUri"] }
+                };
+            var requestUrl = string.Format("{0}/logout?{1}", EndPointUrl, BuildQueryString(parameters));
+
+            Response.Redirect(requestUrl);
         }
 
         public ActionResult Test()
@@ -320,6 +383,55 @@ namespace POC.Controllers
                 TempData["Events"] = lstEvents;
             }
             return View();
+        }
+
+        protected string EndPointUrl
+        {
+            get
+            {
+                return string.Format("{0}/{1}/{2}", "https://login.microsoftonline.com", "common", @"oauth2/v2.0");
+            }
+        }
+        private string BuildQueryString(IDictionary<string, string> parameters)
+        {
+            var list = new List<string>();
+
+            foreach (var parameter in parameters)
+            {
+                list.Add(string.Format("{0}={1}", parameter.Key, HttpUtility.UrlEncode(parameter.Value)));
+            }
+
+            return string.Join("&", list);
+        }
+        public string AcquireTokenWithResource(string resource)
+        {
+            var code = Request.Params["code"];
+            AuthenticationContext ac =
+        new AuthenticationContext(string.Format("https://login.microsoftonline.com/{0}", "common"
+                                  ));
+            ClientCredential clcred =
+                new ClientCredential(System.Configuration.ConfigurationManager.AppSettings["ClientId"], System.Configuration.ConfigurationManager.AppSettings["ClientSecret"]);
+            var r = ac.AcquireTokenAsync(resource, clcred).Result;
+
+
+            var token = r.AccessToken;
+            var b = r.UserInfo;
+
+            //HttpCookie c = new HttpCookie("AccessToken");
+            //c.Expires = r.ExpiresOn.DateTime;
+            //c.Value = token;
+            //Response.Cookies.Add(c);
+            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails("https://graph.microsoft.com/oidc/userinfo", WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", token);
+            var Allproductresponse = Allproductrequest.ResponseString;
+
+            var list = new List<string>();
+            for (int i = 0; i < Request.Params.AllKeys.Count(); i++)
+            {
+                list.Add(Request.Params.AllKeys[i].ToString());
+            }
+
+
+            return token;
         }
     }
 }

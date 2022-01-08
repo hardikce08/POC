@@ -17,6 +17,17 @@ namespace AzureAd_Login_Sample.Controllers
         // GET: Event
         public ActionResult Index(EventView model)
         {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             try
             {
                 DashboardService ds = new DashboardService();
