@@ -47,6 +47,12 @@ namespace POC
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            //routes.MapRoute(
+            //    name: "GetTimeLineGraph",
+            //    url: "Report/TestLineData",
+            //    defaults: new { controller = "Report", action = "TestLineData" }
+            //);
         }
     }
 }

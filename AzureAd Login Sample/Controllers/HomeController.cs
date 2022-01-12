@@ -246,20 +246,25 @@ namespace POC.Controllers
             }
             return PartialView(lstProductDetail);
         }
-        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue)
+        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue,bool AddDefaultValue=true)
         {
-            string SelectText = "-- SELECT --";
+           
             List<SelectListItem> result = (from p in lst.AsEnumerable()
                                            select new SelectListItem
                                            {
                                                Text = p.Trim(),
                                                Value = p.Trim()
                                            }).ToList();
-            result.Insert(0, new SelectListItem
+
+            if (AddDefaultValue)
             {
-                Text = SelectText,
-                Value = SelectText
-            });
+                string SelectText = "-- SELECT --";
+                result.Insert(0, new SelectListItem
+                {
+                    Text = SelectText,
+                    Value = SelectText
+                });
+            }
             if (!string.IsNullOrEmpty(SelectedValue))
             {
                 result.Find(c => c.Value == SelectedValue).Selected = true;
@@ -323,9 +328,9 @@ namespace POC.Controllers
         public ActionResult Test()
         {
             ProductDetailView model = new ProductDetailView();
-            string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
-            model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+           // string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
+           // var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
             return View(model);
         }
         public ActionResult HighChart()
@@ -343,6 +348,8 @@ namespace POC.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Page = "report";
+            var _DateFilters = new List<string> { "Last 3 Days", "Last 7 Days","Last 1 Month","Last 3 Months" };
+            ViewBag.DateFilters = PopulateDropdownListValues(_DateFilters, null,false);
 
             // string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
@@ -370,7 +377,9 @@ namespace POC.Controllers
                         }
                     }
                 }
+                //ViewBag.TransportStartCount = lstEvents.Where(p => p.eventType == "Create").ToList().Count();
                 TempData["Events"] = lstEvents;
+                TempData["AllProducts"] = Allproductresponse.products.active;
             }
             return View();
         }

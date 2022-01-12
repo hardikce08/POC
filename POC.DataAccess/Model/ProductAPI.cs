@@ -476,6 +476,19 @@ namespace POC.DataAccess.Model
         public string CreatedDate { get; set; }
         public DateTime IssuedDate { get; set; }
         public int Count { get; set; }
+        public DateTime FilterDate { get; set; }
+
+        public string Status { get; set; }
+    }
+
+    public class AllProductBarGraph
+    {
+        public string CreatedDate { get; set; }
+        public DateTime IssuedDate { get; set; }
+        public int Count { get; set; }
+        public DateTime FilterDate { get; set; }
+
+        public string Status { get; set; }
     }
 
     #region Event Emission

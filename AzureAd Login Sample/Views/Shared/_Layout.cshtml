@@ -219,11 +219,11 @@
                                     </a>
                                 </li>
                                 @*<li class="nav" data-menuPageId="settings">
-            <a href="#">
-                <i class="fa fa-cog" aria-hidden="true"></i>
-                <span>Settings</span>
-            </a>
-        </li>*@
+                                        <a href="#">
+                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>*@
                             </ul>
                         </nav>
                     </div>
@@ -325,7 +325,7 @@
     <script src="~/Theme/Scripts/dataTables.buttons.min.js"></script>
     <script src="~/Theme/Scripts/buttons.html5.min.js"></script>
     <script src="~/Theme/Scripts/jszip.min.js"></script>
-     
+
     <!-- Theme Base, Components and Settings -->
     <script src="~/Theme/Scripts/theme.js"></script>
 
@@ -377,46 +377,53 @@
                     }
                 ]
             });
-           /* $('#tblTransferRequests').DataTable({});*/
+            /* $('#tblTransferRequests').DataTable({});*/
             $('#tblTransferRequests').DataTable({
                 dom: 'lBfrtip',
                 buttons: [
                     {
                         extend: 'csv',
                         footer: false,
-                        title: 'TransferRequests Data export' 
+                        title: 'TransferRequests Data export'
                     },
                     {
                         extend: 'excel',
                         footer: false,
-                        title: 'TransferRequests Data export' 
+                        title: 'TransferRequests Data export'
                     }
                 ]
             });
             $("#exporttocsvTransferRequest").on("click", function () {
-                var table = $('#tblTransferRequests').DataTable(); 
+                var table = $('#tblTransferRequests').DataTable();
                 table.button('.buttons-csv').trigger();
-                 
+
             });
             $("#exporttoexcelTransferRequest").on("click", function () {
                 var table = $('#tblTransferRequests').DataTable();
                 table.button('.buttons-excel').trigger();
-                
+
             });
         });
-
-        document.onreadystatechange = function () {
-            var state = document.readyState
-            if (state == 'interactive') {
-                $("#load").show();
-            } else if (state == 'complete') {
-                setTimeout(function () {
-                    $("#load").hide(); // hide loader
-                }, 1000);
-            }
-        }
+        $(document).ajaxStart(function () {
+            $("#load").show();
+        });
+        $(document).ajaxStop(function () {
+            $("#load").hide();
+        });
+        //document.onreadystatechange = function () {
+        //    var state = document.readyState
+        //    //alert(state);
+        //    if (state == 'interactive') {
+        //        $("#load").show();
+        //    } else if (state == 'complete') {
+        //        setTimeout(function () {
+        //            $("#load").hide(); // hide loader
+        //        }, 1000);
+        //    }
+        //}
 
     </script>
+    
     @*<script type="text/javascript">
             $(document).ready(function () {
                   var success = @((TempData["Message"] != null).ToString().ToLower());

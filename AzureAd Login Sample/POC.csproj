@@ -249,6 +249,7 @@
     <Content Include="Theme\Css\Googlefonts.css" />
     <Content Include="Theme\Css\ReportPageCustom.css" />
     <Content Include="Theme\Css\responsive.bootstrap4.min.css" />
+    <Content Include="Theme\Css\CSSProgressbar.css" />
     <Content Include="Theme\Css\Sweetalert.css" />
     <Content Include="Theme\Css\theme_16112021.css" />
     <Content Include="Theme\Css\theme - Original.css" />
@@ -283,6 +284,7 @@
     <Content Include="Theme\Scripts\bootstrap-fileupload.min.js" />
     <Content Include="Theme\Scripts\bootstrap-sortable.js" />
     <Content Include="Theme\Scripts\bootstrap.min.js" />
+    <Content Include="Theme\Scripts\circle-progress.js" />
     <Content Include="Theme\Scripts\jszip.min.js" />
     <Content Include="Theme\Scripts\buttons.html5.min.js" />
     <Content Include="Theme\Scripts\datatables.js" />

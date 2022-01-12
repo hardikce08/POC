@@ -10,7 +10,13 @@
     .highcharts-credits {
         display: none;
     }
+
+    .circle canvas {
+        height: auto !important;
+        width: auto !important;
+    }
 </style>
+<link href="~/Theme/Css/CSSProgressbar.css" rel="stylesheet" />
 <h3 style="text-align: center;"></h3>
 <div class="col-md-12">
     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -61,7 +67,58 @@
 </div>
 <div class="col-md-12">
     <div id="piecontainer" class="col-md-6" style="height: 400px;"></div>
-    <div class="col-md-6" id="linecontainer" style="height: 400px"></div>
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Select Date Range</label>
+                <div class="col-md-8">
+                    @Html.DropDownList("Model.DateFilterLineGraph", (IEnumerable<SelectListItem>)
+  ViewBag.DateFilters,
+  htmlAttributes: new { onchange = "return CallTimeGraph();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" id="linecontainer" style="height: 400px">
+        </div>
+
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="col-md-8">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-4 control-label">Select Date Range</label>
+                <div class="col-md-8">
+                    @Html.DropDownList("Model.DateFilterBarGraph", (IEnumerable<SelectListItem>)
+    ViewBag.DateFilters,
+    htmlAttributes: new { onchange = "return CallBarGraph();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" id="barcontainer" style="height: 400px;">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Select Date Range</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("Model.DateFilterPercentage", (IEnumerable<SelectListItem>)
+  ViewBag.DateFilters,
+  htmlAttributes: new { onchange = "return UpdatePecentage();", @class = "form-control", @style = "width:100%;", data_placeholder = "-- ALL--" })
+                </div>
+            </div>
+        </div>
+        <div class="progressbar">
+            <div class="second circle" data-percent="@ViewBag.TransportStartCount">
+                <strong style="padding-top: 25%;"></strong>
+                <span style="font-size:20px;">Currently In Transport</span>
+            </div>
+        </div>
+
+
+
+    </div>
 </div>
 <div id='divLoader' class="loaderdiv" style="display:none;">
 
@@ -69,8 +126,16 @@
 
 
 @section scripts{
+    <script src="~/Theme/Scripts/circle-progress.js"></script>
     <script language="JavaScript">
+        $(document).ajaxStart(function () {
+            $("#load").show();
+        });
+        $(document).ajaxStop(function () {
+            $("#load").hide();
+        });
         $(document).ready(function () {
+
             var chart = {
                 type: 'pie',
                 options3d: {
@@ -120,12 +185,26 @@
             json.series = series;
             $('#piecontainer').highcharts(json);
 
-              $.ajax({
+            CallTimeGraph();
+            CallBarGraph();
+            UpdatePecentage();
+
+
+        });
+
+        function CallTimeGraph()
+        {
+            var filterdays = "";
+            if ($("#Model_DateFilterLineGraph").val() == "Last 3 Days") { filterdays = "3"; }
+            else if ($("#Model_DateFilterLineGraph").val() == "Last 7 Days") { filterdays = "7"; }
+            else if ($("#Model_DateFilterLineGraph").val() == "Last 1 Month") { filterdays = "30"; }
+            else if ($("#Model_DateFilterLineGraph").val() == "Last 3 Months") { filterdays = "90"; }
+
+
+            $.ajax({
             type: "POST",
             url: '@Url.Action("GetTimeLineData", "Report")',
-            data: {},
-            contentType: "application/json",
-            dataType: "json",
+            data: { Filterdays: filterdays},
             success: function (chData) {
                 //alert(chData.data);
                 var graphData = JSON.parse(chData.data);
@@ -156,6 +235,7 @@
                             text: 'Number of Products Created'
                         }
                     },
+
                     //xAxis: {
                     //    accessibility: {
                     //        rangeDescription: 'Range: 2010 to 2017'
@@ -181,12 +261,138 @@
                         }]
                     }
                 });
+
                     }
-        });
+            });
+        }
+
+        function CallBarGraph() {
+
+            var filterdays = "";
+            if ($("#Model_DateFilterBarGraph").val() == "Last 3 Days") { filterdays = "3"; }
+            else if ($("#Model_DateFilterBarGraph").val() == "Last 7 Days") { filterdays = "7"; }
+            else if ($("#Model_DateFilterBarGraph").val() == "Last 1 Month") { filterdays = "30"; }
+            else if ($("#Model_DateFilterBarGraph").val() == "Last 3 Months") { filterdays = "90"; }
 
 
-        });
+              $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBarGraphData", "Report")',
+            data: { Filterdays: filterdays},
+            success: function (chData) {
+                //alert(chData.data);
+                var xAxisData = JSON.parse(chData.categories);
+                var ProductVcCountData = JSON.parse(chData.ProductVCIssuesCount);
+                var TransportStartCountData = JSON.parse(chData.TransportStartEventCount);
+                console.log(xAxisData);
+                console.log(ProductVcCountData);
+                //For Bar Chart
+                Highcharts.chart('barcontainer', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Product VC Created vs In Transportation'
+                    },
+                    loading: {
+                        labelStyle: {
+                            fontStyle: 'italic'
+                        }
+                    },
+                    //subtitle: {
+                    //    text: 'Source: WorldClimate.com'
+                    //},
+                    xAxis: {
+                        categories: xAxisData,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    rangeSelector: {
+                        enabled: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'VC Created',
+                        data: ProductVcCountData
+
+                    },
+                        {
+                        name: 'In Transport',
+                            data: TransportStartCountData
+
+                    }]
+                });
+
+                    }
+              });
+
+
+
+
+        }
+
+        function animateElements() {
+            $('.progressbar').each(function () {
+                var elementPos = $(this).offset().top;
+                var topOfWindow = $(window).scrollTop();
+                var percent = $(this).find('.circle').attr('data-percent');
+                var animate = $(this).data('animate');
+                if (elementPos < topOfWindow + $(window).height() - 30 && !animate) {
+                    $(this).data('animate', true);
+                    $(this).find('.circle').circleProgress({
+                        // startAngle: -Math.PI / 2,
+                        value: percent / 100,
+                        size: 500,
+                        thickness: 15,
+                        fill: {
+                            color: '#ff3700'
+                        }
+                    }).on('circle-animation-progress', function (event, progress, stepValue) {
+                        $(this).find('strong').text((stepValue * 100).toFixed(0) + "%");
+                    }).stop();
+                }
+            });
+        }
+
+        function UpdatePecentage() {
+
+            var filterdays = "";
+            if ($("#Model_DateFilterPercentage").val() == "Last 3 Days") { filterdays = "3"; }
+            else if ($("#Model_DateFilterPercentage").val() == "Last 7 Days") { filterdays = "7"; }
+            else if ($("#Model_DateFilterPercentage").val() == "Last 1 Month") { filterdays = "30"; }
+            else if ($("#Model_DateFilterPercentage").val() == "Last 3 Months") { filterdays = "90"; }
+                 $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdatePercentage", "Report")',
+            data: { Filterdays: filterdays},
+            success: function (chData) {
+                //alert(chData.data);
+                var percentage = JSON.parse(chData.d);
+                console.log(percentage);
+                $(".circle").attr('data-percent', percentage);
+
+                animateElements();
+                    }
+              });
+        }
     </script>
+
+
 }
 
 
