@@ -81,7 +81,8 @@ namespace AzureAd_Login_Sample.Controllers
                 //string GetContractAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/contracts?id=" + model.Id;
                 string GetContractAPIURL = ApiDomain + "/v1/contracts?id=" + model.Id;
                 var Contractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "",BearerToken);
-                var Contractresponse = JsonConvert.DeserializeObject<AllContractReponse>(Contractrequest.ResponseString);
+                var ContractresponseAll = JsonConvert.DeserializeObject<List<AllContractReponse>>(Contractrequest.ResponseString);
+                var Contractresponse = ContractresponseAll.Where(p => p.id == model.Id).FirstOrDefault();
                 if (Contractresponse != null)
                 {
                     model.ContractRequest.endDate = Contractresponse.endDate;

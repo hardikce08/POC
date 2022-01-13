@@ -17092,7 +17092,7 @@ html.search-results body {
 }
 .pageheader {
     float: left;
-    width: 1000px;
+    width: 900px;
     padding-top: 28px;
     height: 56px;
     font-size: 2.4rem;
@@ -17125,7 +17125,7 @@ html.search-results body {
 @media only screen and (max-width: 767px) {
     .pageheader {
         float: left;
-        width: 300px;
+        width: 312px;
         padding-top: 18px;
         height: 60px;
         font-size: 1.4rem;

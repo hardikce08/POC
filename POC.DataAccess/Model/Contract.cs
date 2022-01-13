@@ -87,8 +87,11 @@ namespace POC.DataAccess.Model
         public int mill { get; set; }
         public string role { get; set; }
     }
-
-    public class AllContractReponse
+    public class AllContractReponseNew 
+    {
+        public List<AllContractReponse> results { get; set; }
+    }
+        public class AllContractReponse
     {
         public int id { get; set; }
         public string startDate { get; set; }
