@@ -97,7 +97,8 @@ namespace POC.Helpers
 
         private static HttpWebResponse CallWebAPI(string url, string contentType, out string responseString, string methodType = "GET", string postData = "", string header = "")
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+           // ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpWebRequest request = WebRequest.Create(new Uri(url)) as HttpWebRequest;
             responseString = string.Empty;
             string responseCode = string.Empty;
@@ -147,7 +148,8 @@ namespace POC.Helpers
         private static HttpWebResponse CallWebAPIResponseWithErrorDetailsNew(string url, string contentType, out string responseString, string methodType = "GET", string postData = "", string header = "", string header1 = "", string accept = "",string BearerToken="")
         {
             System.Net.WebResponse response1 = null;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             HttpWebRequest request = WebRequest.Create(new Uri(url)) as HttpWebRequest;
             responseString = string.Empty;
             string responseCode = string.Empty;
@@ -221,7 +223,8 @@ namespace POC.Helpers
         private static HttpWebResponse CallWebAPIResponseWithErrorDetails(string url, string contentType, out string responseString, string methodType = "GET", string postData = "", string header1 = "", string header2 = "", string header3 = "", string accept = "")
         {
             System.Net.WebResponse response1 = null;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             var startTime = DateTime.UtcNow;
             HttpWebRequest request = WebRequest.Create(new Uri(url)) as HttpWebRequest;
             responseString = string.Empty;
@@ -297,7 +300,8 @@ namespace POC.Helpers
         {
 
             WebResponse objWebResponse = new WebResponse();
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             var startTime = DateTime.UtcNow;
             HttpWebRequest requestForLogEntry = WebRequest.Create(new Uri(url)) as HttpWebRequest;
             string responseCodeForLogEntry = string.Empty;
