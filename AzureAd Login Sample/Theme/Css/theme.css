@@ -17109,10 +17109,10 @@ html.search-results body {
     }
 }
 
-@media only screen and (max-width: 1880px) {
+@media only screen and (max-width: 3840px) {
     .pageheader {
         float: left;
-        width: 900px !important;
+        width: 3050px !important;
         padding-top: 28px;
         height: 56px;
         font-size: 2.4rem;
@@ -17120,6 +17120,37 @@ html.search-results body {
     }
 }
 
+@media only screen and (max-width: 3200px) {
+    .pageheader {
+        float: left;
+        width: 2500px !important;
+        padding-top: 28px;
+        height: 56px;
+        font-size: 2.4rem;
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 2700px) {
+    .pageheader {
+        float: left;
+        width: 2000px !important;
+        padding-top: 28px;
+        height: 56px;
+        font-size: 2.4rem;
+        text-align: center;
+    }
+}
+@media only screen and (max-width: 1920px) {
+    .pageheader {
+        float: left;
+        width: 950px !important;
+        padding-top: 28px;
+        height: 56px;
+        font-size: 2.4rem;
+        text-align: center;
+    }
+}
 .loaderdiv {
     /* position: absolute;
     left: 0;
@@ -17146,7 +17177,7 @@ html.search-results body {
 @media only screen and (max-width: 767px) {
     .pageheader {
         float: left;
-        width: 312px;
+        width: 312px !important;
         padding-top: 18px;
         height: 60px;
         font-size: 1.4rem;

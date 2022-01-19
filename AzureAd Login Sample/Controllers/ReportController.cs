@@ -245,9 +245,16 @@ namespace AzureAd_Login_Sample.Controllers
                 {
                     data.Add(AllProductBarGraphdata.Where(p => p.CreatedDate == datestr).Sum(p => p.Count));
                 }
-                iData.Add(data);
-            }
 
+            }
+            else
+            {
+                foreach (var datestr in labels)
+                {
+                    data.Add(0);
+                }
+            }
+            iData.Add(data);
             if (TempData["Events"] == null)
             {
 
@@ -279,19 +286,29 @@ namespace AzureAd_Login_Sample.Controllers
                 {
                     AllProductEvents.Add(new AllPRoductEventsLineGraph { Count = 1, Status = objevent.eventType, FilterDate = objevent.eventVC.issuanceDate.Date, IssuedDate = objevent.eventVC.issuanceDate, CreatedDate = days == 90 ? objevent.eventVC.issuanceDate.ToString("MMM") : objevent.eventVC.issuanceDate.ToString("yyyy-MM-dd") });
                 }
+                data = new List<int>();
                 if (AllProductEvents.Count > 0)
                 {
                     //filter events for selected filter criteria
                     AllProductEvents = AllProductEvents.Where(c => c.FilterDate >= StartDate.Date && c.FilterDate <= EndDate.Date).ToList();
                     //get only those event count whose status is TransportStart 
-                    data = new List<int>();
+
                     foreach (var datestr in labels)
                     {
                         //data.Add(AllProductEvents.Where(p => p.CreatedDate == datestr && p.Status == "TransportStart").Sum(p => p.Count));
                         data.Add(AllProductEvents.Where(p => p.CreatedDate == datestr && p.Status == "Create").Sum(p => p.Count));
                     }
-                    iData.Add(data);
+
                 }
+                else
+                {
+                    foreach (var datestr in labels)
+                    {
+                        //data.Add(AllProductEvents.Where(p => p.CreatedDate == datestr && p.Status == "TransportStart").Sum(p => p.Count));
+                        data.Add(0);
+                    }
+                }
+                iData.Add(data);
             }
 
 
