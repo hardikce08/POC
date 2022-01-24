@@ -15,17 +15,17 @@ namespace AzureAd_Login_Sample.Controllers
     {
         public ActionResult Index(string Filterby = "All")
         {
-            if (Request.Cookies["UserToken"] != null)
-            {
-                ViewBag.Name = Request.Cookies["UserName"]?.Value;
-                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-                // The 'preferred_username' claim can be used for showing the username
-                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (Request.Cookies["UserToken"] != null)
+            //{
+            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
+            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+            //    // The 'preferred_username' claim can be used for showing the username
+            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             List<ProductListView> lst = new List<ProductListView>();
             //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
@@ -94,17 +94,17 @@ namespace AzureAd_Login_Sample.Controllers
         [HttpGet]
         public ActionResult _Detail(string id)
         {
-            if (Request.Cookies["UserToken"] != null)
-            {
-                ViewBag.Name = Request.Cookies["UserName"]?.Value;
-                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-                // The 'preferred_username' claim can be used for showing the username
-                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (Request.Cookies["UserToken"] != null)
+            //{
+            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
+            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+            //    // The 'preferred_username' claim can be used for showing the username
+            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            //}
+            //else
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             ProductDetailView model = new ProductDetailView();
             //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
             //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
