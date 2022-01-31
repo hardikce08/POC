@@ -102,9 +102,9 @@ namespace POC.Controllers
             //}
 
             DashboardService ds = new DashboardService();
-            ViewBag.WeightKg = 0;
-            ViewBag.Lengthcm = 0;
-            ViewBag.Widthcm = 0;
+            ViewBag.WeightKg = "";
+            ViewBag.Lengthcm = "";
+            ViewBag.Widthcm = "";
             if (Request.HttpMethod == "POST" && model.Coil > 0)
             {
                 var info = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
@@ -156,9 +156,9 @@ namespace POC.Controllers
                     longitude = "-79.8711"
                 };
                 data.manufacturer = new VCManufacturer { name = "Steel Co." };
-                data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"] };
-                data.length = new UnitofMeasure { unit = "CM", value = Request["LengthRange"] };
-                data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] };
+                data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"]==string.Empty? "0": Request["myRange"] };
+                data.length = new UnitofMeasure { unit = "CM", value = Request["LengthRange"] == string.Empty ? "0" : Request["LengthRange"] };
+                data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] == string.Empty ? "0" : Request["WidthRange"] };
                 data.technologyType = "ElectricArcFurnace";
                 data.observation = new List<VCObservation> { new VCObservation { description = "Aluminum", name = "aluminum", type = "ChemicalProperty", unit = "%", value = "0.05" } };
 
@@ -333,6 +333,11 @@ namespace POC.Controllers
             //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
             return View(model);
         }
+        public ActionResult RemoveCache(string Key="")
+        {
+            RemoveDataFromCache(Key);
+            return Content("Success");
+        }
         public ActionResult HighChart()
         {
             //if (Request.Cookies["UserToken"] != null)
@@ -353,12 +358,11 @@ namespace POC.Controllers
 
             // string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
-            var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
+            //var Allproductrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            //var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Allproductrequest.ResponseString);
+            var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
             if (Allproductresponse != null)
             {
-
-
                 ViewBag.Active = (int)Allproductresponse.totalProductsCount?.active;
                 ViewBag.Consumed = (int)Allproductresponse.totalProductsCount?.consumed;
                 ViewBag.History = (int)Allproductresponse.totalProductsCount?.history;

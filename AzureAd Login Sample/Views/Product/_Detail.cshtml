@@ -228,6 +228,41 @@
                         }
                     </div>
                 </div>
+                <div class="col-md-12 form-group">
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Coil</label><br />
+                        @if (string.IsNullOrEmpty(ViewBag.Coil))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @ViewBag.Coil
+                        }
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Serial Number</label><br />
+                        @if (string.IsNullOrEmpty(ViewBag.SerialNumber))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @ViewBag.SerialNumber
+                        }
+                    </div>
+                    <div class="col-md-3 background-fill">
+                        <label class="control-label">Lift Number</label><br />
+                        @if (string.IsNullOrEmpty(ViewBag.LiftNumber))
+                        {
+                            @:N/A
+                        }
+                        else
+                        {
+                            @ViewBag.LiftNumber
+                        }
+                    </div>
+                </div>
                 <div class="col-md-12">
                     @if (lstSpecification != null)
                     {
@@ -255,23 +290,23 @@
                 </div>
 
                 @*<div class="tabbable">
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#sub11" class="nav-link">PopularAll</a>
-                            </li>
-                            <li>
-                                <a href="#sub12" class="nav-link">UniqueAll</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade active in" id="sub11">
-                                <p>pop all content</p>
-                            </div>
-                            <div class="tab-pane fade" id="sub12">
-                                <p>unique all content</p>
-                            </div>
-                        </div>
-                    </div>*@
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#sub11" class="nav-link">PopularAll</a>
+                </li>
+                <li>
+                    <a href="#sub12" class="nav-link">UniqueAll</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="sub11">
+                    <p>pop all content</p>
+                </div>
+                <div class="tab-pane fade" id="sub12">
+                    <p>unique all content</p>
+                </div>
+            </div>
+        </div>*@
             </div>
             <div class="tab-pane fade" style="height:100vh;" id="set2">
                 <div class="col-md-12 form-group" style="margin-left:-35px !important;">

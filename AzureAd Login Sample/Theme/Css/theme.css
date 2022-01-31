@@ -17089,6 +17089,7 @@ html.search-results body {
     .search-content {
         margin: -20px;
     }
+   
 }
 .pageheader {
     float: left;
@@ -17144,13 +17145,14 @@ html.search-results body {
 @media only screen and (max-width: 1920px) {
     .pageheader {
         float: left;
-        width: 950px !important;
+        width: 1225px !important;
         padding-top: 28px;
         height: 56px;
         font-size: 2.4rem;
         text-align: center;
     }
 }
+
 .loaderdiv {
     /* position: absolute;
     left: 0;

@@ -29,7 +29,9 @@
         opacity: unset;
         background-color: #F8DFB6 !important;
     }
-
+    .dataTables_wrapper .dataTables_paginate .ellipsis {
+        display: none;
+    }
     table.dataTable tbody th, table.dataTable tbody td {
         padding: 4px 6px !important;
     }
@@ -114,6 +116,9 @@
                         <th scope="col">Product type</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Status</th>
+                        <th scope="col">PCE</th>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">Lift Number</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,6 +133,9 @@
                         <td>@item.ProductType</td>
                         <td>@item.Quantity</td>
                         <td>@item.Status</td>
+                        <td>@item.Coil</td>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.LiftNumber</td>
                     </tr>
                     }
                 </tbody>

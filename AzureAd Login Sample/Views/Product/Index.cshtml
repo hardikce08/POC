@@ -38,7 +38,9 @@
     .table-striped > tbody > tr:nth-child(even):hover {
         background-color: #ff6f47 !important;
     }
-
+    .dataTables_wrapper .dataTables_paginate .ellipsis {
+        display:none;
+    }
     .table-striped > tbody > tr:nth-child(even) {
         opacity: unset;
         background-color: #F8DFB6 !important;
@@ -76,7 +78,9 @@
                         <th scope="col">Origin</th>
                         <th scope="col">LastEvent</th>
                         <th scope="col">Status</th>
-                        @*<th scope="col">Shared Product</th>*@
+                        <th scope="col">Coil</th>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">Lift Number</th>
                         <th scope="col">Anamoly Detected?</th>
                     </tr>
                 </thead>
@@ -84,18 +88,20 @@
                     @foreach (var item in Model)
                     {
 
-                        <tr style="cursor: pointer;" class="showdetail" data-id="@item.id">
-                            <td>@item.id.Substring(0, 9)</td>
-                            <td>@item.Owner</td>
-                            <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
-                            <td>@item.ProductType</td>
-                            <td>@item.Origin</td>
-                            <td>@item.LastEvent</td>
-                            <td>@item.Status</td>
-                            @*<td>@item.SharedProduct</td>*@
-                            <td></td>
-                            @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
-                        </tr>
+                    <tr style="cursor: pointer;" class="showdetail" data-id="@item.id">
+                        <td>@item.id.Substring(0, 9)</td>
+                        <td>@item.Owner</td>
+                        <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
+                        <td>@item.ProductType</td>
+                        <td>@item.Origin</td>
+                        <td>@item.LastEvent</td>
+                        <td>@item.Status</td>
+                        <td>@item.Coil</td>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.LiftNumber</td>
+                        <td></td>
+                        @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
+                    </tr>
                         @*<tr id="tr_@item.id" style="display:none;">
                                 <td>&nbsp;</td>
                                 <td id="detailsGridData_@item.id" colspan="9"></td>

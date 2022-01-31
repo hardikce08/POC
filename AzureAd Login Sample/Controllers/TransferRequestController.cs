@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using POC.Controllers;
+using POC.DataAccess;
 using POC.DataAccess.Model;
 using POC.Helpers;
 using System;
@@ -27,9 +28,10 @@ namespace AzureAd_Login_Sample.Controllers
             //{
             //    return RedirectToAction("Index", "Home");
             //}
-            string GetAllTransferRequestAPIURL = ApiDomain + "/v1/products/transfer/requests";
-            var AllTransferRequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllTransferRequestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var AllTransferresponse = JsonConvert.DeserializeObject<List<AllTransferRequestResponse>>(AllTransferRequest.ResponseString);
+          
+            //var AllTransferRequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllTransferRequestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            //var AllTransferresponse = JsonConvert.DeserializeObject<List<AllTransferRequestResponse>>(AllTransferRequest.ResponseString);
+            var AllTransferresponse = GetDataFromCache<List<AllTransferRequestResponse>>("AllTransferResponse", GetAllTransferRequestAPIURL);
             if (AllTransferresponse != null)
             {
                 model.lst = new List<TransferRequests>();
@@ -61,6 +63,10 @@ namespace AzureAd_Login_Sample.Controllers
                 {
                     AllTransferresponse = AllTransferresponse.Where(p => p.type == Type).ToList();
                 }
+                //get all generated VC List
+                DashboardService ds = new DashboardService();
+                var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+
                 foreach (var transfer in AllTransferresponse)
                 {
                     var productweight = transfer.product.productVC.credentialSubject.product.weight;
@@ -73,6 +79,9 @@ namespace AzureAd_Login_Sample.Controllers
                     obj.Quantity = productweight == null ? "" : (productweight.value + " " + productweight.unitCode);
                     obj.Status = transfer.status;
                     obj.ProductId = transfer.product.id;
+                    obj.Coil = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                    obj.SerialNumber = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                    obj.LiftNumber = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.LIFT_NO.ToString();
                     model.lst.Add(obj);
                 }
                 ViewBag.Filterby = Filterby;

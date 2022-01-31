@@ -18,6 +18,9 @@ namespace POC.DataAccess.Model
         public string Quantity { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ProductId { get; set; }
+        public string Coil { get; set; }
+        public string SerialNumber { get; set; }
+        public string LiftNumber { get; set; }
     }
     public class TransferRequestViewModel
     {

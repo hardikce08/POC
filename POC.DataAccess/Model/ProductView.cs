@@ -49,6 +49,9 @@ namespace POC.DataAccess.Model
         public string LastEvent { get; set; }
         public string Status { get; set; }
         public string SharedProduct { get; set; }
+        public string Coil { get; set; }
+        public string SerialNumber { get; set; }
+        public string LiftNumber { get; set; }
 
     }
     public class LineProductCount
