@@ -139,20 +139,20 @@
                             <img src="~/Theme/Images/person.jpg" class="img-circle" data-lock-picture="~/Theme/Images/person.jpg">
                         </figure>
                         <div class="profile-info">
-                            @*<span class="name">@ViewBag.Name</span>*@
-                            <span class="name">Test</span>
+                            <span class="name">@ViewBag.Name</span>
+                            @*<span class="name">Test</span>*@
                             <span class="role">User</span>
                         </div>
                         <i class="fa custom-caret"></i>
                     </a>
-                    @*<div class="dropdown-menu">
+                    <div class="dropdown-menu">
                         <ul class="list-unstyled">
                             <li class="divider"></li>
                             <li>
                                 <a role="menuitem" tabindex="-1" href="~/Home/SignOut"><i class="fa fa-power-off"></i> Logout</a>
                             </li>
                         </ul>
-                    </div>*@
+                    </div>
                 </div>
             </div>
 
@@ -177,44 +177,44 @@
                     <div>
                         <nav id="menu" class="nav-main" role="navigation">
                             <ul class="nav nav-main" id="navmenu" style="">
-                                <li class="nav-active" data-menuPageId="home">
-                                    <a href="~/DashBoard">
+                                <li class="nav-active" data-menuPageId="home" >
+                                    <a href="~/DashBoard" title="Create Product VC">
                                         <i class="fa fa-search" aria-hidden="true"></i>
-                                        <span>Lookup</span>
+                                        <span>Create VC</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="products">
-                                    <a href="~/Product">
+                                    <a href="~/Product" title="Active Products">
                                         <i class="fa-brands fa-product-hunt" aria-hidden="true"></i>
                                         <span>Products</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="contracts">
-                                    <a href="~/Contract">
+                                    <a href="~/Contract" title="Carrier Contract Status">
                                         <i class="fas fa-file-contract" aria-hidden="true"></i>
                                         <span>Contracts</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="transferrequests">
-                                    <a href="~/TransferRequest">
+                                    <a href="~/TransferRequest" title="Transfer Request Status">
                                         <i class="fas fa-exchange" aria-hidden="true"></i>
                                         <span>Transfer Requests</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="report">
-                                    <a href="~/ReportNew">
+                                    <a href="~/ReportNew" title="Reports">
                                         <i class="fa fa-chart-bar" aria-hidden="true"></i>
                                         <span>Reports</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="events">
-                                    <a href="~/Event">
+                                    <a href="~/Event" title="VC Transport Events">
                                         <i class="fa fa-calendar-range" aria-hidden="true"></i>
                                         <span>Events</span>
                                     </a>
                                 </li>
                                 <li class="nav" data-menuPageId="help">
-                                    <a href="~/Documents/MetalTrailGuide.pdf" target="_blank">
+                                    <a href="~/Documents/MetalTrailGuide.pdf" target="_blank" title="Help">
                                         <i class="fa fa-question-circle" aria-hidden="true"></i>
                                         <span>Help</span>
                                     </a>
@@ -344,6 +344,8 @@
             //$('#tblProduct').DataTable();
             $('#tblProduct').DataTable({
                 dom: 'lBfrtip',
+              /*  order: [[2, "desc"]],*/
+                order: [],
                 buttons: [
                     {
                         extend: 'csv',

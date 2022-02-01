@@ -17,17 +17,17 @@ namespace AzureAd_Login_Sample.Controllers
         // GET: Event
         public ActionResult Index(EventView model)
         {
-            //if (Request.Cookies["UserToken"] != null)
-            //{
-            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
-            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-            //    // The 'preferred_username' claim can be used for showing the username
-            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             try
             {
                 DashboardService ds = new DashboardService();
@@ -44,8 +44,9 @@ namespace AzureAd_Login_Sample.Controllers
                             //get list of all events for selected Coild VCId
                             //data.VCId = "73280271-74f4-4012-a0e2-5583c6f6cbdd";
                             string APIURL = ApiDomain + "/v1/products/" + data.VCId;
-                            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                            var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                           //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                           //var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                            var productresult = GetDataFromCache<Active>("Product:" + data.VCId, APIURL);
                             List<EventDisplayList> eventslst = new List<EventDisplayList>();
                             foreach (var item in productresult?.events)
                             {
@@ -95,9 +96,9 @@ namespace AzureAd_Login_Sample.Controllers
         {
             try
             {
-                string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
-                var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                //var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                var Allcontractresponse = GetDataFromCache<List<AllContractReponse>>( "AllContractResponse", GetAllContractAPIURL);
                 if (Allcontractresponse != null)
                 {
                     //filter only Active Contracts
@@ -109,9 +110,10 @@ namespace AzureAd_Login_Sample.Controllers
                     }
                     ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
                 }
-                string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
-                var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                 
+                //var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                var AllOrganizationresponse = GetDataFromCache<List<AllOrganizationResponse>>("AllOrganizationresponse", GetAllOrganizationAPIURL);
                 if (AllOrganizationresponse != null)
                 {
                     Dictionary<string, string> contracts = new Dictionary<string, string>();
@@ -200,8 +202,9 @@ namespace AzureAd_Login_Sample.Controllers
             try
             {
                 string APIURL = ApiDomain + "/v1/products/" + id;
-                var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                model.result = GetDataFromCache<Active>("Product:" + id, APIURL);
                 ViewBag.EventTitle = "Inspect";
             }
             catch (Exception ex)
@@ -213,8 +216,9 @@ namespace AzureAd_Login_Sample.Controllers
         public ActionResult SaveInspect(string id, string value)
         {
             string APIURL = ApiDomain + "/v1/products/" + id;
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var activeproduct = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+            //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            //var activeproduct = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+            var activeproduct = GetDataFromCache<Active>("Product:" + id, APIURL);
             var product = activeproduct.productVC.credentialSubject.product;
             var facility = activeproduct.productVC.credentialSubject.facility;
             InspectEventAPIRequest data = new InspectEventAPIRequest();
@@ -237,9 +241,9 @@ namespace AzureAd_Login_Sample.Controllers
         {
             try
             {
-                string GetAllContractAPIURL = ApiDomain + "/v1/contracts";
-                var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                //var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
+                var Allcontractresponse = GetDataFromCache<List<AllContractReponse>>("AllContractResponse", GetAllContractAPIURL);
                 if (Allcontractresponse != null)
                 {
                     //filter only Active Contracts
@@ -251,9 +255,9 @@ namespace AzureAd_Login_Sample.Controllers
                     }
                     ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
                 }
-                string GetAllOrganizationAPIURL = ApiDomain + "/v1/organizations/all";
-                var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                //var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
+                var AllOrganizationresponse = GetDataFromCache<List<AllOrganizationResponse>>("AllOrganizationresponse", GetAllOrganizationAPIURL);
                 if (AllOrganizationresponse != null)
                 {
                     Dictionary<string, string> contracts = new Dictionary<string, string>();
@@ -328,8 +332,9 @@ namespace AzureAd_Login_Sample.Controllers
         public ActionResult SaveStartStorage(string EventType, string id, string latitude, string longitude, string address, string weightUnit, string weightValue)
         {
             string APIURL = ApiDomain + "/v1/products/" + id;
-            var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var activeproduct = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+            //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            //var activeproduct = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+            var activeproduct = GetDataFromCache<Active>("Product:" + id, APIURL);
             var product = activeproduct.productVC.credentialSubject.product;
             StartStorageAPIRequest data = new StartStorageAPIRequest();
             data.eventType = EventType;

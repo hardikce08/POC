@@ -141,7 +141,7 @@
                                 <td class="graphdiv" value="graph" data-desc="@item.EventType" data-latLng="@item.Latitude,@item.Longitude" data-latLng2="@item.Latitude2,@item.Longitude2">
                                     <b>@item.EventType</b><br />
                                     Submitted by: @item.InitiatorName<br />
-                                    @item.addressLocality ,  @item.addressRegion ,  @item.addressCountry <br />
+                                                                     <span class="destination"> @item.addressLocality ,  @item.addressRegion ,  @item.addressCountry</span> <br />
                                     <p class="rounddiv">@item.issuanceDate.ToString("yyyy-MMM-dd")</p>  <p class="rounddiv">@item.issuanceDate.ToString("hh:mm tt")</p>
                                 </td>
 
@@ -183,12 +183,12 @@
             var latLng = $(this).attr("data-latLng");
             var latLng2 = $(this).attr("data-latLng2");
             $(this).addClass('grpahselected');
-            initialize(latLng, latLng2);
+            initialize(latLng, latLng2, $(this).find('span').text());
         });
-        function initialize(latLng, latLng2) {
+        function initialize(latLng, latLng2,destination) {
             latLng = latLng.split(",") //split
             latLng2 = latLng2.split(",") //split
-            var data = "Test Data for now!";
+            var data = destination;
             var infowindow = new google.maps.InfoWindow({
                 content: data
             });
@@ -200,7 +200,7 @@
             const marker = new google.maps.Marker({
                 position: new google.maps.LatLng(latLng[0], latLng[1]),
                 map: map,
-                title: "Hello World!"
+                title: ""
             });
 
             google.maps.event.addListener(marker, 'click', function () {
@@ -211,7 +211,7 @@
                 const marker2 = new google.maps.Marker({
                     position: new google.maps.LatLng(latLng2[0], latLng2[1]),
                     map: map,
-                    title: "Hello World!"
+                    title: ""
                 });
 
                 google.maps.event.addListener(marker2, 'click', function () {
@@ -245,10 +245,14 @@
                 var latLng2 = $(this).attr("data-latLng2").split(",");
                 //alert($(this).attr("data-desc"));
                 locations.push([$(this).attr("data-desc"), latLng[0], latLng[1], i]);
-                if (latLng2[0] != '') { locations.push([$(this).attr("data-desc"), latLng2[0], latLng2[1], i]); }
+                if (latLng2[0] != '') {
+                    i = i + 1;
+                    locations.push([$(this).attr("data-desc"), latLng2[0], latLng2[1], i]);
+                }
                 i = i + 1;
             });
-
+            //alert(locations.length);
+            console.log(locations);
             window.map = new google.maps.Map(document.getElementById('map-canvas'), {
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });

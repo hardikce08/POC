@@ -1,7 +1,7 @@
 ﻿@model  List<POC.DataAccess.Model.ProductListView>
 
 @{
-    ViewBag.Title = "Product VC Details";
+    ViewBag.Title = "Active Products";
     ViewBag.Page = "products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -68,6 +68,7 @@
     <div class="col-md-12">
         @if (Model != null)
         {
+            var prdlst = Model.OrderByDescending(p => p.CreatedOn).ToList();
             <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-responsive" id="tblProduct">
                 <thead>
                     <tr>
@@ -85,7 +86,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @foreach (var item in prdlst)
                     {
 
                     <tr style="cursor: pointer;" class="showdetail" data-id="@item.id">

@@ -88,18 +88,18 @@ namespace POC.Controllers
         }
         public ActionResult Dashboard(DashBoardView model)
         {
-            //if (Request.Cookies["UserToken"] != null)
-            //{
-            //    //You get the user's first and last name below:
-            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
-            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-            //    // The 'preferred_username' claim can be used for showing the username
-            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             DashboardService ds = new DashboardService();
             ViewBag.WeightKg = "";
@@ -340,18 +340,18 @@ namespace POC.Controllers
         }
         public ActionResult HighChart()
         {
-            //if (Request.Cookies["UserToken"] != null)
-            //{
-            //    //You get the user's first and last name below:
-            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
-            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-            //    // The 'preferred_username' claim can be used for showing the username
-            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (Request.Cookies["UserToken"] != null)
+            {
+                //You get the user's first and last name below:
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.Page = "report";
             var _DateFilters = new List<string> { "Last 3 Days", "Last 7 Days","Last 1 Month","Last 3 Months" };
             ViewBag.DateFilters = PopulateDropdownListValues(_DateFilters, null,false);

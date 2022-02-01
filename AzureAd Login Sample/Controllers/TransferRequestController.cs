@@ -17,18 +17,18 @@ namespace AzureAd_Login_Sample.Controllers
         // GET: TransferRequest
         public ActionResult Index(TransferRequestViewModel model, string Filterby = "ALL", string Status = "ALL", string Type = "ALL")
         {
-            //if (Request.Cookies["UserToken"] != null)
-            //{
-            //    ViewBag.Name = Request.Cookies["UserName"]?.Value;
-            //    ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
-            //    // The 'preferred_username' claim can be used for showing the username
-            //    ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
-            //}
-            //else
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
-          
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             //var AllTransferRequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllTransferRequestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             //var AllTransferresponse = JsonConvert.DeserializeObject<List<AllTransferRequestResponse>>(AllTransferRequest.ResponseString);
             var AllTransferresponse = GetDataFromCache<List<AllTransferRequestResponse>>("AllTransferResponse", GetAllTransferRequestAPIURL);
