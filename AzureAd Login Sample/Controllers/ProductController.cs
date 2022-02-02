@@ -54,9 +54,9 @@ namespace AzureAd_Login_Sample.Controllers
                         obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
                         obj.Status = activeproduct.status;
                         obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
-                        obj.Coil = LstVc.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
-                        obj.SerialNumber = LstVc.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
-                        obj.LiftNumber = LstVc.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+                        obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                        obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                        obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
                         lst.Add(obj);
                     }
                 }

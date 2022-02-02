@@ -79,9 +79,9 @@ namespace AzureAd_Login_Sample.Controllers
                     obj.Quantity = productweight == null ? "" : (productweight.value + " " + productweight.unitCode);
                     obj.Status = transfer.status;
                     obj.ProductId = transfer.product.id;
-                    obj.Coil = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
-                    obj.SerialNumber = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
-                    obj.LiftNumber = LstVc.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.LIFT_NO.ToString();
+                    obj.Coil = LstVc?.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                    obj.SerialNumber = LstVc?.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                    obj.LiftNumber = LstVc?.Where(p => p.VCId == transfer.product.id).FirstOrDefault()?.LIFT_NO.ToString();
                     model.lst.Add(obj);
                 }
                 ViewBag.Filterby = Filterby;
