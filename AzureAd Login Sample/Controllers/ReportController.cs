@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using POC.Controllers;
+using POC.DataAccess;
 using POC.DataAccess.Model;
 using POC.Helpers;
 using System;
@@ -412,6 +413,119 @@ namespace AzureAd_Login_Sample.Controllers
 
 
             return new JsonResult { Data = new { d = JsonConvert.SerializeObject(percentage) } };
+        }
+
+        public ActionResult ReportNew(ReportViewNew model)
+        {
+            //get all generated VC List
+            DashboardService ds = new DashboardService();
+            var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+            if (LstVc != null)
+            {
+                if (Request.HttpMethod == "POST")
+                {
+                    ViewBag.SelectedStatus = Request["ddlStatus"];
+                    ViewBag.SelectedCountry = Request["ddlCountry"];
+                    ViewBag.SelectedTechnology = Request["ddlTechnology"];
+                    ViewBag.SelectedCoil = Request["txtCoil"];
+                    ViewBag.SelectedSerialNo = Request["txtSerialNo"];
+                    ViewBag.SelectedLiftNo = Request["txtLiftNo"];
+                    ViewBag.IssuanceFrom = Request["IssuanceFrom"];
+                    ViewBag.IssuanceTo = Request["IssuanceTo"];
+                }
+                model.lstProducts = new List<ProductListViewNew>();
+                var _Country = new List<string> { "CANADA", "USA" };
+                ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
+                var _Technology = new List<string> { "EAF", "BF" };
+                ViewBag.Technology = PopulateDropdownListValues(_Technology, ViewBag.SelectedTechnology);
+                var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+                var _Status = Allproductresponse.products.active.Where(c => c.status != null).Select(p => p.status).Distinct().ToList();
+                ViewBag.StatusList = PopulateDropdownListValues(_Status, ViewBag.SelectedStatus);
+
+                foreach (var info in LstVc)
+                {
+                    Active prod = Allproductresponse.products.active.Where(p => p.id == info.VCId).FirstOrDefault();
+                    if (prod != null)
+                    {
+                        var credentialsubject = prod.productVC.credentialSubject;
+                        model.lstProducts.Add(new ProductListViewNew
+                        {
+                            Status = prod.status,
+                            HsCode = credentialsubject?.HSCode,
+                            ProductType = credentialsubject?.product.name,
+                            CreatedAt = prod.createdAt,
+                            Origin = prod.origin?.address?.addressLocality + "," + prod.origin?.address?.addressRegion + "," + prod.origin?.address?.addressCountry,
+                            IssuanceDate = prod.productVC.issuanceDate,
+                            ProductionDate = Convert.ToDateTime(credentialsubject?.productionDate),
+                            Country = info.LABEL_COUNTRY_CD_TEXT.Trim(),
+                            TechnologyType = credentialsubject?.technologyType == "ElectricArcFurnace" ? "EAF" : "BF",
+                            Coil = info.MES_PCE_IDENT_NO.ToString(),
+                            SerialNumber = info.PCE_DISPLAY_NO.Trim(),
+                            LiftNumber = info.LIFT_NO,
+                            Productid = info.VCId
+                        });
+                    }
+                }
+
+                if (Request.HttpMethod == "POST")
+                {
+                    var filteredlst = model.lstProducts;
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedStatus) && ViewBag.SelectedStatus!= "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.Status == ViewBag.SelectedStatus).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedCountry) && ViewBag.SelectedCountry != "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.Country == ViewBag.SelectedCountry).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedTechnology) && ViewBag.SelectedTechnology != "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.TechnologyType == ViewBag.SelectedTechnology).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedCoil))
+                    {
+                        filteredlst = filteredlst.Where(p => p.Coil == ViewBag.SelectedCoil).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedSerialNo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.SerialNumber == ViewBag.SelectedSerialNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedLiftNo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.LiftNumber == ViewBag.SelectedLiftNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.IssuanceFrom))
+                    {
+                        filteredlst = filteredlst.Where(p => p.IssuanceDate >= Convert.ToDateTime(ViewBag.IssuanceFrom)).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.IssuanceTo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.IssuanceDate <= Convert.ToDateTime(ViewBag.IssuanceTo)).ToList();
+                    }
+                    model.lstProducts = filteredlst;
+                }
+            }
+            return View(model);
+        }
+        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue)
+        {
+            string SelectText = "ALL";
+            List<SelectListItem> result = (from p in lst.AsEnumerable()
+                                           select new SelectListItem
+                                           {
+                                               Text = p.Trim(),
+                                               Value = p.Trim()
+                                           }).ToList();
+            result.Insert(0, new SelectListItem
+            {
+                Text = SelectText,
+                Value = SelectText
+            });
+            if (!string.IsNullOrEmpty(SelectedValue))
+            {
+                result.Find(c => c.Value == SelectedValue).Selected = true;
+            }
+            return result;
         }
     }
 }

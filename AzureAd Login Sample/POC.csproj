@@ -359,6 +359,7 @@
     <Content Include="Views\Event\_Inspect.cshtml" />
     <Content Include="Views\Event\_TransferofCustody.cshtml" />
     <Content Include="Views\Event\_StartStorage.cshtml" />
+    <Content Include="Views\Report\ReportNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

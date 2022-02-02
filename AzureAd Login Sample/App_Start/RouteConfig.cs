@@ -17,11 +17,16 @@ namespace POC
               url: "Dashboard",
               defaults: new { controller = "Home", action = "Dashboard", id = UrlParameter.Optional }
           );
+          //  routes.MapRoute(
+          //    name: "ReportNew",
+          //    url: "ReportNew",
+          //    defaults: new { controller = "Home", action = "HighChart", id = UrlParameter.Optional }
+          //);
             routes.MapRoute(
-              name: "ReportNew",
-              url: "ReportNew",
-              defaults: new { controller = "Home", action = "HighChart", id = UrlParameter.Optional }
-          );
+             name: "ReportNew",
+             url: "ReportNew",
+             defaults: new { controller = "Report", action = "ReportNew", id = UrlParameter.Optional }
+         );
             routes.MapRoute(
               name: "Contract",
               url: "Contract",

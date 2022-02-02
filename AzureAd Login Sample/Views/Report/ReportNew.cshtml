@@ -1,0 +1,211 @@
+﻿@model POC.DataAccess.Model.ReportViewNew
+@{
+    ViewBag.Title = "Detailed Reports";
+    ViewBag.Page = "report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    #tblReportsNew_filter.dataTables_filter label {
+        width: 100%;
+    }
+
+    .swal2-confirm {
+        margin-left: 20px !important;
+    }
+
+    #tblReportsNew tbody > tr:hover {
+        background-color: #ff6f47;
+    }
+
+        #tblReportsNew tbody > tr:hover > td > i {
+            background-color: #fff;
+        }
+
+    .table-striped > tbody > tr:nth-child(even):hover {
+        background-color: #ff6f47 !important;
+    }
+
+    .table-striped > tbody > tr:nth-child(even) {
+        opacity: unset;
+        background-color: #F8DFB6 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .ellipsis {
+        display: none;
+    }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 4px 6px !important;
+    }
+
+    .dt-buttons {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+
+    .customheightselect {
+        height: 30px;
+    }
+
+    #tblReportsNew_filter label {
+        visibility: hidden
+    }
+
+        #tblReportsNew_filter label input {
+            visibility: visible
+        }
+
+    .form-group {
+        border-bottom: none !important;
+        padding-bottom: 0px !important;
+        margin-bottom: 0px !important;
+    }
+
+    .dt-buttons {
+        display: none;
+    }
+
+    .dataTables_filter {
+        margin-top: -20px;
+    }
+
+    .dt-buttons1 {
+        text-align: right;
+        padding-right: 0px;
+    }
+</style>
+@using (Html.BeginForm("ReportNew", "Report", FormMethod.Post, new { @class = "form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="form-group col-md-4" style="padding-left:0px;margin-left:-30px;">
+            <label class="col-sm-2 col-form-label">Status:</label>
+            <div class="col-md-10">
+                @Html.DropDownList("ddlStatus", (List<SelectListItem>)
+    ViewBag.StatusList,
+    htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="col-sm-3 col-form-label">Country:</label>
+            <div class="col-md-9">
+                @Html.DropDownList("ddlCountry", (List<SelectListItem>)
+    ViewBag.Country,
+    htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="col-md-6 col-form-label">Type of Technology:</label>
+            <div class="col-md-6">
+                @Html.DropDownList("ddlTechnology", (List<SelectListItem>)
+    ViewBag.Technology,
+    htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="form-group col-md-4" style="padding-left:0px;margin-left:-30px;">
+            <label class="col-sm-2 col-form-label">Coil:</label>
+            <div class="col-md-10">
+                @Html.TextBox("txtCoil", (object)ViewBag.SelectedCoil, new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="col-sm-3 col-form-label">Serial No:</label>
+            <div class="col-md-9">
+                @Html.TextBox("txtSerialNo", (object)ViewBag.SelectedSerialNo, new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="col-md-6 col-form-label">Lift No:</label>
+            <div class="col-md-6">
+                @Html.TextBox("txtLiftNo", (object)ViewBag.SelectedLiftNo, new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <div class="form-group col-md-4" style="padding-left:0px;margin-left:-30px;">
+            <label class="col-sm-2 col-form-label">Issuance From:</label>
+            <div class="col-md-10">
+                @Html.TextBox("IssuanceFrom", (string)ViewBag.IssuanceFrom, new { @id = "IssuanceFrom", @class = "form-control form_datetime" })
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="col-sm-3 col-form-label">Issuance To:</label>
+            <div class="col-md-9">
+                @Html.TextBox("IssuanceTo", (string)ViewBag.IssuanceTo, new { @id = "IssuanceTo", @class = "form-control form_datetime" })
+            </div>
+        </div>
+        @*<div class="form-group col-md-4">
+            <label class="col-md-6 col-form-label">Lift No:</label>
+            <div class="col-md-6">
+                @Html.TextBox("txtLiftNo", (object)ViewBag.SelectedLiftNo, new { @class = "form-control", @style = "width:100%;" })
+            </div>
+        </div>*@
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-orange applyfilter">Apply Filter</button>
+    </div>
+    <div class="dt-buttons1 col-md-12">
+        <button class="buttons-html5 btn btn-orange" id="exporttocsvReportNew" tabindex="0" aria-controls="tblReportsNew" type="button"><span>CSV</span></button> <button id="exporttoexcelReportNew" class="buttons-html5 btn btn-orange" tabindex="0" aria-controls="tblReportsNew" type="button"><span>Excel</span></button>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        @if (Model.lstProducts != null)
+        {
+            <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="tblReportsNew">
+                <thead>
+                    <tr>
+
+                        <th scope="col">Product Id</th>
+                        <th scope="col">PCE</th>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">Lift Number</th>
+                        <th scope="col">HSCode</th>
+                        <th scope="col">Product Type</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Origin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstProducts)
+                    {
+                        <tr>
+
+                            <td>@item.Productid</td>
+                            <td>@item.Coil</td>
+                            <td>@item.SerialNumber</td>
+                            <td>@item.LiftNumber</td>
+                            <td>@item.HsCode</td>
+                            <td>@item.ProductType</td>
+                            <td>@item.Status</td>
+                            <td>@item.CreatedAt.ToString("MMM dd,yyyy")</td>
+                            <td>@item.Origin</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+@section scripts {
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#IssuanceFrom").datepicker({ dateFormat: "yy-mm-dd" });
+            $("#IssuanceTo").datepicker({ dateFormat: "yy-mm-dd" });
+        });
+
+    </script>
+}
+
+
+

@@ -406,6 +406,31 @@
                 table.button('.buttons-excel').trigger();
 
             });
+            $('#tblReportsNew').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        footer: false,
+                        title: 'Report Data export'
+                    },
+                    {
+                        extend: 'excel',
+                        footer: false,
+                        title: 'Report Data export'
+                    }
+                ]
+            });
+            $("#exporttocsvReportNew").on("click", function () {
+                var table = $('#tblReportsNew').DataTable();
+                table.button('.buttons-csv').trigger();
+
+            });
+            $("#exporttoexcelReportNew").on("click", function () {
+                var table = $('#tblReportsNew').DataTable();
+                table.button('.buttons-excel').trigger();
+
+            });
         });
         $(document).ajaxStart(function () {
             $("#load").show();
