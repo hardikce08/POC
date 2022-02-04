@@ -15,7 +15,7 @@ namespace AzureAd_Login_Sample.Controllers
     public class EventController : BaseController
     {
         // GET: Event
-        public ActionResult Index(EventView model)
+        public ActionResult Index(EventView model, string Coil = "")
         {
             if (Request.Cookies["UserToken"] != null)
             {
@@ -30,11 +30,15 @@ namespace AzureAd_Login_Sample.Controllers
             }
             try
             {
+                if (Coil != "")
+                {
+                    model.Coil = Convert.ToInt32(Coil);
+                }
                 DashboardService ds = new DashboardService();
                 List<SelectListItem> items = new List<SelectListItem>();
                 var _Coil = ds.PieceInfos.Where(p => p.VCId != null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
-                ViewBag.Coil = new SelectList(_Coil);
-                if (Request.HttpMethod == "POST" && model.Coil > 0)
+                ViewBag.Coil = new SelectList(_Coil, model.Coil);
+                if (model.Coil > 0)
                 {
                     var data = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
                     if (data != null)
@@ -44,15 +48,15 @@ namespace AzureAd_Login_Sample.Controllers
                             //get list of all events for selected Coild VCId
                             //data.VCId = "73280271-74f4-4012-a0e2-5583c6f6cbdd";
                             string APIURL = ApiDomain + "/v1/products/" + data.VCId;
-                           //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-                           //var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                            //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                            //var productresult = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
                             var productresult = GetDataFromCache<Active>("Product:" + data.VCId, APIURL);
                             List<EventDisplayList> eventslst = new List<EventDisplayList>();
                             foreach (var item in productresult?.events)
                             {
                                 EventDisplayList obj = new EventDisplayList();
                                 obj.EventType = item.eventType;
-                                obj.InitiatorName = item.eventVC.credentialSubject.initiator.name;
+                                obj.InitiatorName = item.eventVC?.credentialSubject?.initiator?.name;
                                 obj.issuanceDate = item.createdAt;
                                 obj.addressLocality = item.eventVC?.credentialSubject?.place?.address?.addressLocality;
                                 obj.addressRegion = item.eventVC?.credentialSubject?.place?.address?.addressRegion;
@@ -98,7 +102,7 @@ namespace AzureAd_Login_Sample.Controllers
             {
                 //var Allcontractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
                 //var Allcontractresponse = JsonConvert.DeserializeObject<List<AllContractReponse>>(Allcontractrequest.ResponseString);
-                var Allcontractresponse = GetDataFromCache<List<AllContractReponse>>( "AllContractResponse", GetAllContractAPIURL);
+                var Allcontractresponse = GetDataFromCache<List<AllContractReponse>>("AllContractResponse", GetAllContractAPIURL);
                 if (Allcontractresponse != null)
                 {
                     //filter only Active Contracts
@@ -110,7 +114,7 @@ namespace AzureAd_Login_Sample.Controllers
                     }
                     ViewBag.Contracts = PopulateDropdownListValues(contracts, null);
                 }
-                 
+
                 //var AllOrganizationrequest = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllOrganizationAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
                 //var AllOrganizationresponse = JsonConvert.DeserializeObject<List<AllOrganizationResponse>>(AllOrganizationrequest.ResponseString);
                 var AllOrganizationresponse = GetDataFromCache<List<AllOrganizationResponse>>("AllOrganizationresponse", GetAllOrganizationAPIURL);
@@ -213,6 +217,23 @@ namespace AzureAd_Login_Sample.Controllers
             }
             return PartialView(model);
         }
+        public ActionResult _MillTest(string id)
+        {
+            ProductDetailView model = new ProductDetailView();
+            try
+            {
+                string APIURL = ApiDomain + "/v1/products/" + id;
+                //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+                //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                model.result = GetDataFromCache<Active>("Product:" + id, APIURL);
+                ViewBag.EventTitle = "Inspect";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = "Error during data load";
+            }
+            return PartialView(model);
+        }
         public ActionResult SaveInspect(string id, string value)
         {
             string APIURL = ApiDomain + "/v1/products/" + id;
@@ -233,6 +254,33 @@ namespace AzureAd_Login_Sample.Controllers
             string CraeteContractAPIURL = ApiDomain + "/v1/products/inspect";
             var postString = JsonConvert.SerializeObject(data);
             var SaveInspectRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
+
+            return Content("Success");
+        }
+        public ActionResult SaveMillTest(string id, string value)
+        {
+            string APIURL = ApiDomain + "/v1/products/" + id;
+            //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            var MillTestValues = JsonConvert.DeserializeObject<List<MillTestValues>>(value);
+            var activeproduct = GetDataFromCache<Active>("Product:" + id, APIURL);
+            var product = activeproduct.productVC.credentialSubject.product;
+            var facility = activeproduct.productVC.credentialSubject.facility;
+            MillTestAPIRequest data = new MillTestAPIRequest();
+            data.productId = id;
+            data.certifier = "Dofasco";
+            data.manufacturer = new MillTestManufacturer { name = product.manufacturer.name };
+            data.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "BRAZIL" };
+            data.specification = "39.9276";
+            data.place = new MillTestPlace { addressCountry = "BRAZIL", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
+            data.originalCountryOfMeltAndPour = "CANADA";
+            data.observation = new List<MillTestObservation>();
+            foreach (var item in MillTestValues)
+            {
+                data.observation.Add(new MillTestObservation {description=item.symbol,type= "ChemicalProperty",name=item.name,value=item.value,unit="%" });
+            }
+            string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
+            var postString = JsonConvert.SerializeObject(data);
+            var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
 
             return Content("Success");
         }

@@ -360,6 +360,7 @@
     <Content Include="Views\Event\_TransferofCustody.cshtml" />
     <Content Include="Views\Event\_StartStorage.cshtml" />
     <Content Include="Views\Report\ReportNew.cshtml" />
+    <Content Include="Views\Event\_MillTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

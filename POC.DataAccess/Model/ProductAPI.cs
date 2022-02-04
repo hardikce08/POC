@@ -39,6 +39,7 @@ namespace POC.DataAccess.Model
     {
         public string name { get; set; }
         public List<string> type { get; set; }
+        public Address address { get; set; }
     }
 
     public class Width
@@ -65,6 +66,7 @@ namespace POC.DataAccess.Model
         public Manufacturer manufacturer { get; set; }
         public Width width { get; set; }
         public Length length { get; set; }
+        public Inspection inspection { get; set; }
     }
 
     public class Geo
@@ -146,6 +148,8 @@ namespace POC.DataAccess.Model
         public List<ConsumedProduct> consumedProducts { get; set; }
         public string deliveryMethod { get; set; }
         public string trackingNumber { get; set; }
+
+        public Manufacturer manufacturer { get; set; }
     }
 
     public class ProductVC
@@ -608,6 +612,59 @@ namespace POC.DataAccess.Model
     {
         public string productId { get; set; }
         public EmissionCarbonFootprintDetails carbonFootprintDetails { get; set; }
+    }
+    public class MillTestValues
+    {
+        public string symbol { get; set; }
+        public string name { get; set; }
+        public string value { get; set; }
+    }
+    #endregion
+    #region MillTest
+    public class MillTestAddress
+    {
+        public string streetAddress { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string postalCode { get; set; }
+        public string addressCountry { get; set; }
+    }
+
+    public class MillTestManufacturer
+    {
+        public string name { get; set; }
+        public MillTestAddress address { get; set; }
+    }
+
+    public class MillTestPlace
+    {
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public string streetAddress { get; set; }
+        public string addressLocality { get; set; }
+        public string addressRegion { get; set; }
+        public string postalCode { get; set; }
+        public string addressCountry { get; set; }
+    }
+
+    public class MillTestObservation
+    {
+        public string type { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public string value { get; set; }
+        public string unit { get; set; }
+    }
+
+    public class MillTestAPIRequest
+    {
+        public string productId { get; set; }
+        public string certifier { get; set; }
+        public MillTestManufacturer manufacturer { get; set; }
+        public string specification { get; set; }
+        public MillTestPlace place { get; set; }
+        public string originalCountryOfMeltAndPour { get; set; }
+        public List<MillTestObservation> observation { get; set; }
     }
     #endregion
 }

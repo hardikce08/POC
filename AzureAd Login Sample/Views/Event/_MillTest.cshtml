@@ -1,0 +1,250 @@
+﻿@model POC.DataAccess.Model.ProductDetailView
+<style>
+    .background-fill {
+        background-color: whitesmoke;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+    .control-label {
+        font-weight: bold;
+    }
+</style>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-error" style="font-weight:bold;color:red;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4>@ViewBag.Error </h4>
+    </div>
+}
+@if (Model.result != null)
+{
+    var product = @Model.result?.productVC?.credentialSubject?.product;
+    var credentialsubject = @Model.result?.productVC?.credentialSubject;
+    var manufaturereAddress = @product.manufacturer.address;
+    var res = @Model.result;
+    var strdefaultvalue = "0.1";
+    <div class="row" id="dvMillTest">
+        <div class="col-md-12">
+            <div class="col-md-4 background-fill">
+                <label class="control-label">Date</label><br />
+                @res.createdAt.ToString("yyyy-MMM-dd")
+            </div>
+            <div class="col-md-4 background-fill">
+                <label class="control-label">Heat No</label><br />
+                @if (string.IsNullOrEmpty(credentialsubject.heatNumber))
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @credentialsubject.heatNumber
+                }
+            </div>
+            <div class="col-md-4 background-fill">
+                <label class="control-label">Grade</label><br />
+                @if (string.IsNullOrEmpty(credentialsubject.grade))
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @credentialsubject.grade
+                }
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-6 background-fill">
+                <label class="control-label">Manufacturer Name</label><br />
+                @product.manufacturer.name
+
+            </div>
+            <div class="col-md-5 background-fill">
+                <label class="control-label">Manufacturer Address</label><br />
+                @if (manufaturereAddress == null)
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @(product.manufacturer.address.addressLocality + "," + product.manufacturer.address.addressRegion + "," + product.manufacturer.address.addressCountry);
+
+                }
+            </div>
+
+        </div>
+        <div class="col-md-12" style="margin-top:10px;"></div>
+        <div class="col-md-12">
+
+            <table class="table table-condensed table-bordered" id="tbldata">
+                <div style="color:black;font-weight:bold;text-align:left;margin-bottom:10px;">Metallurgic Analysis and Percentage of each Chemical Property</div>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Value %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Al</td>
+                        <td>Aluminum</td>
+                        <td>@Html.TextBox("Model.AluminumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Bi</td>
+                        <td>Bismuth</td>
+                        <td>@Html.TextBox("Model.BismuthPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>Boron</td>
+                        <td>@Html.TextBox("Model.BoronPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Carbon</td>
+                        <td>@Html.TextBox("Model.CarbonPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Cr</td>
+                        <td>Chromium</td>
+                        <td>@Html.TextBox("Model.ChromiumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Co</td>
+                        <td>Cobalt</td>
+                        <td>@Html.TextBox("Model.CobaltPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Cu</td>
+                        <td>Copper</td>
+                        <td>@Html.TextBox("Model.CopperPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Pb</td>
+                        <td>Lead</td>
+                        <td>@Html.TextBox("Model.LeadPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Mn</td>
+                        <td>Manganese</td>
+                        <td>@Html.TextBox("Model.ManganesePercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Mo</td>
+                        <td>Molybdenum</td>
+                        <td>@Html.TextBox("Model.MolybdenumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Ni</td>
+                        <td>Nickel</td>
+                        <td>@Html.TextBox("Model.NickelPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Nb</td>
+                        <td>Niobium</td>
+                        <td>@Html.TextBox("Model.NiobiumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>P</td>
+                        <td>Phosphorous</td>
+                        <td>@Html.TextBox("Model.PhosphorousPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Se</td>
+                        <td>Selenium</td>
+                        <td>@Html.TextBox("Model.SeleniumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Si</td>
+                        <td>Silicon</td>
+                        <td>@Html.TextBox("Model.SiliconPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>S</td>
+                        <td>Sulfur</td>
+                        <td>@Html.TextBox("Model.SulfurPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Te</td>
+                        <td>Tellurium</td>
+                        <td>@Html.TextBox("Model.TelluriumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Ti</td>
+                        <td>Titanium</td>
+                        <td>@Html.TextBox("Model.TitaniumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>W</td>
+                        <td>Tungsten (wolfram)</td>
+                        <td>@Html.TextBox("Model.TungstenPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>V</td>
+                        <td>Vanadium</td>
+                        <td>@Html.TextBox("Model.VanadiumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                    <tr>
+                        <td>Zr</td>
+                        <td>Zirconium</td>
+                        <td>@Html.TextBox("Model.ZirconiumPercentage", strdefaultvalue, new { @class = "form-control", @style = "width:20%;" })</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+
+        <div class="col-md-12 form-group">
+            <div class="col-md-12">
+                <label class="col-md-4 control-label"> </label>
+                <div class="col-md-8">
+                    <button type="button" id="btnClose" class="btn btn-black" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-orange" id="btnSaveInspect">Save <i class="icon-disk bigger-110"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+<script>
+    $("#btnSaveInspect").click(function () {
+        var datas = JSON.stringify(CreateModel());
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveMillTest", "Event")',
+                data: { id: $('#hdnProductId').val(), value: datas },
+                success: function (data) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'New MillTest Added',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1500);
+                }
+            });
+    });
+    function CreateModel() {
+        var data = new Array();
+        $('#tbldata > tbody  > tr').each(function () {
+
+        var dest = {
+            symbol: $(this).find("td:eq(0)").text(),
+            name: $(this).find("td:eq(1)").text(),
+            value: $(this).find("td:eq(2) input").val()
+        };
+        data.push(dest);
+    });
+        /*return dest;*/
+        console.log(data);
+        return data;
+    }
+</script>

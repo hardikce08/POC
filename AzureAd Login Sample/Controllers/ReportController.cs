@@ -417,10 +417,29 @@ namespace AzureAd_Login_Sample.Controllers
 
         public ActionResult ReportNew(ReportViewNew model)
         {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             //get all generated VC List
             DashboardService ds = new DashboardService();
             var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
-            if (LstVc != null)
+            var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+            if (Allproductresponse != null)
+            {
+                ViewBag.Active = (int)Allproductresponse.totalProductsCount?.active;
+                ViewBag.Consumed = (int)Allproductresponse.totalProductsCount?.consumed;
+                ViewBag.History = (int)Allproductresponse.totalProductsCount?.history;
+                ViewBag.SharedWithme = (int)Allproductresponse.totalProductsCount?.sharedWithMe;
+            }
+                if (LstVc != null)
             {
                 if (Request.HttpMethod == "POST")
                 {
@@ -438,34 +457,41 @@ namespace AzureAd_Login_Sample.Controllers
                 ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
                 var _Technology = new List<string> { "EAF", "BF" };
                 ViewBag.Technology = PopulateDropdownListValues(_Technology, ViewBag.SelectedTechnology);
-                var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
-                var _Status = Allproductresponse.products.active.Where(c => c.status != null).Select(p => p.status).Distinct().ToList();
-                ViewBag.StatusList = PopulateDropdownListValues(_Status, ViewBag.SelectedStatus);
-
-                foreach (var info in LstVc)
+                
+                if (!string.IsNullOrEmpty(Allproductresponse.message))
                 {
-                    Active prod = Allproductresponse.products.active.Where(p => p.id == info.VCId).FirstOrDefault();
-                    if (prod != null)
+                    TempData["Error"] = "Get All Product List API Error: "+ Allproductresponse.message;
+                }
+                else
+                {
+                    var _Status = Allproductresponse.products.active.Where(c => c.status != null).Select(p => p.status).Distinct().ToList();
+                    ViewBag.StatusList = PopulateDropdownListValues(_Status, ViewBag.SelectedStatus);
+                    foreach (var info in LstVc)
                     {
-                        var credentialsubject = prod.productVC.credentialSubject;
-                        model.lstProducts.Add(new ProductListViewNew
+                        Active prod = Allproductresponse.products.active.Where(p => p.id == info.VCId).FirstOrDefault();
+                        if (prod != null)
                         {
-                            Status = prod.status,
-                            HsCode = credentialsubject?.HSCode,
-                            ProductType = credentialsubject?.product.name,
-                            CreatedAt = prod.createdAt,
-                            Origin = prod.origin?.address?.addressLocality + "," + prod.origin?.address?.addressRegion + "," + prod.origin?.address?.addressCountry,
-                            IssuanceDate = prod.productVC.issuanceDate,
-                            ProductionDate = Convert.ToDateTime(credentialsubject?.productionDate),
-                            Country = info.LABEL_COUNTRY_CD_TEXT.Trim(),
-                            TechnologyType = credentialsubject?.technologyType == "ElectricArcFurnace" ? "EAF" : "BF",
-                            Coil = info.MES_PCE_IDENT_NO.ToString(),
-                            SerialNumber = info.PCE_DISPLAY_NO.Trim(),
-                            LiftNumber = info.LIFT_NO,
-                            Productid = info.VCId
-                        });
+                            var credentialsubject = prod.productVC.credentialSubject;
+                            model.lstProducts.Add(new ProductListViewNew
+                            {
+                                Status = prod.status,
+                                HsCode = credentialsubject?.HSCode,
+                                ProductType = credentialsubject?.product.name,
+                                CreatedAt = prod.createdAt,
+                                Origin = prod.origin?.address?.addressLocality + "," + prod.origin?.address?.addressRegion + "," + prod.origin?.address?.addressCountry,
+                                IssuanceDate = prod.productVC.issuanceDate,
+                                ProductionDate = Convert.ToDateTime(credentialsubject?.productionDate),
+                                Country = info.LABEL_COUNTRY_CD_TEXT.Trim(),
+                                TechnologyType = credentialsubject?.technologyType == "ElectricArcFurnace" ? "EAF" : "BF",
+                                Coil = info.MES_PCE_IDENT_NO.ToString(),
+                                SerialNumber = info.PCE_DISPLAY_NO.Trim(),
+                                LiftNumber = info.LIFT_NO,
+                                Productid = info.VCId
+                            });
+                        }
                     }
                 }
+                
 
                 if (Request.HttpMethod == "POST")
                 {
