@@ -57,6 +57,7 @@ namespace AzureAd_Login_Sample.Controllers
                         obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
                         obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
                         obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+                        obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString(); 
                         lst.Add(obj);
                     }
                 }
@@ -148,7 +149,7 @@ namespace AzureAd_Login_Sample.Controllers
             ViewBag.Coil = vcInfo?.MES_PCE_IDENT_NO.ToString();
             ViewBag.SerialNumber = vcInfo?.PCE_DISPLAY_NO.ToString();
             ViewBag.LiftNumber = vcInfo?.LIFT_NO.ToString();
-
+            ViewBag.CurrentLocation = vcInfo?.LOC_CD.ToString();
             var _events = new List<String> { "Raw Material Supply", "Transportation of Raw Materials", "Manufacturing(Selection from Scrap Yard,Electric Arc Furnace,Blast Furnace,Ladle Furnace,Continuous Casting)", "Transportation", "Downstream Processing(Rolling,Finishing,Fabrication)" };
             ViewBag.Events = new SelectList(_events);
             ViewBag.ProductId = id;

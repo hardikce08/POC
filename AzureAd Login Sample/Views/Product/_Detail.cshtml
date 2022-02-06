@@ -138,9 +138,9 @@
                 <li>
                     <a href="#carbon" class="nav-link">Carbon</a>
                 </li>
-                @*<li>
+                <li>
                     <a href="#milltest" class="nav-link">Mill Test</a>
-                </li>*@
+                </li>
                 @*<li>
                         <a href="#origin" class="nav-link">Origin</a>
                     </li>
@@ -212,13 +212,13 @@
                         </div>
                         <div class="col-md-3 background-fill">
                             <label class="control-label">Current Location</label><br />
-                            @if (credentialsubject.facility.address != null)
+                            @if (string.IsNullOrEmpty(ViewBag.CurrentLocation))
                             {
                                 @:N/A
                             }
                             else
                             {
-                                @credentialsubject.facility.address.addressCountry
+                                @ViewBag.CurrentLocation
                             }
                         </div>
                     </div>
@@ -426,13 +426,13 @@
                                             </div>
                                             <div class="col-md-5 background-fill">
                                                 <label class="control-label">Current Location</label><br />
-                                                @if (credentialsubject.facility.address != null)
+                                                @if (string.IsNullOrEmpty(ViewBag.CurrentLocation))
                                                 {
                                                     @:N/A
                                                 }
                                                 else
                                                 {
-                                                    @credentialsubject.facility.address.addressCountry
+                                                    @ViewBag.CurrentLocation
                                                 }
                                             </div>
                                         </div>
@@ -615,101 +615,190 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" style="height:740px !important;" id="milltest">
-                    <div class="col-md-12 form-group">
-                        <div class="col-md-3 background-fill">
-                            <label class="control-label">Date</label><br />
-                            @if (milltestevent?.createdAt == null)
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @milltestevent.createdAt.ToString("MMM dd,yyyy")
-                            }
-
+                    <div class="col-md-12 form-group" style="margin-left:-35px !important;">
+                        <div class="col-md-4" style="text-align:center;">
+                            <span><b>Certificate of MillTest</b></span><br />
+                            <img src="~/Theme/Images/MillTest.png" style="margin-top:15px;" />
+                            <br />
+                            <p style="margin-top:20px;"><b>Product ID:</b></p>
+                            <p>@product.id</p>
                         </div>
+                        <div class="col-md-8">
+                            <div class="col-md-12">
+                                <div class="col-md-8">
+                                    <p style="font-weight:bold;font-size:20px;">@product.name</p><p>
+                                        @res.origin.address.addressCountry.ToUpper() <i class="flag flag-ca"></i>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 background-fill">
+                                    <label class="control-label">Product Id</label><br />
+                                    @product.id
+                                </div>
+                                <div class="col-md-5 background-fill">
+                                    <label class="control-label">Product Type</label><br />
+                                    @product.name
+                                </div>
 
-                        <div class="col-md-3 background-fill">
-                            <label class="control-label">Heat Number</label><br />
-                            @if (string.IsNullOrEmpty(credentialsubject.heatNumber))
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @credentialsubject.heatNumber
-                            }
-
-                        </div>
-                        <div class="col-md-3 background-fill">
-                            <label class="control-label">Grade</label><br />
-                            @if (string.IsNullOrEmpty(credentialsubject.grade))
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @credentialsubject.grade
-                            }
-
-                        </div>
-                    </div>
-                    <div class="col-md-12  form-group">
-                        <div class="col-md-5 background-fill">
-                            <label class="control-label">Manufacturer Name</label><br />
-                            @if (milltestevent?.eventVC?.credentialSubject?.manufacturer == null)
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @milltestevent.eventVC.credentialSubject.manufacturer.name
-                            }
-                        </div>
-                        <div class="col-md-5 background-fill">
-                            <label class="control-label">Manufacturer Address</label><br />
-                            @if (milltestevent?.eventVC?.credentialSubject?.manufacturer?.address == null)
-                            {
-                                @:N/A
-                            }
-                            else
-                            {
-                                @(milltestevent.eventVC.credentialSubject.manufacturer.address.addressLocality + "," + milltestevent.eventVC.credentialSubject.manufacturer.address.addressRegion + "," + milltestevent.eventVC.credentialSubject.manufacturer.address.addressCountry);
-
-
-                            }
-
-
-                        </div>
-
-                    </div>
-                    <div class="col-md-12" style="height:575px !important;overflow:scroll;">
-                        @if (milltestspecification != null)
-                        {
-                            <table class="table table-condensed table-bordered" style="height:250px;scroll-behavior:auto;">
-                                <div style="color:black;font-weight:bold;text-align:left;margin-bottom:10px;">Metallurgic Analysis and Percentage of each Chemical Property</div>
-                                <thead>
-                                    <tr>
-                                        <th>Symbol</th>
-                                        <th>Name</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in milltestspecification.observation)
+                            </div>
+                            @*<div class="col-md-12" style="margin-top:10px;"></div>*@
+                            <div class="col-md-12">
+                                <div class="col-md-6 background-fill">
+                                    <label class="control-label">Technology Type</label><br />
+                                    @credentialsubject.technologyType
+                                </div>
+                                <div class="col-md-5 background-fill">
+                                    <label class="control-label">Owner</label><br />
+                                    @res.owner.name
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 background-fill">
+                                    <label class="control-label">Origin</label><br />
+                                    @res.origin.address.addressLocality ,  @res.origin.address.addressRegion ,  @res.origin.address.addressCountry
+                                </div>
+                                <div class="col-md-5 background-fill">
+                                    <label class="control-label">Current Location</label><br />
+                                    @if (string.IsNullOrEmpty(ViewBag.CurrentLocation))
                                     {
-                                        <tr>
-                                            <td>@item.property.description</td>
-                                            <td>@item.property.name</td>
-                                            <td>@item.measurement.value @item.measurement.unitCode</td>
-                                        </tr>
+                                        @:N/A
                                     }
-                                </tbody>
-                            </table>
+                                    else
+                                    {
+                                        @ViewBag.CurrentLocation
+                                    }
+                                </div>
+                            </div>
+                            @*<div class="col-md-12" style="margin-top:10px;"></div>*@
+                            <div class="col-md-12">
+                                <div class="col-md-6 background-fill">
+                                    <label class="control-label">Weight</label><br />
+                                    @product.weight.value.ToString()  @product.weight.unitCode
+                                </div>
 
-                        }
+                                <div class="col-md-5 background-fill">
+                                    <label class="control-label">Price per KG</label><br />
+                                    N/A
+                                </div>
 
+                            </div>
+                            @*<div class="col-md-12" style="margin-top:10px;"></div>*@
+                            <div class="col-md-12">
+                                <div class="col-md-6 background-fill">
+                                    <label class="control-label">HS Code</label><br />
+                                    @credentialsubject.HSCode
+                                </div>
+                                <div class="col-md-5 background-fill">
+                                    <label class="control-label">Sku</label><br />
+                                    @if (string.IsNullOrEmpty(credentialsubject.sku))
+                                    {
+                                        @:N/A
+                                    }
+                                    else
+                                    {
+                                        @credentialsubject.sku
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    @*<div class="col-md-12 form-group">
+            <div class="col-md-3 background-fill">
+                <label class="control-label">Date</label><br />
+                @if (milltestevent?.createdAt == null)
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @milltestevent.createdAt.ToString("MMM dd,yyyy")
+                }
+
+            </div>
+
+            <div class="col-md-3 background-fill">
+                <label class="control-label">Heat Number</label><br />
+                @if (string.IsNullOrEmpty(credentialsubject.heatNumber))
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @credentialsubject.heatNumber
+                }
+
+            </div>
+            <div class="col-md-3 background-fill">
+                <label class="control-label">Grade</label><br />
+                @if (string.IsNullOrEmpty(credentialsubject.grade))
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @credentialsubject.grade
+                }
+
+            </div>
+        </div>
+        <div class="col-md-12  form-group">
+            <div class="col-md-5 background-fill">
+                <label class="control-label">Manufacturer Name</label><br />
+                @if (milltestevent?.eventVC?.credentialSubject?.manufacturer == null)
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @milltestevent.eventVC.credentialSubject.manufacturer.name
+                }
+            </div>
+            <div class="col-md-5 background-fill">
+                <label class="control-label">Manufacturer Address</label><br />
+                @if (milltestevent?.eventVC?.credentialSubject?.manufacturer?.address == null)
+                {
+                    @:N/A
+                }
+                else
+                {
+                    @(milltestevent.eventVC.credentialSubject.manufacturer.address.addressLocality + "," + milltestevent.eventVC.credentialSubject.manufacturer.address.addressRegion + "," + milltestevent.eventVC.credentialSubject.manufacturer.address.addressCountry);
+
+
+                }
+
+
+            </div>
+
+        </div>
+        <div class="col-md-12" style="height:575px !important;overflow:scroll;">
+            @if (milltestspecification != null)
+            {
+                <table class="table table-condensed table-bordered" style="height:250px;scroll-behavior:auto;">
+                    <div style="color:black;font-weight:bold;text-align:left;margin-bottom:10px;">Metallurgic Analysis and Percentage of each Chemical Property</div>
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in milltestspecification.observation)
+                        {
+                            <tr>
+                                <td>@item.property.description</td>
+                                <td>@item.property.name</td>
+                                <td>@item.measurement.value @item.measurement.unitCode</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
+
+        </div>*@
 
 
                 </div>

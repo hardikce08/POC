@@ -86,7 +86,7 @@ namespace POC.Controllers
             }
             return View();
         }
-        public ActionResult Dashboard(DashBoardView model)
+        public ActionResult Dashboard(DashBoardView model,string Id="")
         {
             if (Request.Cookies["UserToken"] != null)
             {
@@ -119,7 +119,14 @@ namespace POC.Controllers
                     ViewBag.WeightKg = (int)info.PCE_WT;
                     ViewBag.Lengthcm = info.PCE_LGT;
                     ViewBag.Widthcm = (int)info.PCE_WDT;
+                    ViewBag.HeatNo = info.HT_NO;
+                    ViewBag.Location = info.LOC_CD;
+                    
                 }
+            }
+            if (!string.IsNullOrEmpty(Id))
+            {
+                ViewBag.VCId = Id;
             }
             List<SelectListItem> items = new List<SelectListItem>();
             var _Coil = ds.PieceInfos.Where(p => p.VCId == null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
@@ -137,13 +144,15 @@ namespace POC.Controllers
             ViewBag.HSCode10digits = PopulateDropdownListValues(_HSCode10Digits, ViewBag.SelectedHSCode10Digits);
             var _Guage = ds.PieceInfos.Select(p => p.TYP).Distinct().ToList();
             ViewBag.Guage = PopulateDropdownListValues(_Guage, ViewBag.SelectedGuage);
+            var _ProductNames = new List<string> {"Metallurgical Coke","Iron Ore","Scrap Steel","Carbon and alloy semi-finished products","Carbon and alloy flat product", "Carbon and alloy long product","Stainless steel products","Carbon and alloy pipe and tube products" };
+            ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName);
             if (Request.HttpMethod == "POST" && model.Coil > 0 && Request["btnfilter"] != null)
             {
                 //MAKE API call to get VCNumber
                 //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products";
                 string APIURL = ApiDomain + "/v1/products";
                 VCRequest data = new VCRequest();
-                data.productName = "Stainless steel products";
+                data.productName = Request["ddlProductName"]== "-- SELECT --" ? "Stainless steel products" : Request["ddlProductName"];
                 data.hsCode = Request["txtHSCode10digits"];
                 data.facility = new VCFacility
                 {
@@ -153,7 +162,8 @@ namespace POC.Controllers
                     addressCountry = Request["txtCountryofOrigin"],
                     streetAddress = "",
                     latitude = "43.2557",
-                    longitude = "-79.8711"
+                    longitude = "-79.8711",
+                    globalLocationNumber= Request["txtLocation"]
                 };
                 data.manufacturer = new VCManufacturer { name = "Steel Co." };
                 data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"]==string.Empty? "0": Request["myRange"] };
@@ -161,7 +171,8 @@ namespace POC.Controllers
                 data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] == string.Empty ? "0" : Request["WidthRange"] };
                 data.technologyType = "ElectricArcFurnace";
                 data.observation = new List<VCObservation> { new VCObservation { description = "Aluminum", name = "aluminum", type = "ChemicalProperty", unit = "%", value = "0.05" } };
-
+                data.grade = Request["txtGrade"];
+                data.heatNumber = Request["HeatNo"];
                 var postString = JsonConvert.SerializeObject(data);
                 //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "Authorization:Bearer " + token, "", "");
                 var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
@@ -213,7 +224,8 @@ namespace POC.Controllers
                 //    {
                 //        throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
                 //    }
-                //}
+                //}home
+                return RedirectToAction("Dashboard", "Home",new { Id= res.id });
             }
             return View(model);
         }

@@ -17,6 +17,8 @@ namespace POC.DataAccess.Model
         public UnitofMeasure width { get; set; }
         public List<VCObservation> observation { get; set; }
         public string technologyType { get; set; }
+        public string grade { get; set; }
+        public string heatNumber { get; set; }
     }
     [Serializable]
     public class VCResponse
@@ -34,6 +36,7 @@ namespace POC.DataAccess.Model
         public string addressRegion { get; set; }
         public string postalCode { get; set; }
         public string addressCountry { get; set; }
+        public string globalLocationNumber { get; set; }
     }
 
     public class VCManufacturer

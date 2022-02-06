@@ -143,7 +143,10 @@ namespace AzureAd_Login_Sample.Controllers
             data.price = model.price;
             data.productId = model.productId;
             data.hasDocuments = false;
-            data.contractId = model.contractId;
+            if (model.contractId.Trim() != "-- SELECT --")
+            {
+                data.contractId = model.contractId;
+            }
             //string CraeteContractAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/contracts";
             string CraeteContractAPIURL = ApiDomain + "/v1/products/transferownership/requests";
             var postString = JsonConvert.SerializeObject(data);
@@ -338,7 +341,10 @@ namespace AzureAd_Login_Sample.Controllers
             data.countryOfDestination = model.countryOfDestination;
             data.productId = model.productId;
             data.hasDocuments = false;
-            data.contractId = model.contractId.ToString();
+            if (model.contractId.Trim() != "-- SELECT --")
+            {
+                data.contractId = model.contractId;
+            }
             DashboardService ds = new DashboardService();
             var Ports = ds.Ports.ToList();
             var portOfEntry = Ports.Where(p => p.Ports == model.portOfEntry).FirstOrDefault();

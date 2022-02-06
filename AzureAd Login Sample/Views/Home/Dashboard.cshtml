@@ -178,8 +178,8 @@
                 <div class="col-md-6">
                     <div class="slidecontainer">
                         @*@Html.DropDownList("ddlHSCode10digits", (List<SelectListItem>)
-        ViewBag.HSCode10digits,
-        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                            ViewBag.HSCode10digits,
+                            htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
                         @Html.TextBox("txtHSCode10digits", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                     </div>
                 </div>
@@ -229,19 +229,49 @@
                 <label class="col-md-6 control-label">Guage</label>
                 <div class="col-md-6">
                     @*@Html.DropDownList("ddlGuage", (List<SelectListItem>)
-        ViewBag.Guage,
-        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
+                        ViewBag.Guage,
+                        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })*@
                     @Html.TextBox("txtGuage", "", new { @class = "form-control DisableTextbox", @style = "width:100%;" })
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-10" style="margin-top:10px;"></div>
-    @*<div class="col-md-10">
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Heat No</label>
+                <div class="col-md-6">
+                    @Html.TextBox("HeatNo", (object)ViewBag.HeatNo, new { @class = "form-control DisableTextbox", @style = "width:100%;" })
 
-            <div class="col-md-6">
+                </div>
             </div>
-        </div>*@
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Current Location</label>
+                <div class="col-md-6">
+                    @Html.TextBox("txtLocation", (object)ViewBag.Location, new { @class = "form-control DisableTextbox", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10" style="margin-top:10px;"></div>
+    <div class="col-md-10">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-6 control-label">Product Name</label>
+                <div class="col-md-6">
+                    @Html.DropDownList("ddlProductName", (List<SelectListItem>)
+        ViewBag.ProductNames,
+        htmlAttributes: new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+         
+    </div>
+    <div class="col-md-10" style="margin-top:10px;"></div>
     <div class="raw">
         <div class="col-md-5">
 

@@ -52,6 +52,7 @@ namespace POC.DataAccess.Model
         public string Coil { get; set; }
         public string SerialNumber { get; set; }
         public string LiftNumber { get; set; }
+        public string CurrentLocation { get; set; }
 
     }
     public class LineProductCount

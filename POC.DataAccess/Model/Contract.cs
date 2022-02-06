@@ -23,7 +23,7 @@ namespace POC.DataAccess.Model
 
     public class TransferofOwnerShipAPIRequest
     {
-        public int contractId { get; set; }
+        public string contractId { get; set; }
         public string receiver { get; set; }
         public bool hasDocuments { get; set; }
         public string price { get; set; }
@@ -31,7 +31,7 @@ namespace POC.DataAccess.Model
     }
     public class TransferofCustodyData
     {
-        public int contractId { get; set; }
+        public string contractId { get; set; }
         public string receiver { get; set; }
         public string countryOfDestination { get; set; }
         public string portOfEntry { get; set; }

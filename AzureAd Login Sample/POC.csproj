@@ -268,6 +268,7 @@
     <Content Include="Theme\Images\loader_small.gif" />
     <Content Include="Theme\Images\logo.png" />
     <Content Include="Theme\Images\logo_old.png" />
+    <Content Include="Theme\Images\MillTest.png" />
     <Content Include="Theme\Images\origin.png" />
     <Content Include="Theme\Images\person.jpg" />
     <Content Include="Theme\Images\sort_asc.png" />
