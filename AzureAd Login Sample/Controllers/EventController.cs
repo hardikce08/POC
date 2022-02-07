@@ -152,7 +152,7 @@ namespace AzureAd_Login_Sample.Controllers
             var postString = JsonConvert.SerializeObject(data);
             var Contractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
             //var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Contractrequest.ResponseString);
-
+            RemoveDataFromCache("Product:" + model.productId);
             return Content("Success");
         }
         public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue)
@@ -257,7 +257,7 @@ namespace AzureAd_Login_Sample.Controllers
             string CraeteContractAPIURL = ApiDomain + "/v1/products/inspect";
             var postString = JsonConvert.SerializeObject(data);
             var SaveInspectRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
-
+            RemoveDataFromCache("Product:" + id);
             return Content("Success");
         }
         public ActionResult SaveMillTest(string id, string value)
@@ -284,7 +284,7 @@ namespace AzureAd_Login_Sample.Controllers
             string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
             var postString = JsonConvert.SerializeObject(data);
             var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
-
+            RemoveDataFromCache("Product:" + id);
             return Content("Success");
         }
 
@@ -359,7 +359,8 @@ namespace AzureAd_Login_Sample.Controllers
             var postString = JsonConvert.SerializeObject(data);
             var Contractrequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
             //var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(Contractrequest.ResponseString);
-
+            string APIURL = ApiDomain + "/v1/products/" + model.productId;
+            RemoveDataFromCache("Product:" + model.productId);
             return Content("Success");
         }
 
@@ -404,6 +405,7 @@ namespace AzureAd_Login_Sample.Controllers
             string CraeteContractAPIURL = ApiDomain + "/v1/products/storage";
             var postString = JsonConvert.SerializeObject(data);
             var SaveStorageRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteContractAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
+            RemoveDataFromCache("Product:" + id);
             return Content("Success");
         }
     }

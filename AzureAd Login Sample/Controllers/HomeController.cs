@@ -105,6 +105,7 @@ namespace POC.Controllers
             ViewBag.WeightKg = "";
             ViewBag.Lengthcm = "";
             ViewBag.Widthcm = "";
+            ViewBag.SelectedProductName = "Carbon and alloy long product";
             if (Request.HttpMethod == "POST" && model.Coil > 0)
             {
                 var info = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
@@ -121,7 +122,7 @@ namespace POC.Controllers
                     ViewBag.Widthcm = (int)info.PCE_WDT;
                     ViewBag.HeatNo = info.HT_NO;
                     ViewBag.Location = info.LOC_CD;
-                    
+                    ViewBag.SelectedProductName = Request["ddlProductName"];
                 }
             }
             if (!string.IsNullOrEmpty(Id))
@@ -145,14 +146,14 @@ namespace POC.Controllers
             var _Guage = ds.PieceInfos.Select(p => p.TYP).Distinct().ToList();
             ViewBag.Guage = PopulateDropdownListValues(_Guage, ViewBag.SelectedGuage);
             var _ProductNames = new List<string> {"Metallurgical Coke","Iron Ore","Scrap Steel","Carbon and alloy semi-finished products","Carbon and alloy flat product", "Carbon and alloy long product","Stainless steel products","Carbon and alloy pipe and tube products" };
-            ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName);
+            ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName,false);
             if (Request.HttpMethod == "POST" && model.Coil > 0 && Request["btnfilter"] != null)
             {
                 //MAKE API call to get VCNumber
                 //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products";
                 string APIURL = ApiDomain + "/v1/products";
                 VCRequest data = new VCRequest();
-                data.productName = Request["ddlProductName"]== "-- SELECT --" ? "Stainless steel products" : Request["ddlProductName"];
+                data.productName = Request["ddlProductName"]== "-- SELECT --" ? "Carbon and alloy long product" : Request["ddlProductName"];
                 data.hsCode = Request["txtHSCode10digits"];
                 data.facility = new VCFacility
                 {
@@ -186,6 +187,8 @@ namespace POC.Controllers
                 {
                     //update VC number in Database from above result
                     ds.UpdateVCId(model.Coil, res.id);
+                    RemoveCache("AllProductResponse");
+                    //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
                 }
                 //Get All Active Product API
                 //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
