@@ -133,18 +133,18 @@ namespace POC.Controllers
             var _Coil = ds.PieceInfos.Where(p => p.VCId == null).Select(p => p.MES_PCE_IDENT_NO).Distinct().ToList();
             ViewBag.Coil = new SelectList(_Coil);
 
-            var _CountryofOrigin = ds.PieceInfos.Select(p => p.ORIGN_COUNTRY_CD_TEXT).Distinct().ToList();
-            ViewBag.CountryofOrigin = PopulateDropdownListValues(_CountryofOrigin, ViewBag.SelectedCountry);
-            var _CountryofMeltPour = ds.PieceInfos.Select(p => p.LABEL_COUNTRY_CD_TEXT).Distinct().ToList();
-            ViewBag.CountryofMeltPour = PopulateDropdownListValues(_CountryofMeltPour, ViewBag.SelectedCountryofMeltPourlst);
-            var _TypeofTechnology = ds.PieceInfos.Select(p => p.FIELD_SHORT_DESC).Distinct().ToList();
-            ViewBag.TypeofTechnology = PopulateDropdownListValues(_TypeofTechnology, ViewBag.SelectedTypeofTechnology);
-            var _Grade = ds.PieceInfos.Select(p => p.GRD_CD).Distinct().ToList();
-            ViewBag.Grade = PopulateDropdownListValues(_Grade, ViewBag.SelectedGrade);
-            var _HSCode10Digits = ds.HSCodes.Select(p => p.HSCODE).Distinct().ToList();
-            ViewBag.HSCode10digits = PopulateDropdownListValues(_HSCode10Digits, ViewBag.SelectedHSCode10Digits);
-            var _Guage = ds.PieceInfos.Select(p => p.TYP).Distinct().ToList();
-            ViewBag.Guage = PopulateDropdownListValues(_Guage, ViewBag.SelectedGuage);
+            //var _CountryofOrigin = ds.PieceInfos.Select(p => p.ORIGN_COUNTRY_CD_TEXT).Distinct().ToList();
+            //ViewBag.CountryofOrigin = PopulateDropdownListValues(_CountryofOrigin, ViewBag.SelectedCountry);
+            //var _CountryofMeltPour = ds.PieceInfos.Select(p => p.LABEL_COUNTRY_CD_TEXT).Distinct().ToList();
+            //ViewBag.CountryofMeltPour = PopulateDropdownListValues(_CountryofMeltPour, ViewBag.SelectedCountryofMeltPourlst);
+            //var _TypeofTechnology = ds.PieceInfos.Select(p => p.FIELD_SHORT_DESC).Distinct().ToList();
+            //ViewBag.TypeofTechnology = PopulateDropdownListValues(_TypeofTechnology, ViewBag.SelectedTypeofTechnology);
+            //var _Grade = ds.PieceInfos.Select(p => p.GRD_CD).Distinct().ToList();
+            //ViewBag.Grade = PopulateDropdownListValues(_Grade, ViewBag.SelectedGrade);
+            //var _HSCode10Digits = ds.HSCodes.Select(p => p.HSCODE).Distinct().ToList();
+            //ViewBag.HSCode10digits = PopulateDropdownListValues(_HSCode10Digits, ViewBag.SelectedHSCode10Digits);
+            //var _Guage = ds.PieceInfos.Select(p => p.TYP).Distinct().ToList();
+            //ViewBag.Guage = PopulateDropdownListValues(_Guage, ViewBag.SelectedGuage);
             var _ProductNames = new List<string> {"Metallurgical Coke","Iron Ore","Scrap Steel","Carbon and alloy semi-finished products","Carbon and alloy flat product", "Carbon and alloy long product","Stainless steel products","Carbon and alloy pipe and tube products" };
             ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName,false);
             if (Request.HttpMethod == "POST" && model.Coil > 0 && Request["btnfilter"] != null)
