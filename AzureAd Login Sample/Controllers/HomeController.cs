@@ -116,7 +116,7 @@ namespace POC.Controllers
                     ViewBag.SelectedTypeofTechnology = info.FIELD_SHORT_DESC?.Trim();
                     ViewBag.SelectedGrade = info.GRD_CD?.Trim();
                     ViewBag.SelectedHSCode10Digits = ds.GetHSCode(info.MES_PCE_IDENT_NO)?.Trim();
-                    ViewBag.SelectedGuage = info.TYP?.Trim();
+                    ViewBag.SelectedGuage = info.PCE_IMP_THK.ToString().Trim();
                     ViewBag.WeightKg = (int)info.PCE_WT;
                     ViewBag.Lengthcm = info.PCE_LGT;
                     ViewBag.Widthcm = (int)info.PCE_WDT;
