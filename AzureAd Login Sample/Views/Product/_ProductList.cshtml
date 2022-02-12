@@ -1,10 +1,7 @@
 ﻿@model  List<POC.DataAccess.Model.ProductListView>
 
 @{
-    ViewBag.Title = "Active Products";
-    ViewBag.Page = "products";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
+    Layout = null;
 }
 <style>
     .dataTables_wrapper {
@@ -55,7 +52,7 @@
 </style>
 @*<h4>Dashboard</h4>*@
 
-@using (Html.BeginForm("Index", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+@using (Html.BeginForm("_ProductList", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
     <h3 style="text-align: center;"></h3>
     <div class="col-md-12">
@@ -110,26 +107,6 @@
             </table>
         }
     </div>
-    <div id='divLoader' class="loaderdiv" style="display:none;">
-    </div>
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" style="width:60% !important;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="modal-title">Product Details</h4>
-
-                </div>
-                <div class="modal-body" id="modal_details">
-                </div>
-                <div class="modal-footer">
-                    @*<button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>*@
-                </div>
-            </div>
-        </div>
-    </div>
-    <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
 }
 @section scripts {
     <script type="text/javascript">
@@ -148,26 +125,6 @@
             $('#' + filterbyval).removeClass('btn-black');
             $('#' + filterbyval).addClass('btn-orange');
 
-        });
-        $(".showdetail").click(function () {
-            //alert($(this).data("id"));
-            //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
-            var Id = $(this).data("id");
-            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
-            window.open(
-                url,
-                '_self' // <- This is what makes it open in a new window.
-            );
-            @*$.ajax({
-            type: "GET",
-            url: '@Url.Action("_Detail", "Product")',
-                /*data: { Id: $(this).data("id") },*/
-                data: { Id: "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5" },
-            success: function (data) {
-                $("#modal_details").html(data);
-                $("#modal").modal('show');
-                    }
-         });*@
         });
     </script>
     

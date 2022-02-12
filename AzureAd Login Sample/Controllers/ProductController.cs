@@ -103,6 +103,195 @@ namespace AzureAd_Login_Sample.Controllers
             //}
             return View(lst);
         }
+        public ActionResult IndexNew(string Filterby = "All")
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.TotalRecords = 10;
+            return View();
+        }
+        public ActionResult _ProductList(string Filterby = "All")
+        {
+            List<ProductListView> lst = new List<ProductListView>();
+            //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+            var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+            if (Allproductresponse != null)
+            {
+                DashboardService ds = new DashboardService();
+                var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+
+                if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
+                {
+                    foreach (var activeproduct in Allproductresponse.products?.active)
+                    {
+                        ProductListView obj = new ProductListView();
+                        obj.Owner = activeproduct.owner?.name;
+                        obj.id = activeproduct.id;
+                        obj.CreatedOn = activeproduct.createdAt;
+                        obj.ProductType = activeproduct?.productVC?.credentialSubject?.product?.name;
+                        obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
+                        obj.Status = activeproduct.status;
+                        obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
+                        obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                        obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                        obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+                        obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString();
+                        lst.Add(obj);
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Get All Product List API Error:" + Allproductresponse.message;
+                    //throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+                }
+            }
+            if (Filterby != "All")
+            {
+                if (Filterby == "Day")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddHours(-24)).ToList();
+                }
+                if (Filterby == "Week")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddDays(-7)).ToList();
+                }
+                if (Filterby == "Month")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddMonths(-1)).ToList();
+                }
+            }
+            ViewBag.Filterby = Filterby;
+             
+            return PartialView(lst);
+        }
+
+        public ActionResult GetData(JqueryDatatableParam param, string Filterby = "All", string TotalRecords = "10", string CurrentPage = "0")
+        {
+            List<ProductListView> lst = new List<ProductListView>();
+            int RecordCount = 10;
+            int offset = 0;
+            if (CurrentPage != "0")
+            {
+                //var pageindex = (Convert.ToInt32(CurrentPage) + 1).ToString();
+                var a = param.iDisplayLength * Convert.ToInt32(CurrentPage);
+                if ((Convert.ToInt32(TotalRecords) - a) < RecordCount)
+                {
+                    RecordCount = Convert.ToInt32(TotalRecords) - a;
+                }
+            }
+            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset="+ (Convert.ToInt32(CurrentPage)).ToString()+ "&count="+ RecordCount.ToString();
+            //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active";
+            var Allproductresponse = GetDataFromCache<AllProductResponse>("ProductPage:"+ (Convert.ToInt32(CurrentPage) + 1).ToString(), GetAllProductAPIURL);
+            if (Allproductresponse != null)
+            {
+                DashboardService ds = new DashboardService();
+                var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+
+                if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
+                {
+                    foreach (var activeproduct in Allproductresponse.products?.active)
+                    {
+                        ProductListView obj = new ProductListView();
+                        obj.Owner = activeproduct.owner?.name;
+                        obj.id = activeproduct.id;
+                        obj.CreatedOn = activeproduct.createdAt;
+                        obj.ProductType = activeproduct?.productVC?.credentialSubject?.product?.name;
+                        obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
+                        obj.Status = activeproduct.status;
+                        obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
+                        obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                        obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                        obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+                        obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString();
+                        lst.Add(obj);
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Get All Product List API Error:" + Allproductresponse.message;
+                    //throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+                }
+            }
+            if (Filterby != "All")
+            {
+                if (Filterby == "Day")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddHours(-24)).ToList();
+                }
+                if (Filterby == "Week")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddDays(-7)).ToList();
+                }
+                if (Filterby == "Month")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddMonths(-1)).ToList();
+                }
+            }
+
+            //var employees = lst;
+
+            lst.ForEach(x => x.CreatedOnString = x.CreatedOn.ToString("MMM dd,yyyy"));
+
+            if (!string.IsNullOrEmpty(param.sSearch))
+            {
+                lst = lst.Where(x => x.Owner.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.Coil.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.id.ToLower().Contains(param.sSearch.ToLower())
+                                              || x.Owner.ToString().Contains(param.sSearch.ToLower())
+                                              || x.ProductType.ToString().Contains(param.sSearch.ToLower())
+                                               || x.Origin.ToString().Contains(param.sSearch.ToLower())
+                                                || x.LastEvent.ToString().Contains(param.sSearch.ToLower())
+                                              || x.CreatedOn.ToString("MMM dd,yyyy").ToLower().Contains(param.sSearch.ToLower())).ToList();
+            }
+
+            var sortColumnIndex = Convert.ToInt32(HttpContext.Request.QueryString["iSortCol_0"]);
+            var sortDirection = HttpContext.Request.QueryString["sSortDir_0"];
+
+            if (sortColumnIndex == 3)
+            {
+                lst = sortDirection == "asc" ? lst.OrderBy(c => c.ProductType).ToList() : lst.OrderByDescending(c => c.ProductType).ToList();
+            }
+            //else if (sortColumnIndex == 4)
+            //{
+            //    employees = sortDirection == "asc" ? employees.OrderBy(c => c.StartDate) : employees.OrderByDescending(c => c.StartDate);
+            //}
+            //else if (sortColumnIndex == 5)
+            //{
+            //    employees = sortDirection == "asc" ? employees.OrderBy(c => c.Salary) : employees.OrderByDescending(c => c.Salary);
+            //}
+            //else
+            //{
+            //    Func<Employee, string> orderingFunction = e => sortColumnIndex == 0 ? e.Name :
+            //                                                   sortColumnIndex == 1 ? e.Position :
+            //                                                   e.Location;
+
+            //    employees = sortDirection == "asc" ? employees.OrderBy(orderingFunction) : employees.OrderByDescending(orderingFunction);
+            //}
+
+            //var displayResult = lst.Skip(param.iDisplayStart)
+            //    .Take(param.iDisplayLength).ToList();
+            var displayResult = lst;
+            var totalRecords = Allproductresponse.totalProductsCount?.active;
+            ViewBag.TotalRecords = Allproductresponse.totalProductsCount?.active;
+            return Json(new
+            {
+                param.sEcho,
+                iTotalRecords = totalRecords,
+                iTotalDisplayRecords = totalRecords,
+                aaData = displayResult
+            }, JsonRequestBehavior.AllowGet);
+
+        }
         //private List<TEntity> GetFromCache<TEntity>(string key, Func<List<TEntity>> valueFactory) where TEntity : class
         //{
         //    ObjectCache cache = MemoryCache.Default;
@@ -211,4 +400,20 @@ namespace AzureAd_Login_Sample.Controllers
             return Json(new { ResponseCode = objResponse.ResponseCode }, JsonRequestBehavior.AllowGet);
         }
     }
+}
+
+public class JqueryDatatableParam
+{
+    public string sEcho { get; set; }
+    public string sSearch { get; set; }
+    public int iDisplayLength { get; set; }
+    public int iDisplayStart { get; set; }
+    public int iColumns { get; set; }
+    public int iSortCol_0 { get; set; }
+    public string sSortDir_0 { get; set; }
+    public int iSortingCols { get; set; }
+    public string sColumns { get; set; }
+
+    public string Filter { get; set; }
+    public string name { get; set; }
 }

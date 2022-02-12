@@ -362,6 +362,8 @@
     <Content Include="Views\Event\_StartStorage.cshtml" />
     <Content Include="Views\Report\ReportNew.cshtml" />
     <Content Include="Views\Event\_MillTest.cshtml" />
+    <Content Include="Views\Product\IndexNew.cshtml" />
+    <Content Include="Views\Product\_ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

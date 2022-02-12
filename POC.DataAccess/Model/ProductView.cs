@@ -53,6 +53,7 @@ namespace POC.DataAccess.Model
         public string SerialNumber { get; set; }
         public string LiftNumber { get; set; }
         public string CurrentLocation { get; set; }
+        public string CreatedOnString { get; set; }
 
     }
     public class LineProductCount

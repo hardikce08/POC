@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "Active Products";
+    ViewBag.Page = "products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .dataTables_wrapper {
+        font-size: 12px !important;
+    }
+
+    .content-body {
+        margin-top: -25px;
+    }
+
+    #tblProduct tbody > tr:hover {
+        background-color: #ff3700;
+    }
+
+    #tblProduct_filter.dataTables_filter label {
+        width: 100%;
+    }
+
+    #tblProduct_length select {
+        margin-left: -15px;
+    }
+
+    table.dataTable thead th, table.dataTable thead td {
+        border-bottom: 1px solid #ff6f47;
+    }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 6px 6px !important;
+    }
+
+    .table-striped > tbody > tr:nth-child(even):hover {
+        background-color: #ff6f47 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .ellipsis {
+        display: none;
+    }
+
+    .table-striped > tbody > tr:nth-child(even) {
+        opacity: unset;
+        background-color: #F8DFB6 !important;
+    }
+
+    .dt-buttons {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+
+    .customheightselect {
+        height: 30px;
+    }
+</style>
+
+@using (Html.BeginForm("IndexNew", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <h3 style="text-align: center;"></h3>
+    <div id="lstdata"></div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped" id="tblStudent">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Product Type</th>
+                        <th scope="col">Origin</th>
+                        <th scope="col">LastEvent</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
+    <input type="hidden" id="hdnTotalCounts" name="hdnTotalCounts" value="@ViewBag.TotalRecords" />
+    <input type="hidden" id="hdnCurrentPage" name="hdnCurrentPage" value="0" />
+}
+@section scripts {
+    <script type="text/javascript">
+        @*$(document).ready(function () {
+            $("#load").show();
+      $.ajax({
+        type: "GET",
+        url: '@Url.Action("_ProductList", "Product")',
+        data: { Filterby: 'All'},
+        success: function (data) {
+
+            $("#lstdata").html(data);
+            $("#load").hide();
+            $('#tblProduct').DataTable({
+                paging: false,
+                order: []
+
+            });
+            $(".showdetail").bind("click",function () {
+            var Id = $(this).data("id");
+            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
+            window.open(
+                url,
+                '_self' // <- This is what makes it open in a new window.
+            );
+        });
+        }
+        });
+
+        });*@
+        $(document).ready(function () {
+           /* $("#load").show();*/
+            bindDatatable();
+           /* $("#load").hide();*/
+        });
+        function bindDatatable() {
+            //var url = "@Url.Action("GetData", "Product")?Filter=All&TotalRecords="+ $("#hdnTotalCounts").val();
+            datatable = $('#tblStudent')
+                .DataTable({
+                    "sAjaxSource": "@Url.Action("GetData", "Product")",
+                    "fnServerData": function (sSource, aoData, fnCallback) {
+                        /* Add some extra data to the sender */
+                        aoData.push({ "name": "Filterby", "value": "123" });
+                        aoData.push({ "name": "TotalRecords", "value": $("#hdnTotalCounts").val() });
+                        aoData.push({ "name": "CurrentPage", "value": $("#hdnCurrentPage").val() });
+                        $.getJSON(sSource, aoData, function (json) {
+                            /* Do whatever additional processing you want on the callback, then tell DataTables */
+                            fnCallback(json)
+                        });
+                    },
+                    //"fnDrawCallback": function () {
+                    //    //pageNo = $('#tblStudent').DataTable().fnPagingInfo().iPage + 1;
+                    //    var info = $('#tblStudent').DataTable().page.info();
+                    //    $("#hdnCurrentPage").val((info.page + 1));
+                        
+                    //    alert(info.page); // this alerts correct page
+                    //},
+                    "bServerSide": true,
+                    "bProcessing": true,
+                    "bSearchable": true,
+                    "bDeferRender": true,
+                    "order": [[1, 'asc']],
+                    "language": {
+                        "emptyTable": "No record found.",
+                        "processing":
+                            '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                    },
+                    "columns": [
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "Owner",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "CreatedOnString",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                        {
+                            "data": "ProductType",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "Origin",
+                            "autoWidth": true,
+                            "searchable": true
+                        }, {
+                            "data": "LastEvent",
+                            "autoWidth": true,
+                            "searchable": true
+                        },
+                    ]
+                });
+
+            $('#tblStudent').on('xhr.dt',
+                function (e, settings, data, xhr) {
+                    //do something with the 'data' returned from server
+                    //OR handle some error using the 'xhr' request
+                    //alert(data.iTotalRecords);
+                    $("#hdnTotalCounts").val(data.iTotalRecords);
+                });
+            $('#tblStudent').on('page.dt', function () {
+                var info = $('#tblStudent').DataTable().page.info();
+                $("#hdnCurrentPage").val((info.page));
+                console.log('Showing page: ' + info.page + ' of ' + info.pages);
+            });
+
+
+        }
+    </script>
+
+
+}
+
+

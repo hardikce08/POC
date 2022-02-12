@@ -13,9 +13,11 @@
     <link href="~/Theme/Css/Googlefonts.css" rel="stylesheet" />
     @Styles.Render("~/Content/DashboardCSS")
     @Scripts.Render("~/bundles/modernizr")
-    <link href="~/Theme/Css/jquery.dataTables.min.css" rel="stylesheet" />
-    <link hre="~/Theme/Css/buttons.dataTables.min.css" rel="stylesheet" />
     <link href="~/Theme/Css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Theme/Css/jquery.dataTables.min.css" rel="stylesheet" />
+    @*<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css" rel="stylesheet" />*@
+    <link hre="~/Theme/Css/buttons.dataTables.min.css" rel="stylesheet" />
+
     <link href="~/Theme/Css/jquery-ui.css" rel="stylesheet" />
     <link href="~/Theme/Css/ReportPageCustom.css" rel="stylesheet" />
     <link href="~/Theme/Css/Sweetalert.css" rel="stylesheet" />
@@ -177,7 +179,7 @@
                     <div>
                         <nav id="menu" class="nav-main" role="navigation">
                             <ul class="nav nav-main" id="navmenu" style="">
-                                <li class="nav-active" data-menuPageId="home" >
+                                <li class="nav-active" data-menuPageId="home">
                                     <a href="~/DashBoard" title="Create Product VC">
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                         <span>Create VC</span>
@@ -322,7 +324,9 @@
     @*<script src="~/Theme/Scripts/pnotify.custom.js"></script>*@
     @*<script src="~/Theme/Scripts/jquery.dataTables.js"></script>
         <script src="~/Theme/Scripts/datatables.js"></script>*@
-    <script src="~/Theme/Scripts/jquery.dataTables.min.js"></script>
+    @*<script src="~/Theme/Scripts/jquery.dataTables.min.js"></script>*@
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
     <script src="~/Theme/Scripts/dataTables.buttons.min.js"></script>
     <script src="~/Theme/Scripts/buttons.html5.min.js"></script>
     <script src="~/Theme/Scripts/jszip.min.js"></script>
@@ -344,7 +348,7 @@
             //$('#tblProduct').DataTable();
             $('#tblProduct').DataTable({
                 dom: 'lBfrtip',
-              /*  order: [[2, "desc"]],*/
+                /*  order: [[2, "desc"]],*/
                 order: [],
                 buttons: [
                     {
@@ -438,20 +442,20 @@
         $(document).ajaxStop(function () {
             $("#load").hide();
         });
-        //document.onreadystatechange = function () {
-        //    var state = document.readyState
-        //    //alert(state);
-        //    if (state == 'interactive') {
-        //        $("#load").show();
-        //    } else if (state == 'complete') {
-        //        setTimeout(function () {
-        //            $("#load").hide(); // hide loader
-        //        }, 1000);
-        //    }
-        //}
+            //document.onreadystatechange = function () {
+            //    var state = document.readyState
+            //    //alert(state);
+            //    if (state == 'interactive') {
+            //        $("#load").show();
+            //    } else if (state == 'complete') {
+            //        setTimeout(function () {
+            //            $("#load").hide(); // hide loader
+            //        }, 1000);
+            //    }
+            //}
 
     </script>
-    
+
     @*<script type="text/javascript">
             $(document).ready(function () {
                   var success = @((TempData["Message"] != null).ToString().ToLower());
