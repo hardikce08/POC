@@ -114,14 +114,22 @@
            /* $("#load").show();*/
             bindDatatable();
             /* $("#load").hide();*/
-             $(".showdetail").bind("click",function () {
+            @*$(".showdetail").bind("click",function () {
             var Id = $(this).data("id");
             var url = "@Url.Action("_Detail", "Product")?id=" + Id;
             window.open(
                 url,
                 '_self' // <- This is what makes it open in a new window.
             );
-        });
+            });*@
+            $('#tblStudent tbody').on('click', 'tr', function () {
+                 var Id = $(this).data("id");
+            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
+            window.open(
+                url,
+                '_self' // <- This is what makes it open in a new window.
+            );
+            });
         });
         function bindDatatable() {
             //var url = "@Url.Action("GetData", "Product")?Filter=All&TotalRecords="+ $("#hdnTotalCounts").val();
@@ -145,6 +153,13 @@
 
                     //    alert(info.page); // this alerts correct page
                     //},
+                    "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                        console.log(aData.id);
+                        jQuery(nRow).addClass('showdetail');
+                        jQuery(nRow).attr('data-id', aData.id);
+                        jQuery(nRow).attr('style', 'cursor: pointer;');
+                        return nRow;
+                    },
                     "bServerSide": true,
                     "bProcessing": true,
                     "bSearchable": true,

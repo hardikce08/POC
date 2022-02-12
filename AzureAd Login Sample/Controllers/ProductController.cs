@@ -183,13 +183,13 @@ namespace AzureAd_Login_Sample.Controllers
             if (CurrentPage != "0")
             {
                 //var pageindex = (Convert.ToInt32(CurrentPage) + 1).ToString();
-                var a = param.iDisplayLength * Convert.ToInt32(CurrentPage);
-                if ((Convert.ToInt32(TotalRecords) - a) < RecordCount)
+                offset = param.iDisplayLength * Convert.ToInt32(CurrentPage);
+                if ((Convert.ToInt32(TotalRecords) - offset) < RecordCount)
                 {
-                    RecordCount = Convert.ToInt32(TotalRecords) - a;
+                    RecordCount = Convert.ToInt32(TotalRecords) - offset;
                 }
             }
-            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset="+ (Convert.ToInt32(CurrentPage)).ToString()+ "&count="+ RecordCount.ToString();
+            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset="+ (offset.ToString()) + "&count="+ RecordCount.ToString();
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active";
             var Allproductresponse = GetDataFromCache<AllProductResponse>("ProductPage:"+ (Convert.ToInt32(CurrentPage) + 1).ToString(), GetAllProductAPIURL);
             if (Allproductresponse != null)

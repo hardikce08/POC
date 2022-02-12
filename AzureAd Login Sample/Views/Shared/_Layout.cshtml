@@ -22,6 +22,97 @@
     <link href="~/Theme/Css/ReportPageCustom.css" rel="stylesheet" />
     <link href="~/Theme/Css/Sweetalert.css" rel="stylesheet" />
     <script src="~/Theme/Scripts/jquery.js"></script>
+
+    <script type="text/javascript">
+        document.onreadystatechange = function (e) {
+            if (document.readyState == "interactive") {
+                var all = document.getElementsByTagName("*");
+                document.getElementById("progress_div").style.display = "block";
+                for (var i = 0, max = all.length; i < max; i++) {
+                    set_ele(all[i]);
+                }
+            }
+        }
+        function check_element(ele) {
+            var all = document.getElementsByTagName("*");
+            var totalele = all.length;
+            var per_inc = 100 / all.length;
+
+            if ($(ele).on()) {
+                var prog_width = per_inc + Number(document.getElementById("progress_width").value);
+                document.getElementById("progress_width").value = prog_width;
+                $("#bar1").animate({ width: prog_width + "%" }, 10, function () {
+                    if (document.getElementById("bar1").style.width == "100%") {
+                        $(".progress").fadeOut("slow");
+                    }
+                });
+
+
+
+            }
+            else {
+                set_ele(ele);
+            }
+        }
+        function set_ele(set_element) {
+            check_element(set_element);
+        }
+    </script>
+    <style>
+        body {
+            margin: 0px;
+            auto;
+            padding: 0px;
+            font-family: helvetica;
+        }
+
+        .progress {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: #F2F2F2;
+        }
+
+        .bar {
+            background-color: #819FF7;
+            width: 0%;
+            height: 5px;
+            border-radius: 3px;
+        }
+
+        .percent {
+            position: absolute;
+            display: inline-block;
+            top: 3px;
+            left: 48%;
+        }
+
+        #wrapper {
+            width: 995px;
+            padding: 0px;
+            margin: 0px auto;
+            font-family: helvetica;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 35px;
+            margin-top: 60px;
+            color: #A9BCF5;
+        }
+
+            h1 p {
+                text-align: center;
+                margin: 0px;
+                font-size: 18px;
+                text-decoration: underline;
+                color: grey;
+            }
+    </style>
     <style type="text/css">
         body {
             font-family: 'VAG_Rounded_Light';
@@ -113,6 +204,13 @@
     </style>
 </head>
 <body>
+
+    <div class='progress' id="progress_div">
+        <div class='bar' id='bar1'></div>
+        <div class='percent' id='percent1'></div>
+    </div>
+
+    <input type="hidden" id="progress_width" value="0">
     <section class="body">
         <div id='load' style="display:none;">
         </div>
@@ -442,17 +540,17 @@
         $(document).ajaxStop(function () {
             $("#load").hide();
         });
-            //document.onreadystatechange = function () {
-            //    var state = document.readyState
-            //    //alert(state);
-            //    if (state == 'interactive') {
-            //        $("#load").show();
-            //    } else if (state == 'complete') {
-            //        setTimeout(function () {
-            //            $("#load").hide(); // hide loader
-            //        }, 1000);
-            //    }
-            //}
+                //document.onreadystatechange = function () {
+                //    var state = document.readyState
+                //    //alert(state);
+                //    if (state == 'interactive') {
+                //        $("#load").show();
+                //    } else if (state == 'complete') {
+                //        setTimeout(function () {
+                //            $("#load").hide(); // hide loader
+                //        }, 1000);
+                //    }
+                //}
 
     </script>
 
