@@ -113,7 +113,15 @@
         $(document).ready(function () {
            /* $("#load").show();*/
             bindDatatable();
-           /* $("#load").hide();*/
+            /* $("#load").hide();*/
+             $(".showdetail").bind("click",function () {
+            var Id = $(this).data("id");
+            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
+            window.open(
+                url,
+                '_self' // <- This is what makes it open in a new window.
+            );
+        });
         });
         function bindDatatable() {
             //var url = "@Url.Action("GetData", "Product")?Filter=All&TotalRecords="+ $("#hdnTotalCounts").val();
@@ -134,7 +142,7 @@
                     //    //pageNo = $('#tblStudent').DataTable().fnPagingInfo().iPage + 1;
                     //    var info = $('#tblStudent').DataTable().page.info();
                     //    $("#hdnCurrentPage").val((info.page + 1));
-                        
+
                     //    alert(info.page); // this alerts correct page
                     //},
                     "bServerSide": true,
