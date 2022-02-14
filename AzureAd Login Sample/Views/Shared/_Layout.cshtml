@@ -24,15 +24,15 @@
     <script src="~/Theme/Scripts/jquery.js"></script>
 
     <script type="text/javascript">
-        document.onreadystatechange = function (e) {
-            if (document.readyState == "interactive") {
-                var all = document.getElementsByTagName("*");
-                document.getElementById("progress_div").style.display = "block";
-                for (var i = 0, max = all.length; i < max; i++) {
-                    set_ele(all[i]);
-                }
-            }
-        }
+        //document.onreadystatechange = function (e) {
+        //    if (document.readyState == "interactive") {
+        //        var all = document.getElementsByTagName("*");
+        //        document.getElementById("progress_div").style.display = "block";
+        //        for (var i = 0, max = all.length; i < max; i++) {
+        //            set_ele(all[i]);
+        //        }
+        //    }
+        //}
         function check_element(ele) {
             var all = document.getElementsByTagName("*");
             var totalele = all.length;
@@ -43,7 +43,7 @@
                 document.getElementById("progress_width").value = prog_width;
                 $("#bar1").animate({ width: prog_width + "%" }, 10, function () {
                     if (document.getElementById("bar1").style.width == "100%") {
-                        $(".progress").fadeOut("slow");
+                        $(".progress").fadeOut("fast");
                     }
                 });
 
@@ -77,7 +77,7 @@
         }
 
         .bar {
-            background-color: #819FF7;
+            background-color: #ff3700;
             width: 0%;
             height: 5px;
             border-radius: 3px;
@@ -205,12 +205,12 @@
 </head>
 <body>
 
-    <div class='progress' id="progress_div">
+    @*<div class='progress' id="progress_div">
         <div class='bar' id='bar1'></div>
         <div class='percent' id='percent1'></div>
     </div>
 
-    <input type="hidden" id="progress_width" value="0">
+    <input type="hidden" id="progress_width" value="0">*@
     <section class="body">
         <div id='load' style="display:none;">
         </div>

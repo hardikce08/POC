@@ -368,10 +368,10 @@ html.no-overflowscrolling .nano > .nano-pane > .nano-slider {
     color: #0088cc;
 }
 
-    .pagination > li a:hover,
+   /* .pagination > li a:hover,
     .pagination > li a:focus {
         color: #0099e6;
-    }
+    }*/
 
 .pagination > li.active a,
 .pagination > li.active span,

@@ -55,9 +55,13 @@
     .customheightselect {
         height: 30px;
     }
+    #load {
+        display:none !important;
+    }
 </style>
 
-@using (Html.BeginForm("IndexNew", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+@*@using (Html.BeginForm("IndexNew", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))*@
+@using (Html.BeginForm("IndexNew", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
 {
     <h3 style="text-align: center;"></h3>
     <div id="lstdata"></div>

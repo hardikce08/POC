@@ -4428,14 +4428,17 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 }
-.pagination > li > a:hover,
-.pagination > li > span:hover,
-.pagination > li > a:focus,
-.pagination > li > span:focus {
-  color: #2a6496;
+    .pagination > li > a:hover,
+    .pagination > li > span:hover,
+    .pagination > li > a:focus,
+    .pagination > li > span:focus {
+        /*color: #2a6496;
   background-color: #eeeeee;
-  border-color: #dddddd;
-}
+  border-color: #dddddd;*/
+        color: white !important;
+        background-color: #0088cc;
+        border-color: #dddddd;
+    }
 .pagination > .active > a,
 .pagination > .active > span,
 .pagination > .active > a:hover,
