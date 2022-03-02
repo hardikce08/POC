@@ -26,6 +26,16 @@ namespace AzureAd_Login_Sample.Controllers
         // GET: Admin/HangfireJobs
         public ActionResult HangfireJobs()
         {
+            HttpCookieCollection cookies = System.Web.HttpContext.Current.Request.Cookies;
+            if (cookies["UserToken"] != null)
+            {
+                UserService us = new UserService();
+                bool HasAccess= us.HasUserHangfireAccess(cookies["UserEmail"].Value);
+                if (HasAccess == false)
+                {
+                    return Redirect("/Error/NotFound");
+                }
+            }
             return View(new POC.Models.HangFireJobsViewModel());
         }
 

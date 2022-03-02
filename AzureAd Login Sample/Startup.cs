@@ -10,6 +10,8 @@ using System;
 using System.Threading.Tasks;
 using Hangfire;
 using System.Configuration;
+using AzureAd_Login_Sample;
+using Hangfire.Dashboard;
 
 [assembly: OwinStartup(typeof(POC.Startup))]
 
@@ -41,30 +43,30 @@ namespace POC
             app.UseOpenIdConnectAuthentication(
                 new OpenIdConnectAuthenticationOptions
                 {
-                // Sets the ClientId, authority, RedirectUri as obtained from web.config
-                ClientId = clientId,
+                    // Sets the ClientId, authority, RedirectUri as obtained from web.config
+                    ClientId = clientId,
                     Authority = authority,
                     RedirectUri = redirectUri,
-                // PostLogoutRedirectUri is the page that users will be redirected to after sign-out. In this case, it is using the home page
-                PostLogoutRedirectUri = redirectUri,
+                    // PostLogoutRedirectUri is the page that users will be redirected to after sign-out. In this case, it is using the home page
+                    PostLogoutRedirectUri = redirectUri,
                     Scope = OpenIdConnectScope.OpenIdProfile,
-                // ResponseType is set to request the code id_token - which contains basic information about the signed-in user
-                ResponseType = OpenIdConnectResponseType.CodeIdToken,
-                // ValidateIssuer set to false to allow personal and work accounts from any organization to sign in to your application
-                // To only allow users from a single organizations, set ValidateIssuer to true and 'tenant' setting in web.config to the tenant name
-                // To allow users from only a list of specific organizations, set ValidateIssuer to true and use ValidIssuers parameter
-                TokenValidationParameters = new TokenValidationParameters()
+                    // ResponseType is set to request the code id_token - which contains basic information about the signed-in user
+                    ResponseType = OpenIdConnectResponseType.CodeIdToken,
+                    // ValidateIssuer set to false to allow personal and work accounts from any organization to sign in to your application
+                    // To only allow users from a single organizations, set ValidateIssuer to true and 'tenant' setting in web.config to the tenant name
+                    // To allow users from only a list of specific organizations, set ValidateIssuer to true and use ValidIssuers parameter
+                    TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuer = false // This is a simplification
-                },
-                // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
-                Notifications = new OpenIdConnectAuthenticationNotifications
+                    },
+                    // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
+                    Notifications = new OpenIdConnectAuthenticationNotifications
                     {
                         AuthenticationFailed = OnAuthenticationFailed
                     }
                 }
             );
-
+            
             GlobalConfiguration.Configuration
               .UseSqlServerStorage(ConfigurationManager.AppSettings["DbConnectionStringKey"]);
             //app.UseHangfireDashboard();
@@ -74,12 +76,18 @@ namespace POC
             //// Change `Back to site` link URL
             //var options = new DashboardOptions { AppPath = "http://your-app.net" };
             //// Make `Back to site` link working for subfolder applications
-            //var options1 = new DashboardOptions { AppPath = VirtualPathUtility.ToAppRelative("~")+"/BulkUpload/Index" };
-            var options1 = new DashboardOptions
+            //var options1 = new DashboardOptions { AppPath = VirtualPathUtility.ToAppRelative("~")+"/Admin/Index" };
+            //var options1 = new DashboardOptions
+            //{
+            //    AppPath = null
+            //};
+            //app.UseHangfireDashboard("/hangfire", options1);
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
+                Authorization = new[] { new MyAuthorizationFilter() },
                 AppPath = null
-            };
-            app.UseHangfireDashboard("/hangfire", options1);
+            });
         }
 
         /// <summary>

@@ -144,7 +144,7 @@ namespace POC.DataAccess
                     FirstName = r.FirstName,
                     LastName = r.LastName,
                     ContactNumber = r.ContactNumber,
-                   
+
                 };
 
                 db.Users.AddObject(i);
@@ -171,6 +171,13 @@ namespace POC.DataAccess
             u.LastName = r.LastName;
             u.ContactNumber = r.ContactNumber;
             db.SaveChanges();
+        }
+
+        public bool HasUserHangfireAccess(string Username)
+        {
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteScaler("select count(1) FROM AdminUsers (nolock) Where UserName='" + Username + "'", null,System.Data.CommandType.Text);
+            return (Convert.ToInt32(result) == 1 ? true : false) ;
         }
         public void UpdateNewPassword(int UserId, string NewPassword)
         {
@@ -200,7 +207,7 @@ namespace POC.DataAccess
                             FirstName = r.FirstName,
                             LastName = r.LastName,
                             ContactNumber = r.ContactNumber,
-                           
+
                         }).ToList();
             }
         }
