@@ -9,6 +9,7 @@ using POC.DataAccess.Model;
 using POC.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
@@ -20,6 +21,7 @@ namespace POC.Controllers
     public class HomeController : BaseController
     {
         public string GetAllProductAPIURL { get; set; } = string.Empty;
+        public int TotalActiveProducts = 0;
         public HomeController()
         {
             GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
@@ -86,8 +88,19 @@ namespace POC.Controllers
             }
             return View();
         }
-        public ActionResult Dashboard(DashBoardView model,string Id="")
+        public ActionResult Dashboard(DashBoardView model, string Id = "")
         {
+            //int RecordCount = 20;
+            //InsertProducts(0, 20);
+            //if (TotalActiveProducts > RecordCount)
+            //{
+            //    decimal TotalPages = Math.Ceiling(Convert.ToDecimal(TotalActiveProducts) / Convert.ToDecimal(RecordCount));
+            //    for (int i = 1; i <= TotalPages - 1; i++)
+            //    {
+            //        InsertProducts((i * RecordCount), 20);
+            //    }
+            //}
+
             if (Request.Cookies["UserToken"] != null)
             {
                 //You get the user's first and last name below:
@@ -145,15 +158,15 @@ namespace POC.Controllers
             //ViewBag.HSCode10digits = PopulateDropdownListValues(_HSCode10Digits, ViewBag.SelectedHSCode10Digits);
             //var _Guage = ds.PieceInfos.Select(p => p.TYP).Distinct().ToList();
             //ViewBag.Guage = PopulateDropdownListValues(_Guage, ViewBag.SelectedGuage);
-            var _ProductNames = new List<string> {"Metallurgical Coke","Iron Ore","Scrap Steel","Carbon and alloy semi-finished products","Carbon and alloy flat product", "Carbon and alloy long product","Stainless steel products","Carbon and alloy pipe and tube products" };
-            ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName,false);
+            var _ProductNames = new List<string> { "Metallurgical Coke", "Iron Ore", "Scrap Steel", "Carbon and alloy semi-finished products", "Carbon and alloy flat product", "Carbon and alloy long product", "Stainless steel products", "Carbon and alloy pipe and tube products" };
+            ViewBag.ProductNames = PopulateDropdownListValues(_ProductNames, ViewBag.SelectedProductName, false);
             if (Request.HttpMethod == "POST" && model.Coil > 0 && Request["btnfilter"] != null)
             {
                 //MAKE API call to get VCNumber
                 //string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products";
                 string APIURL = ApiDomain + "/v1/products";
                 VCRequest data = new VCRequest();
-                data.productName = Request["ddlProductName"]== "-- SELECT --" ? "Carbon and alloy long product" : Request["ddlProductName"];
+                data.productName = Request["ddlProductName"] == "-- SELECT --" ? "Carbon and alloy long product" : Request["ddlProductName"];
                 data.hsCode = Request["txtHSCode10digits"];
                 data.facility = new VCFacility
                 {
@@ -164,24 +177,25 @@ namespace POC.Controllers
                     streetAddress = "",
                     latitude = "43.2557",
                     longitude = "-79.8711",
-                    globalLocationNumber= Request["txtLocation"]
+                    globalLocationNumber = Request["txtLocation"]
                 };
                 data.manufacturer = new VCManufacturer { name = "Steel Co." };
-                data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"]==string.Empty? "0": Request["myRange"] };
+                data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"] == string.Empty ? "0" : Request["myRange"] };
                 data.length = new UnitofMeasure { unit = "CM", value = Request["LengthRange"] == string.Empty ? "0" : Request["LengthRange"] };
                 data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] == string.Empty ? "0" : Request["WidthRange"] };
-                data.technologyType = "ElectricArcFurnace";
+                data.technologyType = Request["txtGrade"].StartsWith("EA") ? "ElectricArcFurnace" : "BlastFurnace";
                 data.observation = new List<VCObservation> { new VCObservation { description = "Aluminum", name = "aluminum", type = "ChemicalProperty", unit = "%", value = "0.05" } };
                 data.grade = Request["txtGrade"];
                 data.heatNumber = Request["HeatNo"];
                 var postString = JsonConvert.SerializeObject(data);
                 //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "Authorization:Bearer " + token, "", "");
                 var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
-                var res = JsonConvert.DeserializeObject<VCResponse>(objResponse.ResponseString);
+                var res = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
+                //var res = JsonConvert.DeserializeObject<VCResponse>(objResponse.ResponseString);
                 ViewBag.VCId = res.id;
                 if (res.id == null)
                 {
-                    TempData["Error"] = res.message;
+                    TempData["Error"] = "Error in Product API";//res.message;
                 }
                 else
                 {
@@ -189,6 +203,54 @@ namespace POC.Controllers
                     ds.UpdateVCId(model.Coil, res.id);
                     RemoveCache("AllProductResponse");
                     //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+                    var info = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
+                    double CoilWeight = info.PCE_WT;
+                    var Co2EmissionCalculated = (CoilWeight * AnnualCo2value) / 1000;
+                    ProductCarbonFootPrint eventdata = new ProductCarbonFootPrint();
+                    eventdata.productId = res.id;
+                    eventdata.carbonFootprintDetails = new CarbonFootprintDetailsNew();
+                    eventdata.carbonFootprintDetails.startDate = Convert.ToDateTime(res.productVC.issuanceDate);
+                    eventdata.carbonFootprintDetails.endDate = Convert.ToDateTime(res.productVC.issuanceDate);
+                    eventdata.carbonFootprintDetails.role = "Steel Co.";
+                    eventdata.carbonFootprintDetails.carbonFootprintEvents = new CarbonFootprintEventsNew();
+                    eventdata.carbonFootprintDetails.carbonFootprintEvents.co2eEmissionsInTonnes = Convert.ToInt32(Co2EmissionCalculated);
+                    eventdata.carbonFootprintDetails.carbonFootprintEvents.events = new List<EventNew>();
+                    eventdata.carbonFootprintDetails.carbonFootprintEvents.events.Add(new EventNew { @event = "Manufacturing (Selection from Scrap Yard, Electric Arc Furnace, Blast Furnace, Ladle Furnace, Continuous Casting)", co2eProduced = new Co2eProducedNew { type = new List<string> { "MeasuredValue" }, unitCode = "Tonne", value = Co2EmissionCalculated.ToString() } });
+                    postString = JsonConvert.SerializeObject(eventdata);
+                    string CarbonFootprintAPIURL = ApiDomain + "/v1/products/carbonfootprint";
+                    objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(CarbonFootprintAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
+                    if (objResponse.ResponseCode != HttpStatusCode.Created)
+                    {
+                        TempData["Error"] = "Error in CarbonFoorPrint API Request for New VC: " + res.id;//res.message;
+                    }
+                    // Insert Mill Test data at the time of Produt Creation
+
+                    List<MillTestDataAPIRequestModel> MillTestValues = ds.GetCoilMillTestDatra(model.Coil);
+                    var product = res.productVC.credentialSubject.product;
+                    var facility = res.productVC.credentialSubject.facility;
+                    MillTestAPIRequest milltestdata = new MillTestAPIRequest();
+                    milltestdata.productId = res.id;
+                    milltestdata.certifier = "Dofasco";
+                    milltestdata.manufacturer = new MillTestManufacturer { name = product.manufacturer.name };
+                    milltestdata.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "BRAZIL" };
+                    milltestdata.specification = "39.9276";
+                    milltestdata.place = new MillTestPlace { addressCountry = "BRAZIL", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
+                    milltestdata.originalCountryOfMeltAndPour = "CANADA";
+                    milltestdata.observation = new List<MillTestObservation>();
+                    foreach (var item in MillTestValues)
+                    {
+                        if (!string.IsNullOrEmpty(item.ChemicalPropertyName))
+                        {
+                            milltestdata.observation.Add(new MillTestObservation { description = item.CHEM_ELEM_CD, type = "ChemicalProperty", name = item.ChemicalPropertyName, value = item.CHEM_ELEM_PCT.ToString(), unit = "%" });
+                        }
+                    }
+                    string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
+                    postString = JsonConvert.SerializeObject(data);
+                    var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
+                    if(SaveMillTestRequest.ResponseCode !=HttpStatusCode.Created)
+                    {
+                        TempData["Error"] = "Error in MillTest API Submission Request for New VC: " + res.id;//res.message;
+                    }
                 }
                 //Get All Active Product API
                 //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
@@ -228,10 +290,11 @@ namespace POC.Controllers
                 //        throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
                 //    }
                 //}home
-                return RedirectToAction("Dashboard", "Home",new { Id= res.id });
+                return RedirectToAction("Dashboard", "Home", new { Id = res.id });
             }
             return View(model);
         }
+
         public PartialViewResult _ProductDetail(string id)
         {
             List<ProductDetail> lstProductDetail = new List<ProductDetail>();
@@ -261,9 +324,9 @@ namespace POC.Controllers
             }
             return PartialView(lstProductDetail);
         }
-        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue,bool AddDefaultValue=true)
+        public List<SelectListItem> PopulateDropdownListValues(List<string> lst, string SelectedValue, bool AddDefaultValue = true)
         {
-           
+
             List<SelectListItem> result = (from p in lst.AsEnumerable()
                                            select new SelectListItem
                                            {
@@ -343,12 +406,12 @@ namespace POC.Controllers
         public ActionResult Test()
         {
             ProductDetailView model = new ProductDetailView();
-           // string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
-           // var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
+            // string APIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products/dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
+            // var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "");
             //model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
             return View(model);
         }
-        public ActionResult RemoveCache(string Key="")
+        public ActionResult RemoveCache(string Key = "")
         {
             RemoveDataFromCache(Key);
             return Content("Success");
@@ -368,8 +431,8 @@ namespace POC.Controllers
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Page = "report";
-            var _DateFilters = new List<string> { "Last 3 Days", "Last 7 Days","Last 1 Month","Last 3 Months" };
-            ViewBag.DateFilters = PopulateDropdownListValues(_DateFilters, null,false);
+            var _DateFilters = new List<string> { "Last 3 Days", "Last 7 Days", "Last 1 Month", "Last 3 Months" };
+            ViewBag.DateFilters = PopulateDropdownListValues(_DateFilters, null, false);
 
             // string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";

@@ -29,7 +29,7 @@ namespace POC.DataAccess.Model
         public string SerialNumber { get; set; }
         public string LiftNumber { get; set; }
         public DateTime IssuanceDate { get; set; }
-        public DateTime ProductionDate { get; set; }
+        public DateTime? ProductionDate { get; set; }
         public string Origin { get; set; }
         public string HsCode { get; set; }
         public string ProductType { get; set; }

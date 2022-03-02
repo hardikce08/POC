@@ -1,7 +1,9 @@
 ﻿using POC.DataAccess.Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Objects;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -150,6 +152,52 @@ namespace POC.DataAccess
                        };
             }
         }
+        public IQueryable<ProductMst> DBProducts
+        {
+            get
+            {
+                return from r in db.ProductMst
+                       select new ProductMst
+                       {
+                           ProductId = r.ProductId,
+                           Owner = r.Owner,
+                           id = r.id,
+                           CreatedOn = r.CreatedOn,
+                           ProductType = r.ProductType,
+                           Origin = r.Origin,
+                           Status = r.Status,
+                           LastEvent = r.LastEvent,
+                           Coil = r.Coil,
+                           SerialNumber = r.SerialNumber,
+                           LiftNumber = r.LiftNumber,
+                           CurrentLocation = r.CurrentLocation,
+                       };
+            }
+        }
+        public List<EF.ProductMst> ProductsListfromDB()
+        {
+            
+                var lst = from r in db.ProductMst
+                          select r;
+            return lst.ToList();
+            
+        }
+
+        public IQueryable<ProductSummary> ProductSummary
+        {
+            get
+            {
+                return from r in db.ProductSummary
+                       select new ProductSummary
+                       {
+                           Id = r.Id,
+                           Active = r.Active,
+                           Consumed = r.Consumed,
+                           History = r.History,
+                           SharedWithMe = r.SharedWithMe,
+                       };
+            }
+        }
         public IQueryable<HSCode> HSCodes
         {
             get
@@ -179,6 +227,50 @@ namespace POC.DataAccess
                 data.VCId = VCId;
                 db.SaveChanges();
             }
+        }
+
+        public void InsertProductData(DataTable dt)
+        {
+            var para = new SqlParameter[]
+                            {
+                             new System.Data.SqlClient.SqlParameter("@dtProducts", dt),
+                            };
+
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure("proc_InsertProductList", para);
+        }
+
+        public List<MillTestDataAPIRequestModel> GetCoilMillTestDatra(int CoilId)
+        {
+            var para = new SqlParameter[]
+                            {
+                             new System.Data.SqlClient.SqlParameter("@CoilId", CoilId),
+                            };
+
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure<MillTestDataAPIRequestModel>("proc_GetCoilChemicalPropertyData", para);
+            return result;
+        }
+
+        public void InsertProductSummaryData(int Active,int Consumed,int History,int SharedWithMe)
+        {
+            var para = new SqlParameter[]
+                            {
+                             new System.Data.SqlClient.SqlParameter("@Active", Active),
+                              new System.Data.SqlClient.SqlParameter("@Consumed", Consumed),
+                               new System.Data.SqlClient.SqlParameter("@History", History),
+                                new System.Data.SqlClient.SqlParameter("@SharedWithMe", SharedWithMe),
+                            };
+
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure("proc_ImportProductSummary", para);
+        }
+
+        public List<ProductMst> GetProductsFromDB()
+        {
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure<ProductMst>("proc_GetAllProductsfromDb", null);
+            return result;
         }
     }
 }

@@ -112,7 +112,8 @@
         var res = @Model.result;
         int co2emission = 0;
         int co2eemission = 0;
-        var milltestevent = Model.result.events.Where(p => p.eventType == "MillTestReport").FirstOrDefault();
+        string EstimatedCo2 = "0";
+        var milltestevent = Model.result.events?.Where(p => p.eventType == "MillTestReport").FirstOrDefault();
         var milltestspecification = milltestevent?.eventVC?.credentialSubject?.product?.inspection;
         var Coil = ViewBag.Coil;
 
@@ -505,8 +506,16 @@
 
                                 @if (Model.result.carbonFootprints != null && Model.result.carbonFootprints.Count > 0)
                                 {
-                                    co2emission = Model.result.carbonFootprints[0].carbonFootprintDetails.processEmission.co2EmissionsInTonnes;
-                                    co2eemission = Model.result.carbonFootprints[0].carbonFootprintDetails.processEmission.co2EmissionsInTonnes;
+                                    if (Model.result.carbonFootprints[0].carbonFootprintDetails.carbonFootprintEvents != null)
+                                    {
+                                        co2emission = Model.result.carbonFootprints[0].carbonFootprintDetails.carbonFootprintEvents.co2eEmissionsInTonnes;
+                                        co2eemission += co2emission;
+
+                                    }
+                                    if (Model.result.carbonEstimates != null)
+                                    {
+                                        EstimatedCo2 = Model.result.carbonEstimates[0].estimate.ToString();
+                                    }
                                 }
 
                                 <div class="col-md-12 form-group" style="margin-left:-35px !important;">
@@ -526,7 +535,7 @@
                                             </div>
                                             <div class="col-md-5 background-fill">
                                                 <label class="control-label">NO2 Emissions</label><br />
-                                                39 Tonne
+                                                0 Tonne
                                             </div>
 
                                         </div>
@@ -534,7 +543,7 @@
                                         <div class="col-md-12">
                                             <div class="col-md-6 background-fill">
                                                 <label class="control-label">CH4 Emissions</label><br />
-                                                39 Tonne
+                                                0 Tonne
                                             </div>
                                             <div class="col-md-5 background-fill">
                                                 <label class="control-label">Total CO2e Emissions</label><br />
@@ -544,7 +553,7 @@
                                         <div class="col-md-12">
                                             <div class="col-md-6 background-fill">
                                                 <label class="control-label">Total Estimated CO2e Emissions</label><br />
-                                                39 Tonne
+                                                @EstimatedCo2 Tonne
                                             </div>
                                             @*<div class="col-md-5 background-fill">
                                                     <label class="control-label">Total CO2e Emissions</label><br />

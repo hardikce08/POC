@@ -161,6 +161,21 @@ namespace POC.DataAccess.Model
         public bool hasDocuments { get; set; }
     }
     #endregion
+    public class MillTestDataAPIRequestModel
+    {
 
+        public string MES_PCE_IDENT_NO { get; set; }
+
+        public string PCE_DISPLAY_NO { get; set; }
+
+        public string HT_NO { get; set; }
+
+        public decimal SAMP_NO { get; set; }
+
+        public string CHEM_ELEM_CD { get; set; }
+
+        public decimal CHEM_ELEM_PCT { get; set; }
+        public string ChemicalPropertyName { get; set; }
+    }
 
 }

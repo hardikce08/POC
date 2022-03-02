@@ -396,7 +396,13 @@ namespace POC.DataAccess.Model
         public int id { get; set; }
         public EmissionCarbonFootprintDetails carbonFootprintDetails { get; set; }
     }
-
+    public class CarbonEstimate
+    {
+        public int id { get; set; }
+        public string carbonEventType { get; set; }
+        public double estimate { get; set; }
+        public DateTime createdAt { get; set; }
+    }
     public class Active
     {
         public string id { get; set; }
@@ -417,6 +423,8 @@ namespace POC.DataAccess.Model
         public Owner owner { get; set; }
         public object custodian { get; set; }
         public List<CarbonFootprint> carbonFootprints { get; set; }
+
+        public List<CarbonEstimate> carbonEstimates { get; set; }
         public Anomaly anomaly { get; set; }
         public List<object> sharedWith { get; set; }
         public object price { get; set; }
@@ -583,9 +591,10 @@ namespace POC.DataAccess.Model
     public class EmissionCarbonFootprintEvents
     {
         public int co2eEmissionsInTonnes { get; set; }
-        public List<string> events { get; set; }
+        public List<EventNew> events { get; set; }
     }
 
+    
     public class SaveEmissionRequest
     {
         public string productid { get; set; }
@@ -667,4 +676,43 @@ namespace POC.DataAccess.Model
         public List<MillTestObservation> observation { get; set; }
     }
     #endregion
+
+    #region Product Save Emission Request
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class Co2eProducedNew
+    {
+        public List<string> type { get; set; }
+        public string unitCode { get; set; }
+        public string value { get; set; }
+    }
+
+    public class EventNew
+    {
+        public string @event { get; set; }
+        public Co2eProducedNew co2eProduced { get; set; }
+    }
+
+    public class CarbonFootprintEventsNew
+    {
+        public int co2eEmissionsInTonnes { get; set; }
+        public List<EventNew> events { get; set; }
+    }
+
+    public class CarbonFootprintDetailsNew
+    {
+        public DateTime startDate { get; set; }
+        public DateTime endDate { get; set; }
+        public string role { get; set; }
+        public CarbonFootprintEventsNew carbonFootprintEvents { get; set; }
+    }
+
+    public class ProductCarbonFootPrint
+    {
+        public string productId { get; set; }
+        public CarbonFootprintDetailsNew carbonFootprintDetails { get; set; }
+    }
+
+
+    #endregion
 }
+ 

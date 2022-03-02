@@ -1,0 +1,177 @@
+﻿@model  List<POC.DataAccess.Model.ProductMst>
+
+@{
+    ViewBag.Title = "Active Products";
+    ViewBag.Page = "products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .dataTables_wrapper {
+        font-size: 12px !important;
+    }
+
+    .content-body {
+        margin-top: -25px;
+    }
+
+    #tblProduct tbody > tr:hover {
+        background-color: #ff3700;
+    }
+
+    #tblProduct_filter.dataTables_filter label {
+        width: 100%;
+    }
+
+    #tblProduct_length select {
+        margin-left: -15px;
+    }
+
+    table.dataTable thead th, table.dataTable thead td {
+        border-bottom: 1px solid #ff6f47;
+    }
+
+    table.dataTable tbody th, table.dataTable tbody td {
+        padding: 6px 6px !important;
+    }
+
+    .table-striped > tbody > tr:nth-child(even):hover {
+        background-color: #ff6f47 !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .ellipsis {
+        display:none;
+    }
+    .table-striped > tbody > tr:nth-child(even) {
+        opacity: unset;
+        background-color: #F8DFB6 !important;
+    }
+    .dt-buttons {
+        text-align: right;
+        margin-bottom: 10px;
+    }
+    .customheightselect {
+        height:30px;
+    }
+</style>
+@*<h4>Dashboard</h4>*@
+
+@using (Html.BeginForm("Index", "Product", FormMethod.Post, new { @class = "form-horizontal form-bordered", enctype = "multipart/form-data", @load = "$(\"#load\").show().fadeOut(1000);", onsubmit = "showLoader(this);", @novalidate = "novalidate" }))
+{
+    <h3 style="text-align: center;"></h3>
+    <div class="col-md-12">
+        <a class="btn btn-black" id="All" href="~/Product/IndexV2?Filterby=All">All</a>
+        <a class="btn btn-black" id="Day" href="~/Product/IndexV2?Filterby=Day">Day</a>
+        <a class="btn btn-black" id="Week" href="~/Product/IndexV2?Filterby=Week">Week</a>
+        <a class="btn btn-black" id="Month" href="~/Product/IndexV2?Filterby=Month">Month</a>
+    </div>
+    <div class="col-md-12" style="margin-top:10px;"></div>
+    <div class="col-md-12">
+        @if (Model != null)
+        {
+            var prdlst = Model.OrderByDescending(p => p.CreatedOn).ToList();
+            <table class="table table-bordered table-striped table-hover js-basic-example dataTable table-responsive" id="tblProduct">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Product Type</th>
+                        <th scope="col">Origin</th>
+                        <th scope="col">LastEvent</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Coil</th>
+                        <th scope="col">Serial Number</th>
+                        <th scope="col">Lift Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in prdlst)
+                    {
+
+                    <tr style="cursor: pointer;" class="showdetail" data-id="@item.id">
+                        <td>@item.id</td>
+                        <td>@item.Owner</td>
+                        <td>@item.CreatedOn.ToString("MMM dd,yyyy")</td>
+                        <td>@item.ProductType</td>
+                        <td>@item.Origin</td>
+                        <td>@item.LastEvent</td>
+                        <td>@item.Status</td>
+                        <td>@item.Coil</td>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.LiftNumber</td>
+                        @*<td><a id="a_@item.id" onclick="javascript: return getDetails('@item.id');" href="javascript:void(0);">Get Details</a></td>*@
+                    </tr>
+                        @*<tr id="tr_@item.id" style="display:none;">
+                                <td>&nbsp;</td>
+                                <td id="detailsGridData_@item.id" colspan="9"></td>
+                            </tr>*@
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div id='divLoader' class="loaderdiv" style="display:none;">
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" style="width:60% !important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="modal-title">Product Details</h4>
+
+                </div>
+                <div class="modal-body" id="modal_details">
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnSaveContract">Save <i class="icon-disk bigger-110"></i></button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdnFilterBy" name="hdnFilterBy" value="@ViewBag.Filterby" />
+}
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var input = $('#tblProduct_filter label input');
+            $("#tblProduct_filter label").html('');
+            $("#tblProduct_filter label").append(input);
+            //$("div > div", "#tblProduct_wrapper")[0].remove();
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-sm-12');
+            //$("div > div", "#tblProduct_wrapper").removeClass('col-md-6');
+            //$("div > div", "#tblProduct_wrapper").addClass('col-md-6');
+            $("select", "#tblProduct_length").addClass('customheightselect');
+            $("button", ".dt-buttons").addClass('btn btn-orange');
+            $("#tblProduct_length").addClass('col-md-6');
+            var filterbyval = $('#hdnFilterBy').val();
+            $('#' + filterbyval).removeClass('btn-black');
+            $('#' + filterbyval).addClass('btn-orange');
+
+        });
+        $(".showdetail").click(function () {
+            //alert($(this).data("id"));
+            //var Id = "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5";
+            var Id = $(this).data("id");
+            var url = "@Url.Action("_Detail", "Product")?id=" + Id;
+            window.open(
+                url,
+                '_self' // <- This is what makes it open in a new window.
+            );
+            @*$.ajax({
+            type: "GET",
+            url: '@Url.Action("_Detail", "Product")',
+                /*data: { Id: $(this).data("id") },*/
+                data: { Id: "dc82c0ec-7b66-41dc-a9ba-2bb1c2f9ea5" },
+            success: function (data) {
+                $("#modal_details").html(data);
+                $("#modal").modal('show');
+                    }
+         });*@
+        });
+    </script>
+    
+    
+}
+
+

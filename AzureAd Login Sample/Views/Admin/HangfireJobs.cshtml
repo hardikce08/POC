@@ -1,0 +1,32 @@
+﻿@model POC.Models.HangFireJobsViewModel
+
+@{
+    ViewBag.Title = "Hangfire Jobs";
+}
+
+@using (Html.BeginForm())
+{
+
+    <table class="table table-condensed table-bordered">
+        <thead>
+            <tr>
+                <td>&nbsp;</td>
+                <td>Job</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Actions)
+            {
+                <tr>
+                    <td><input type="checkbox" name="selected" value="@item.Key" id="cb_@item.Key" /></td>
+                    <td><label for="cb_@item.Key">@item.Value</label> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <button type="submit" class="btn"> Create Jobs </button>
+    </p>
+}
+

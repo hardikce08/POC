@@ -56,6 +56,24 @@ namespace POC.DataAccess.Model
         public string CreatedOnString { get; set; }
 
     }
+    public class ProductListViewV2
+    {
+       
+        public string Owner { get; set; }
+        public string id { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string ProductType { get; set; }
+        public string Origin { get; set; }
+        public string Status { get; set; }
+        public string LastEvent { get; set; }
+
+        public string HsCode { get; set; }
+        public DateTime IssuanceDate { get; set; }
+
+        public DateTime? ProductionDate { get; set; }
+
+        public string TechnologyType { get; set; }
+    }
     public class LineProductCount
     {
         public string Date { get; set; }

@@ -126,6 +126,37 @@ warning 6002: The table/view 'MetalTrail.dbo.Hscode' does not have a primary key
           <Property Name="Latitude" Type="varchar" MaxLength="50" />
           <Property Name="Longitude" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="ProductMst">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="250" />
+          <Property Name="id" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="ProductType" Type="nvarchar" MaxLength="150" />
+          <Property Name="Origin" Type="nvarchar" MaxLength="150" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastEvent" Type="nvarchar" MaxLength="150" />
+          <Property Name="Coil" Type="int" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="LiftNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="CurrentLocation" Type="nvarchar" MaxLength="250" />
+          <Property Name="IssuanceDate" Type="datetime" Nullable="false" />
+          <Property Name="ProductionDate" Type="datetime" />
+          <Property Name="TechnologyType" Type="nvarchar" MaxLength="50" />
+          <Property Name="HsCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ProductSummary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Active" Type="int" />
+          <Property Name="Consumed" Type="int" />
+          <Property Name="History" Type="int" />
+          <Property Name="SharedWithMe" Type="int" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="UserID" />
@@ -141,6 +172,8 @@ warning 6002: The table/view 'MetalTrail.dbo.Hscode' does not have a primary key
         <EntityContainer Name="POCModelStoreContainer">
           <EntitySet Name="PieceInfo" EntityType="Self.PieceInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ports" EntityType="Self.Ports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductMst" EntityType="Self.ProductMst" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductSummary" EntityType="Self.ProductSummary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Hscode" EntityType="Self.Hscode" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -167,6 +200,8 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
           <EntitySet Name="Users" EntityType="POCModel.Users" />
           <EntitySet Name="PieceInfo" EntityType="POCModel.PieceInfo" />
           <EntitySet Name="Ports" EntityType="POCModel.Ports" />
+          <EntitySet Name="ProductSummary" EntityType="POCModel.ProductSummary" />
+          <EntitySet Name="ProductMst" EntityType="POCModel.ProductMst" />
         </EntityContainer>
         <EntityType Name="Users">
           <Key>
@@ -290,6 +325,37 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
           <Property Name="ReceiptLocation" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ProductSummary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="Consumed" Type="Int32" />
+          <Property Name="History" Type="Int32" />
+          <Property Name="SharedWithMe" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ProductMst">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Owner" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProductType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Origin" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LastEvent" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Coil" Type="Int32" />
+          <Property Name="SerialNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LiftNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CurrentLocation" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="IssuanceDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProductionDate" Type="DateTime" Precision="3" />
+          <Property Name="TechnologyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HsCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -432,6 +498,39 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ProductSummary">
+            <EntityTypeMapping TypeName="POCModel.ProductSummary">
+              <MappingFragment StoreEntitySet="ProductSummary">
+                <ScalarProperty Name="SharedWithMe" ColumnName="SharedWithMe" />
+                <ScalarProperty Name="History" ColumnName="History" />
+                <ScalarProperty Name="Consumed" ColumnName="Consumed" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductMst">
+            <EntityTypeMapping TypeName="POCModel.ProductMst">
+              <MappingFragment StoreEntitySet="ProductMst">
+                <ScalarProperty Name="HsCode" ColumnName="HsCode" />
+                <ScalarProperty Name="TechnologyType" ColumnName="TechnologyType" />
+                <ScalarProperty Name="ProductionDate" ColumnName="ProductionDate" />
+                <ScalarProperty Name="IssuanceDate" ColumnName="IssuanceDate" />
+                <ScalarProperty Name="CurrentLocation" ColumnName="CurrentLocation" />
+                <ScalarProperty Name="LiftNumber" ColumnName="LiftNumber" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Coil" ColumnName="Coil" />
+                <ScalarProperty Name="LastEvent" ColumnName="LastEvent" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Origin" ColumnName="Origin" />
+                <ScalarProperty Name="ProductType" ColumnName="ProductType" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -459,6 +558,8 @@ FROM [dbo].[Hscode] AS [Hscode]</DefiningQuery>
         <EntityTypeShape EntityType="POCModel.Users" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="POCModel.PieceInfo" Width="1.5" PointX="0.75" PointY="4.75" />
         <EntityTypeShape EntityType="POCModel.Ports" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="POCModel.ProductSummary" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="POCModel.ProductMst" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </Diagrams>
   </Designer>

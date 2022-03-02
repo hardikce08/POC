@@ -30,6 +30,19 @@ namespace POC.Controllers
                 return _bearertoken;
             }
         }
+        private double _annualco2value;
+        public double AnnualCo2value
+        {
+            get
+            {
+                if (_annualco2value == null || _annualco2value == 0)
+                {
+                    _annualco2value = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["AnnualCo2"].ToString());
+                }
+
+                return _annualco2value;
+            }
+        }
         private string _apidomin;
         public string ApiDomain
         {

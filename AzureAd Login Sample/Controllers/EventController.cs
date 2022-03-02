@@ -408,5 +408,6 @@ namespace AzureAd_Login_Sample.Controllers
             RemoveDataFromCache("Product:" + id);
             return Content("Success");
         }
+
     }
 }

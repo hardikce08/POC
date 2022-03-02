@@ -8,6 +8,8 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Microsoft.Owin.Security.Notifications;
 using System;
 using System.Threading.Tasks;
+using Hangfire;
+using System.Configuration;
 
 [assembly: OwinStartup(typeof(POC.Startup))]
 
@@ -62,6 +64,22 @@ namespace POC
                     }
                 }
             );
+
+            GlobalConfiguration.Configuration
+              .UseSqlServerStorage(ConfigurationManager.AppSettings["DbConnectionStringKey"]);
+            //app.UseHangfireDashboard();
+            //app.UseHangfireServer();
+            var options = new BackgroundJobServerOptions { WorkerCount = Environment.ProcessorCount * 5 };
+            app.UseHangfireServer(options);
+            //// Change `Back to site` link URL
+            //var options = new DashboardOptions { AppPath = "http://your-app.net" };
+            //// Make `Back to site` link working for subfolder applications
+            //var options1 = new DashboardOptions { AppPath = VirtualPathUtility.ToAppRelative("~")+"/BulkUpload/Index" };
+            var options1 = new DashboardOptions
+            {
+                AppPath = null
+            };
+            app.UseHangfireDashboard("/hangfire", options1);
         }
 
         /// <summary>

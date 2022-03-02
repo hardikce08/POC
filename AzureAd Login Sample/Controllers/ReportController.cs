@@ -439,7 +439,7 @@ namespace AzureAd_Login_Sample.Controllers
                 ViewBag.History = (int)Allproductresponse.totalProductsCount?.history;
                 ViewBag.SharedWithme = (int)Allproductresponse.totalProductsCount?.sharedWithMe;
             }
-                if (LstVc != null)
+            if (LstVc != null)
             {
                 if (Request.HttpMethod == "POST")
                 {
@@ -457,10 +457,10 @@ namespace AzureAd_Login_Sample.Controllers
                 ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
                 var _Technology = new List<string> { "EAF", "BF" };
                 ViewBag.Technology = PopulateDropdownListValues(_Technology, ViewBag.SelectedTechnology);
-                
+
                 if (!string.IsNullOrEmpty(Allproductresponse.message))
                 {
-                    TempData["Error"] = "Get All Product List API Error: "+ Allproductresponse.message;
+                    TempData["Error"] = "Get All Product List API Error: " + Allproductresponse.message;
                 }
                 else
                 {
@@ -491,12 +491,128 @@ namespace AzureAd_Login_Sample.Controllers
                         }
                     }
                 }
-                
+
 
                 if (Request.HttpMethod == "POST")
                 {
                     var filteredlst = model.lstProducts;
-                    if (!string.IsNullOrEmpty(ViewBag.SelectedStatus) && ViewBag.SelectedStatus!= "ALL")
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedStatus) && ViewBag.SelectedStatus != "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.Status == ViewBag.SelectedStatus).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedCountry) && ViewBag.SelectedCountry != "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.Country == ViewBag.SelectedCountry).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedTechnology) && ViewBag.SelectedTechnology != "ALL")
+                    {
+                        filteredlst = filteredlst.Where(p => p.TechnologyType == ViewBag.SelectedTechnology).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedCoil))
+                    {
+                        filteredlst = filteredlst.Where(p => p.Coil == ViewBag.SelectedCoil).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedSerialNo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.SerialNumber == ViewBag.SelectedSerialNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedLiftNo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.LiftNumber == ViewBag.SelectedLiftNo).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.IssuanceFrom))
+                    {
+                        filteredlst = filteredlst.Where(p => p.IssuanceDate >= Convert.ToDateTime(ViewBag.IssuanceFrom)).ToList();
+                    }
+                    if (!string.IsNullOrEmpty(ViewBag.IssuanceTo))
+                    {
+                        filteredlst = filteredlst.Where(p => p.IssuanceDate <= Convert.ToDateTime(ViewBag.IssuanceTo)).ToList();
+                    }
+                    model.lstProducts = filteredlst;
+                }
+            }
+            return View(model);
+        }
+        public ActionResult ReportV2(ReportViewNew model)
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //get all generated VC List
+            DashboardService ds = new DashboardService();
+            var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+
+            var lstProductSummary = ds.ProductSummary.ToList().FirstOrDefault();
+
+            //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+            var Allproductresponse = ds.GetProductsFromDB();
+            if (lstProductSummary != null)
+            {
+                ViewBag.Active = (int)lstProductSummary.Active;
+                ViewBag.Consumed = (int)lstProductSummary.Consumed;
+                ViewBag.History = (int)lstProductSummary.History;
+                ViewBag.SharedWithme = (int)lstProductSummary.SharedWithMe;
+            }
+            if (LstVc != null)
+            {
+                if (Request.HttpMethod == "POST")
+                {
+                    ViewBag.SelectedStatus = Request["ddlStatus"];
+                    ViewBag.SelectedCountry = Request["ddlCountry"];
+                    ViewBag.SelectedTechnology = Request["ddlTechnology"];
+                    ViewBag.SelectedCoil = Request["txtCoil"];
+                    ViewBag.SelectedSerialNo = Request["txtSerialNo"];
+                    ViewBag.SelectedLiftNo = Request["txtLiftNo"];
+                    ViewBag.IssuanceFrom = Request["IssuanceFrom"];
+                    ViewBag.IssuanceTo = Request["IssuanceTo"];
+                }
+                model.lstProducts = new List<ProductListViewNew>();
+                var _Country = new List<string> { "CANADA", "USA" };
+                ViewBag.Country = PopulateDropdownListValues(_Country, ViewBag.SelectedCountry);
+                var _Technology = new List<string> { "EAF", "BF" };
+                ViewBag.Technology = PopulateDropdownListValues(_Technology, ViewBag.SelectedTechnology);
+
+
+                var _Status = Allproductresponse.Where(c => c.Status != null).Select(p => p.Status).Distinct().ToList();
+                ViewBag.StatusList = PopulateDropdownListValues(_Status, ViewBag.SelectedStatus);
+                foreach (var info in LstVc)
+                {
+                    ProductMst prod = Allproductresponse.Where(p => p.id == info.VCId).FirstOrDefault();
+                    if (prod != null)
+                    {
+                        model.lstProducts.Add(new ProductListViewNew
+                        {
+                            Status = prod.Status,
+                            HsCode = prod.HsCode,
+                            ProductType = prod.ProductType,
+                            CreatedAt = prod.CreatedOn,
+                            Origin = prod.Origin,
+                            IssuanceDate = prod.IssuanceDate,
+                            ProductionDate = prod.ProductionDate,
+                            Country = info.LABEL_COUNTRY_CD_TEXT.Trim(),
+                            TechnologyType = prod.TechnologyType == "ElectricArcFurnace" ? "EAF" : "BF",
+                            Coil = info.MES_PCE_IDENT_NO.ToString(),
+                            SerialNumber = info.PCE_DISPLAY_NO.Trim(),
+                            LiftNumber = info.LIFT_NO,
+                            Productid = info.VCId
+                        });
+                    }
+                }
+
+
+
+                if (Request.HttpMethod == "POST")
+                {
+                    var filteredlst = model.lstProducts;
+                    if (!string.IsNullOrEmpty(ViewBag.SelectedStatus) && ViewBag.SelectedStatus != "ALL")
                     {
                         filteredlst = filteredlst.Where(p => p.Status == ViewBag.SelectedStatus).ToList();
                     }

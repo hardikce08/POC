@@ -18,7 +18,7 @@ namespace AzureAd_Login_Sample.Controllers
 {
     public class ProductController : BaseController
     {
-       
+
         //[OutputCache(Duration = 60, VaryByParam = "Filterby", Location = OutputCacheLocation.Client)]
         public ActionResult Index(string Filterby = "All")
         {
@@ -57,7 +57,7 @@ namespace AzureAd_Login_Sample.Controllers
                         obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
                         obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
                         obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
-                        obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString(); 
+                        obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString();
                         lst.Add(obj);
                     }
                 }
@@ -119,6 +119,73 @@ namespace AzureAd_Login_Sample.Controllers
             ViewBag.TotalRecords = 10;
             return View();
         }
+        public ActionResult IndexV2(string Filterby = "All")
+        {
+            if (Request.Cookies["UserToken"] != null)
+            {
+                ViewBag.Name = Request.Cookies["UserName"]?.Value;
+                ViewBag.UserGuid = Request.Cookies["UserGuid"]?.Value;
+                // The 'preferred_username' claim can be used for showing the username
+                ViewBag.Username = Request.Cookies["UserEmail"]?.Value;
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            List<ProductMst> lst = new List<ProductMst>();
+            DashboardService ds = new DashboardService();
+            lst = ds.GetProductsFromDB();
+            //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";
+            //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=100";
+            //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
+            //if (Allproductresponse != null)
+            //{
+            //    DashboardService ds = new DashboardService();
+            //    var LstVc = ds.PieceInfos.Where(p => p.VCId != null).Distinct().ToList();
+
+            //    if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
+            //    {
+            //        foreach (var activeproduct in Allproductresponse.products?.active)
+            //        {
+            //            ProductListView obj = new ProductListView();
+            //            obj.Owner = activeproduct.owner?.name;
+            //            obj.id = activeproduct.id;
+            //            obj.CreatedOn = activeproduct.createdAt;
+            //            obj.ProductType = activeproduct?.productVC?.credentialSubject?.product?.name;
+            //            obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
+            //            obj.Status = activeproduct.status;
+            //            obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
+            //            obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+            //            obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+            //            obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+            //            obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString();
+            //            lst.Add(obj);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        TempData["Error"] = "Get All Product List API Error:" + Allproductresponse.message;
+            //        //throw new System.Exception("Get All Product List API Error:" + Allproductresponse.message);
+            //    }
+            //}
+            if (Filterby != "All")
+            {
+                if (Filterby == "Day")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddHours(-24)).ToList();
+                }
+                if (Filterby == "Week")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddDays(-7)).ToList();
+                }
+                if (Filterby == "Month")
+                {
+                    lst = lst.Where(p => p.CreatedOn >= DateTime.Now.Date.AddMonths(-1)).ToList();
+                }
+            }
+            ViewBag.Filterby = Filterby;
+            return View(lst);
+        }
         public ActionResult _ProductList(string Filterby = "All")
         {
             List<ProductListView> lst = new List<ProductListView>();
@@ -171,7 +238,7 @@ namespace AzureAd_Login_Sample.Controllers
                 }
             }
             ViewBag.Filterby = Filterby;
-             
+
             return PartialView(lst);
         }
 
@@ -189,9 +256,9 @@ namespace AzureAd_Login_Sample.Controllers
                     RecordCount = Convert.ToInt32(TotalRecords) - offset;
                 }
             }
-            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset="+ (offset.ToString()) + "&count="+ RecordCount.ToString();
+            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=" + (offset.ToString()) + "&count=" + RecordCount.ToString();
             //string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active";
-            var Allproductresponse = GetDataFromCache<AllProductResponse>("ProductPage:"+ (Convert.ToInt32(CurrentPage) + 1).ToString(), GetAllProductAPIURL);
+            var Allproductresponse = GetDataFromCache<AllProductResponse>("ProductPage:" + (Convert.ToInt32(CurrentPage) + 1).ToString(), GetAllProductAPIURL);
             if (Allproductresponse != null)
             {
                 DashboardService ds = new DashboardService();
@@ -332,7 +399,7 @@ namespace AzureAd_Login_Sample.Controllers
             string APIURL = ApiDomain + "/v1/products/" + id;
             //var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(APIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
             // model.result = JsonConvert.DeserializeObject<Active>(objResponse.ResponseString);
-            model.result = GetDataFromCache<Active>("Product:"+id, APIURL);
+            model.result = GetDataFromCache<Active>("Product:" + id, APIURL);
             DashboardService ds = new DashboardService();
             var vcInfo = ds.PieceInfos.Where(p => p.VCId == id).FirstOrDefault();
             ViewBag.Coil = vcInfo?.MES_PCE_IDENT_NO.ToString();
@@ -392,7 +459,9 @@ namespace AzureAd_Login_Sample.Controllers
 
             data.carbonFootprintDetails.carbonFootprintEvents = new EmissionCarbonFootprintEvents();
             data.carbonFootprintDetails.carbonFootprintEvents.co2eEmissionsInTonnes = Convert.ToInt32(model.co2emissionintonnes);
-            data.carbonFootprintDetails.carbonFootprintEvents.events = new List<string> { model.Event };
+            //data.carbonFootprintDetails.carbonFootprintEvents.events = new List<string> { model.Event };
+            data.carbonFootprintDetails.carbonFootprintEvents.events.Add(new EventNew { @event = model.Event, co2eProduced = new Co2eProducedNew { type = new List<string> { "MeasuredValue" }, unitCode = "Tonne", value = model.co2emissionintonnes.ToString() } });
+
             var postString = JsonConvert.SerializeObject(data);
             string CarbonFootprintAPIURL = ApiDomain + "/v1/products/carbonfootprint";
             var objResponse = WebHelper.GetWebAPIResponseWithErrorDetails(CarbonFootprintAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
