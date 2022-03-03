@@ -226,30 +226,33 @@ namespace POC.Controllers
                     // Insert Mill Test data at the time of Produt Creation
 
                     List<MillTestDataAPIRequestModel> MillTestValues = ds.GetCoilMillTestDatra(model.Coil);
-                    var product = res.productVC.credentialSubject.product;
-                    var facility = res.productVC.credentialSubject.facility;
-                    MillTestAPIRequest milltestdata = new MillTestAPIRequest();
-                    milltestdata.productId = res.id;
-                    milltestdata.certifier = "Dofasco";
-                    milltestdata.manufacturer = new MillTestManufacturer { name = product.manufacturer.name };
-                    milltestdata.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "BRAZIL" };
-                    milltestdata.specification = "39.9276";
-                    milltestdata.place = new MillTestPlace { addressCountry = "BRAZIL", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
-                    milltestdata.originalCountryOfMeltAndPour = "CANADA";
-                    milltestdata.observation = new List<MillTestObservation>();
-                    foreach (var item in MillTestValues)
+                    if (MillTestValues != null)
                     {
-                        if (!string.IsNullOrEmpty(item.ChemicalPropertyName))
+                        var product = res.productVC.credentialSubject.product;
+                        var facility = res.productVC.credentialSubject.facility;
+                        MillTestAPIRequest milltestdata = new MillTestAPIRequest();
+                        milltestdata.productId = res.id;
+                        milltestdata.certifier = "Dofasco";
+                        milltestdata.manufacturer = new MillTestManufacturer { name = product.manufacturer.name };
+                        milltestdata.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "BRAZIL" };
+                        milltestdata.specification = "39.9276";
+                        milltestdata.place = new MillTestPlace { addressCountry = "BRAZIL", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
+                        milltestdata.originalCountryOfMeltAndPour = "CANADA";
+                        milltestdata.observation = new List<MillTestObservation>();
+                        foreach (var item in MillTestValues)
                         {
-                            milltestdata.observation.Add(new MillTestObservation { description = item.CHEM_ELEM_CD, type = "ChemicalProperty", name = item.ChemicalPropertyName, value = item.CHEM_ELEM_PCT.ToString(), unit = "%" });
+                            if (!string.IsNullOrEmpty(item.ChemicalPropertyName))
+                            {
+                                milltestdata.observation.Add(new MillTestObservation { description = item.CHEM_ELEM_CD, type = "ChemicalProperty", name = item.ChemicalPropertyName, value = item.CHEM_ELEM_PCT.ToString(), unit = "%" });
+                            }
                         }
-                    }
-                    string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
-                    postString = JsonConvert.SerializeObject(data);
-                    var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
-                    if(SaveMillTestRequest.ResponseCode !=HttpStatusCode.Created)
-                    {
-                        TempData["Error"] = "Error in MillTest API Submission Request for New VC: " + res.id;//res.message;
+                        string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
+                        postString = JsonConvert.SerializeObject(data);
+                        var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
+                        if (SaveMillTestRequest.ResponseCode != HttpStatusCode.Created)
+                        {
+                            TempData["Error"] = "Error in MillTest API Submission Request for New VC: " + res.id;//res.message;
+                        }
                     }
                 }
                 //Get All Active Product API
