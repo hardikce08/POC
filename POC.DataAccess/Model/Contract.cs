@@ -174,7 +174,7 @@ namespace POC.DataAccess.Model
 
         public string CHEM_ELEM_CD { get; set; }
 
-        public decimal CHEM_ELEM_PCT { get; set; }
+        public string CHEM_ELEM_PCT { get; set; }
         public string ChemicalPropertyName { get; set; }
     }
 

@@ -239,6 +239,21 @@ namespace POC.DataAccess
             DataHelper ds = new DataHelper();
             var result = ds.ExecuteStoredProcedure("proc_InsertProductList", para);
         }
+        public void LogError(string ErrorMessage,string CustomMessage,string APIURL,string PostData,string ResponseCode,int CoilNumber=0)
+        {
+            var para = new SqlParameter[]
+                            {
+                             new System.Data.SqlClient.SqlParameter("@ErrorMessage", ErrorMessage),
+                             new System.Data.SqlClient.SqlParameter("@CustomMessage", CustomMessage),
+                             new System.Data.SqlClient.SqlParameter("@APIURL", APIURL),
+                             new System.Data.SqlClient.SqlParameter("@PostData", PostData),
+                             new System.Data.SqlClient.SqlParameter("@ResponseCode", ResponseCode),
+                              new System.Data.SqlClient.SqlParameter("@CoilNumber", CoilNumber),
+                            };
+
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure("proc_InsertErrorLog", para);
+        }
 
         public List<MillTestDataAPIRequestModel> GetCoilMillTestDatra(int CoilId)
         {

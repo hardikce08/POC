@@ -126,7 +126,7 @@ namespace POC.Controllers
                 {
                     ViewBag.SelectedCountry = info.ORIGN_COUNTRY_CD_TEXT?.Trim();
                     ViewBag.SelectedCountryofMeltPourlst = info.LABEL_COUNTRY_CD_TEXT?.Trim();
-                    ViewBag.SelectedTypeofTechnology = info.FIELD_SHORT_DESC?.Trim();
+                    ViewBag.SelectedTypeofTechnology = info.GRD_CD.Trim().StartsWith("EA") ? "EAF" : "BF";
                     ViewBag.SelectedGrade = info.GRD_CD?.Trim();
                     ViewBag.SelectedHSCode10Digits = ds.GetHSCode(info.MES_PCE_IDENT_NO)?.Trim();
                     ViewBag.SelectedGuage = info.PCE_IMP_THK.ToString().Trim();
@@ -172,6 +172,8 @@ namespace POC.Controllers
                 {
                     addressLocality = "Hamilton",
                     addressRegion = "Ontario",
+                    //addressLocality = "",
+                    //addressRegion = "",
                     postalCode = "",
                     addressCountry = Request["txtCountryofOrigin"],
                     streetAddress = "",
@@ -234,9 +236,9 @@ namespace POC.Controllers
                         milltestdata.productId = res.id;
                         milltestdata.certifier = "Dofasco";
                         milltestdata.manufacturer = new MillTestManufacturer { name = product.manufacturer.name };
-                        milltestdata.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "BRAZIL" };
+                        milltestdata.manufacturer.address = new MillTestAddress { addressLocality = "Hamilton", addressRegion = "Ontario", addressCountry = "CANADA" };
                         milltestdata.specification = "39.9276";
-                        milltestdata.place = new MillTestPlace { addressCountry = "BRAZIL", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
+                        milltestdata.place = new MillTestPlace { addressCountry = "CANADA", addressLocality = "Hamilton", addressRegion = "Ontario", latitude = Convert.ToDouble("43.2557"), longitude = Convert.ToDouble("-79.8711") };
                         milltestdata.originalCountryOfMeltAndPour = "CANADA";
                         milltestdata.observation = new List<MillTestObservation>();
                         foreach (var item in MillTestValues)
@@ -247,13 +249,44 @@ namespace POC.Controllers
                             }
                         }
                         string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
-                        postString = JsonConvert.SerializeObject(data);
+                        postString = JsonConvert.SerializeObject(milltestdata);
                         var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
                         if (SaveMillTestRequest.ResponseCode != HttpStatusCode.Created)
                         {
                             TempData["Error"] = "Error in MillTest API Submission Request for New VC: " + res.id;//res.message;
                         }
                     }
+
+                    // Get the Latest created Product using above VC and insert data in Product Master table
+                    if (res != null)
+                    {
+                        var activeproduct = res;
+                        var credentialsubject = res.productVC.credentialSubject;
+                        List<ProductListViewV2> lst = new List<ProductListViewV2>();
+                        ProductListViewV2 obj = new ProductListViewV2();
+                        obj.Owner = res.owner?.name;
+                        obj.id = res.id;
+                        obj.CreatedOn = res.createdAt;
+                        obj.ProductType = credentialsubject?.product?.name;
+                        obj.Origin = res.origin?.address?.addressLocality + "," + res.origin?.address?.addressRegion + "," + res.origin?.address?.addressCountry;
+                        obj.Status = res.status;
+                        obj.LastEvent = res.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
+                        obj.HsCode = credentialsubject?.HSCode;
+                        obj.IssuanceDate = res.productVC.issuanceDate;
+                        obj.ProductionDate = Convert.ToDateTime(credentialsubject?.productionDate);
+                        obj.TechnologyType = credentialsubject?.technologyType;
+                        //obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
+                        //obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
+                        //obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
+                        //obj.CurrentLocation = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LOC_CD.ToString();
+                        lst.Add(obj);
+                        if (lst.Count > 0)
+                        {
+                            DataTable dt = lst.ToDataTable<ProductListViewV2>();
+                            ds.InsertProductData(dt);
+                        }
+                    }
+
                 }
                 //Get All Active Product API
                 //string GetAllProductAPIURL = "https://www.mockachino.com/97fd072e-cfdf-45/v1/products?category=active&offset=0&count=100";

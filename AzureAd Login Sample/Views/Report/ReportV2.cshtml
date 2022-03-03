@@ -225,7 +225,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.lstProducts)
+                        @foreach (var item in Model.lstProducts.OrderByDescending(c=>c.CreatedAt).ToList())
                         {
                             <tr style="cursor: pointer;" class="showdetail" data-id="@item.Productid">
 

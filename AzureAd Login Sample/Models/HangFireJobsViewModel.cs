@@ -31,7 +31,8 @@ namespace POC.Models
 
         public enum JobEnum
         {
-            LoadProductData = 1
+            LoadProductData = 1,
+            LoadVCandCreateProduct = 2
         }
     }
 
