@@ -185,7 +185,7 @@ namespace POC.Controllers
                 data.weight = new UnitofMeasure { unit = "KG", value = Request["myRange"] == string.Empty ? "0" : Request["myRange"] };
                 data.length = new UnitofMeasure { unit = "CM", value = Request["LengthRange"] == string.Empty ? "0" : Request["LengthRange"] };
                 data.width = new UnitofMeasure { unit = "CM", value = Request["WidthRange"] == string.Empty ? "0" : Request["WidthRange"] };
-                data.technologyType = Request["txtGrade"].StartsWith("EA") ? "ElectricArcFurnace" : "BlastFurnace";
+                data.technologyType = Request["txtGrade"].StartsWith("EA") ? "EAF" : "BF";
                 data.observation = new List<VCObservation> { new VCObservation { description = "Aluminum", name = "aluminum", type = "ChemicalProperty", unit = "%", value = "0.05" } };
                 data.grade = Request["txtGrade"];
                 data.heatNumber = Request["HeatNo"];
