@@ -207,7 +207,7 @@ namespace POC.Controllers
                     //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
                     var info = ds.PieceInfos.Where(p => p.MES_PCE_IDENT_NO == model.Coil).FirstOrDefault();
                     double CoilWeight = info.PCE_WT;
-                    var Co2EmissionCalculated = (CoilWeight * AnnualCo2value) / 1000;
+                    var Co2EmissionCalculated = (CoilWeight * (data.technologyType == "EAF" ? AnnualEAFCo2value : AnnualBFCo2value)) / 1000;
                     ProductCarbonFootPrint eventdata = new ProductCarbonFootPrint();
                     eventdata.productId = res.id;
                     eventdata.carbonFootprintDetails = new CarbonFootprintDetailsNew();

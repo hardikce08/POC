@@ -199,7 +199,7 @@ namespace AzureAd_Login_Sample.Controllers
                         ds.UpdateVCId(coil, res.id);
                         //var Allproductresponse = GetDataFromCache<AllProductResponse>("AllProductResponse", GetAllProductAPIURL);
                         double CoilWeight = info.PCE_WT;
-                        var Co2EmissionCalculated = (CoilWeight * AnnualCo2value) / 1000;
+                        var Co2EmissionCalculated = (CoilWeight * (data.technologyType == "EAF" ? AnnualEAFCo2value : AnnualBFCo2value)) / 1000;
                         ProductCarbonFootPrint eventdata = new ProductCarbonFootPrint();
                         eventdata.productId = res.id;
                         eventdata.carbonFootprintDetails = new CarbonFootprintDetailsNew();

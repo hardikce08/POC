@@ -30,17 +30,30 @@ namespace POC.Controllers
                 return _bearertoken;
             }
         }
-        private double _annualco2value;
-        public double AnnualCo2value
+        private double _annualBFco2value;
+        public double AnnualBFCo2value
         {
             get
             {
-                if (_annualco2value == null || _annualco2value == 0)
+                if (_annualBFco2value == null || _annualBFco2value == 0)
                 {
-                    _annualco2value = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["AnnualCo2"].ToString());
+                    _annualBFco2value = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["AnnualBFCo2"].ToString());
                 }
 
-                return _annualco2value;
+                return _annualBFco2value;
+            }
+        }
+        private double _annualEAFco2value;
+        public double AnnualEAFCo2value
+        {
+            get
+            {
+                if (_annualEAFco2value == null || _annualEAFco2value == 0)
+                {
+                    _annualEAFco2value = Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["AnnualEAFCo2"].ToString());
+                }
+
+                return _annualEAFco2value;
             }
         }
         private string _apidomin;
