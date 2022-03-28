@@ -50,9 +50,9 @@ namespace AzureAd_Login_Sample.Controllers
                     // minutes, hours, days, months, days of week
                     switch ((HangFireJobsViewModel.JobEnum)item)
                     {
-                        case HangFireJobsViewModel.JobEnum.LoadProductData:
-                            RecurringJob.AddOrUpdate<AdminController>("Load All Products", ss => ss.LoadProducts(), Cron.Daily(2));
-                            break;
+                        //case HangFireJobsViewModel.JobEnum.LoadProductData:
+                        //    RecurringJob.AddOrUpdate<AdminController>("Load All Products", ss => ss.LoadProducts(), Cron.Daily(2));
+                        //    break;
                         case HangFireJobsViewModel.JobEnum.LoadVCandCreateProduct:
                             RecurringJob.AddOrUpdate<AdminController>("Load VC and Create Products", ss => ss.CreateNewVC(), Cron.HourInterval(2));
                             break;
@@ -92,7 +92,7 @@ namespace AzureAd_Login_Sample.Controllers
 
             string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=" + (offset.ToString()) + "&count=" + RecordCount.ToString();
             var allproductresponse = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
-            var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponse>(allproductresponse.ResponseString);
+            var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponseV2>(allproductresponse.ResponseString);
             if (Allproductresponse != null)
             {
                 if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
@@ -116,19 +116,19 @@ namespace AzureAd_Login_Sample.Controllers
                         }
                         foreach (var activeproduct in ActilveProductsList)
                         {
-                            var credentialsubject = activeproduct.productVC.credentialSubject;
+                            //var credentialsubject = activeproduct.productVC.credentialSubject;
                             ProductListViewV2 obj = new ProductListViewV2();
                             obj.Owner = activeproduct.owner?.name;
                             obj.id = activeproduct.id;
                             obj.CreatedOn = activeproduct.createdAt;
-                            obj.ProductType = credentialsubject?.product?.name;
+                            obj.ProductType = activeproduct.productName;
                             obj.Origin = activeproduct.origin?.address?.addressLocality + "," + activeproduct.origin?.address?.addressRegion + "," + activeproduct.origin?.address?.addressCountry;
                             obj.Status = activeproduct.status;
                             obj.LastEvent = activeproduct.events?.OrderByDescending(p => p.createdAt).FirstOrDefault()?.eventType + " Product";
-                            obj.HsCode = credentialsubject?.HSCode;
-                            obj.IssuanceDate = activeproduct.productVC.issuanceDate;
-                            obj.ProductionDate = Convert.ToDateTime(credentialsubject?.productionDate);
-                            obj.TechnologyType = credentialsubject?.technologyType;
+                            obj.HsCode = activeproduct?.hsCode;
+                            obj.IssuanceDate = activeproduct.createdAt;
+                            obj.ProductionDate = Convert.ToDateTime(activeproduct?.createdAt);
+                            obj.TechnologyType = "";
                             //obj.Coil = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.MES_PCE_IDENT_NO.ToString();
                             //obj.SerialNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.PCE_DISPLAY_NO.ToString();
                             //obj.LiftNumber = LstVc?.Where(p => p.VCId == activeproduct.id).FirstOrDefault()?.LIFT_NO.ToString();
@@ -150,7 +150,7 @@ namespace AzureAd_Login_Sample.Controllers
 
         public void CreateNewVC()
         {
-            // Load All CoilId whose VCId is null to Identify its New Imported and Product creation is pending
+            //Load All CoilId whose VCId is null to Identify its New Imported and Product creation is pending
             var lstcoil = ds.PieceInfos.Where(p => p.VCId == null).Select(c => c.MES_PCE_IDENT_NO);
             foreach (var coil in lstcoil)
             {
@@ -241,7 +241,7 @@ namespace AzureAd_Login_Sample.Controllers
                                 }
                             }
                             string CraeteMillTestAPIURL = ApiDomain + "/v1/products/millTest";
-                            postString = JsonConvert.SerializeObject(data);
+                            postString = JsonConvert.SerializeObject(milltestdata);
                             var SaveMillTestRequest = WebHelper.GetWebAPIResponseWithErrorDetails(CraeteMillTestAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Post, postString, "", "", "", BearerToken);
                             if (SaveMillTestRequest.ResponseCode != HttpStatusCode.Created)
                             {
@@ -287,6 +287,22 @@ namespace AzureAd_Login_Sample.Controllers
 
                 }
 
+            }
+
+            //Update Data to Product Summary table once all Coil generated
+            string GetAllProductAPIURL = ApiDomain + "/v1/products?category=active&offset=0&count=10";
+            var allproductresponse = WebHelper.GetWebAPIResponseWithErrorDetails(GetAllProductAPIURL, WebHelper.ContentType.application_json, WebRequestMethods.Http.Get, "", "", "", "", BearerToken);
+            var Allproductresponse = JsonConvert.DeserializeObject<AllProductResponseV3>(allproductresponse.ResponseString);
+            if (Allproductresponse != null)
+            {
+                if (Allproductresponse.statusCode == 200 || Allproductresponse.statusCode == 0)
+                {
+                    TotalActiveProducts = (int)Allproductresponse.totalProductsCount?.active;
+                    Consumed = (int)Allproductresponse.totalProductsCount?.consumed;
+                    History = (int)Allproductresponse.totalProductsCount?.history;
+                    SharedWithMe = (int)Allproductresponse.totalProductsCount?.sharedWithMe;
+                    ds.InsertProductSummaryData(TotalActiveProducts, Consumed, History, SharedWithMe);
+                }
             }
         }
     }

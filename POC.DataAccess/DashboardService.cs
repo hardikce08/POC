@@ -219,16 +219,26 @@ namespace POC.DataAccess
                         select s).FirstOrDefault();
             return data?.HSCODE1;
         }
-        public void UpdateVCId(int CoilNumber,string VCId)
+        //public void UpdateVCId(int CoilNumber, string VCId)
+        //{
+        //    var data = db.PieceInfo.Where(p => p.MES_PCE_IDENT_NO == CoilNumber).Single();
+        //    if (data != null)
+        //    {
+        //        data.VCId = VCId;
+        //        db.SaveChanges();
+        //    }
+        //}
+        public void UpdateVCId(int CoilNumber, string VCId)
         {
-            var data = db.PieceInfo.Where(p=>p.MES_PCE_IDENT_NO == CoilNumber).Single();
-            if (data != null)
-            {
-                data.VCId = VCId;
-                db.SaveChanges();
-            }
-        }
+            var para = new SqlParameter[]
+                            {
+                             new System.Data.SqlClient.SqlParameter("@CoilNumber", CoilNumber),
+                             new System.Data.SqlClient.SqlParameter("@VCId", VCId),
+                            };
 
+            DataHelper ds = new DataHelper();
+            var result = ds.ExecuteStoredProcedure("proc_UpdateVCId", para);
+        }
         public void InsertProductData(DataTable dt)
         {
             var para = new SqlParameter[]

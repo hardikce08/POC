@@ -363,12 +363,20 @@ namespace POC.DataAccess.Model
         [JsonProperty("Phoenix/search_generator_0/last_dense_238081/logits:0")]
         public object PhoenixSearchGenerator0LastDense238081Logits0 { get; set; }
     }
-
+    public class PriceAnomalyV2
+    {
+        public string productId { get; set; }
+        public string prediction { get; set; }
+        public object correction { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
+    }
     public class Anomaly
     {
-        public CarbonAnomaly carbonAnomaly { get; set; }
-        public OriginAnomaly originAnomaly { get; set; }
-        public PriceAnomaly priceAnomaly { get; set; }
+        //public CarbonAnomaly carbonAnomaly { get; set; }
+        //public OriginAnomaly originAnomaly { get; set; }
+        //public PriceAnomaly priceAnomaly { get; set; }
+        public PriceAnomalyV2 priceAnomaly { get; set; }
     }
     public class Co2eProduced
     {
@@ -447,7 +455,7 @@ namespace POC.DataAccess.Model
         //public Owner owner { get; set; }
         //public bool shared { get; set; }
         //public Anomaly anomaly { get; set; }
-          
+
     }
     public class EventDisplayList
     {
@@ -594,7 +602,7 @@ namespace POC.DataAccess.Model
         public List<EventNew> events { get; set; }
     }
 
-    
+
     public class SaveEmissionRequest
     {
         public string productid { get; set; }
@@ -714,5 +722,165 @@ namespace POC.DataAccess.Model
 
 
     #endregion
+
+    #region New All PRoduct API response class
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class TotalProductsCountV2
+    {
+        public int active { get; set; }
+        public int consumed { get; set; }
+        public int sharedWithMe { get; set; }
+        public int sharedWithMeDeclared { get; set; }
+        public int sharedWithMeNonDeclared { get; set; }
+        public int history { get; set; }
+    }
+
+    public class PropertyV2
+    {
+        public string name { get; set; }
+        public List<string> type { get; set; }
+        public string description { get; set; }
+    }
+
+    public class MeasurementV2
+    {
+        public List<string> type { get; set; }
+        public string value { get; set; }
+        public string unitCode { get; set; }
+    }
+
+    public class ProductSpecV2
+    {
+        public List<string> type { get; set; }
+        public PropertyV2 property { get; set; }
+        public MeasurementV2 measurement { get; set; }
+    }
+
+    public class GeoV2
+    {
+        public List<string> type { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+    }
+
+    public class AddressV2
+    {
+        public List<string> type { get; set; }
+        public string postalCode { get; set; }
+        public string addressRegion { get; set; }
+        public string streetAddress { get; set; }
+        public string addressCountry { get; set; }
+        public string addressLocality { get; set; }
+    }
+
+    public class OriginV2
+    {
+        public GeoV2 geo { get; set; }
+        public List<string> type { get; set; }
+        public AddressV2 address { get; set; }
+        public string globalLocationNumber { get; set; }
+    }
+
+    public class OwnerV2
+    {
+        public int id { get; set; }
+        public string did { get; set; }
+        public string name { get; set; }
+        public string email { get; set; }
+        public string address { get; set; }
+        public string phone { get; set; }
+        public int mill { get; set; }
+        public string role { get; set; }
+        public string clientType { get; set; }
+        public string backendLink { get; set; }
+    }
+
+    public class PricePredictionV2
+    {
+        public string productId { get; set; }
+        public string prediction { get; set; }
+        public object correction { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
+    }
+
+    public class PlaceV2
+    {
+        public GeoV2 geo { get; set; }
+        public List<string> type { get; set; }
+        public AddressV2 address { get; set; }
+        public string globalLocationNumber { get; set; }
+    }
+
+    public class EventV2
+    {
+        public string id { get; set; }
+        public string eventType { get; set; }
+        public DateTime createdAt { get; set; }
+        public PlaceV2 place { get; set; }
+    }
+
+    public class AnomalyV2
+    {
+        public string priceAnomaly { get; set; }
+    }
+
+    public class ActiveV2
+    {
+        public string id { get; set; }
+        public List<ProductSpecV2> productSpecs { get; set; }
+        public string productVCHash { get; set; }
+        public int ownerId { get; set; }
+        public int creatorId { get; set; }
+        public object custodianId { get; set; }
+        public object shipmentId { get; set; }
+        public string status { get; set; }
+        public OriginV2 origin { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
+        public string txHash { get; set; }
+        public DateTime txTimestamp { get; set; }
+        public string releaseStatus { get; set; }
+        public OwnerV2 owner { get; set; }
+        public PricePredictionV2 pricePrediction { get; set; }
+        public List<EventV2> events { get; set; }
+        public string weight { get; set; }
+        public string unit { get; set; }
+        public List<string> productType { get; set; }
+        public string productName { get; set; }
+        public string hsCode { get; set; }
+        public bool shared { get; set; }
+        public AnomalyV2 anomaly { get; set; }
+    }
+
+    public class ProductsV2
+    {
+        public List<ActiveV2> active { get; set; }
+        public List<object> consumed { get; set; }
+        public List<object> sharedWithMe { get; set; }
+        public List<object> sharedWithMeDeclared { get; set; }
+        public List<object> sharedWithMeNonDeclared { get; set; }
+        public List<object> history { get; set; }
+    }
+
+    public class AllProductResponseV2
+    {
+        public TotalProductsCountV2 totalProductsCount { get; set; }
+        public int count { get; set; }
+        public int offset { get; set; }
+        public string category { get; set; }
+        public ProductsV2 products { get; set; }
+        public int statusCode { get; set; }
+        public string message { get; set; }
+    }
+    public class AllProductResponseV3
+    {
+        public TotalProductsCountV2 totalProductsCount { get; set; }
+        public int count { get; set; }
+        public int offset { get; set; }
+        public string category { get; set; }
+        public int statusCode { get; set; }
+        public string message { get; set; }
+    }
+    #endregion
 }
- 
