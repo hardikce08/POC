@@ -433,7 +433,8 @@ namespace POC.DataAccess.Model
         public List<CarbonFootprint> carbonFootprints { get; set; }
 
         public List<CarbonEstimate> carbonEstimates { get; set; }
-        public Anomaly anomaly { get; set; }
+        public object anomaly { get; set; }
+        //public Anomaly priceAnomaly { get; set; }
         public List<object> sharedWith { get; set; }
         public object price { get; set; }
         public List<object> predescessors { get; set; }
